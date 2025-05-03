@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FamilyMember {
+  id         String    @id @default(uuid())
+  fullName   String
+  gender     String // Consider using an Enum if your DB supports it
+  birthDate  DateTime? @db.Date // Use Date type if only date is needed
+  deathDate  DateTime? @db.Date // Use Date type if only date is needed
+  birthPlace String?
+  pictureUrl String?
+
+  // Self-referencing relations for parents
+  parentId1 String?
+  parentId2 String?
+
+  // Define the relation to self for children
+  children1 FamilyMember[] @relation("Parent1Children")
+  children2 FamilyMember[] @relation("Parent2Children")
+
+  // Define the relation fields for parents (optional, improves clarity)
+  parent1   FamilyMember? @relation("Parent1Children", fields: [parentId1], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  parent2   FamilyMember? @relation("Parent2Children", fields: [parentId2], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
