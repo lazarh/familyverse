@@ -12,11 +12,13 @@ import ReactFlow, {
   EdgeChange,
   Position,
   MarkerType,
-  BackgroundVariant // Import BackgroundVariant
+  BackgroundVariant, // Import BackgroundVariant
+  NodeMouseHandler // <<< ADD THIS IMPORT
 } from 'reactflow';
 import 'reactflow/dist/style.css'; // Import reactflow styles
 import { FamilyMember } from '@/types/familyMember'; // Assuming type path
 import { v4 as uuidv4 } from 'uuid'; // Import uuid for unique IDs
+import dagre from 'dagre'; // Import dagre
 
 // === Initial Sample Family Data ===
 const initialFamilyData: FamilyMember[] = [
@@ -52,6 +54,80 @@ const initialFamilyData: FamilyMember[] = [
 ];
 // === End Sample Family Data ===
 
+// === Dagre Layout Function ===
+const getLayoutedElements = (familyMembers: FamilyMember[], direction = 'TB') => {
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 50, ranksep: 100 }); // TB = Top to Bottom, add spacing
+
+  const nodeWidth = 170; // Match node style width + padding
+  const nodeHeight = 60; // Approximate height based on content
+
+  familyMembers.forEach((member) => {
+    dagreGraph.setNode(member.id, { label: member.fullName, width: nodeWidth, height: nodeHeight });
+  });
+
+  familyMembers.forEach((member) => {
+    // Add edges from parent to child for layout calculation
+    if (member.parentId1 && familyMembers.some(p => p.id === member.parentId1)) {
+      dagreGraph.setEdge(member.parentId1, member.id);
+    }
+    if (member.parentId2 && familyMembers.some(p => p.id === member.parentId2)) {
+      dagreGraph.setEdge(member.parentId2, member.id);
+    }
+    // Potential: Add spouse edges here if needed for layout influence (might need different edge type/style)
+  });
+
+  dagre.layout(dagreGraph);
+
+  const nodes: Node[] = [];
+  const edges: Edge[] = [];
+
+  familyMembers.forEach((member) => {
+    const node = dagreGraph.node(member.id);
+    if (node) { // Check if node exists in the layout graph
+        nodes.push({
+          id: member.id,
+          // Display name and birth year (if available)
+          data: { label: `${member.fullName}\n(${member.birthDate?.substring(0, 4) || 'N/A'})` },
+          position: {
+            x: node.x - nodeWidth / 2, // Center node horizontally
+            y: node.y - nodeHeight / 2, // Center node vertically
+          },
+          sourcePosition: Position.Bottom,
+          targetPosition: Position.Top,
+          style: {
+            border: '1px solid #777',
+            padding: 10,
+            background: '#fff',
+            textAlign: 'center',
+            width: nodeWidth, // Use full node width for style
+            fontSize: '12px',
+          },
+        });
+    } else {
+        console.warn(`Node data for ${member.fullName} (ID: ${member.id}) not found in Dagre layout.`);
+    }
+
+
+    // Add React Flow edges (parent -> child)
+    const commonEdgeStyle = {
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+        },
+        style: { strokeWidth: 1.5, stroke: '#555' }, // Style edges
+    };
+    if (member.parentId1 && familyMembers.some(p => p.id === member.parentId1)) {
+      edges.push({ id: `e-${member.parentId1}-${member.id}`, source: member.parentId1, target: member.id, ...commonEdgeStyle });
+    }
+    if (member.parentId2 && familyMembers.some(p => p.id === member.parentId2)) {
+      edges.push({ id: `e-${member.parentId2}-${member.id}`, source: member.parentId2, target: member.id, ...commonEdgeStyle });
+    }
+  });
+
+  return { layoutedNodes: nodes, layoutedEdges: edges };
+};
+// === End Dagre Layout Function ===
 
 export default function Home() {
   // Placeholder state for authentication status
@@ -64,95 +140,36 @@ export default function Home() {
 
   // Prepare data for dropdowns (just id and name) - derived from state
   const existingMembersForDropdown: Pick<FamilyMember, 'id' | 'fullName'>[] = useMemo(() =>
-    familyMembers.map(m => ({ id: m.id, fullName: m.fullName })),
+    familyMembers.map(m => ({ id: m.id, fullName: m.fullName })).sort((a, b) => a.fullName.localeCompare(b.fullName)), // Sort dropdown
     [familyMembers]
   );
 
-  // --- Convert familyMembers state to React Flow nodes and edges ---
-  const { initialNodes, initialEdges } = useMemo(() => {
-    const nodes: Node[] = [];
-    const edges: Edge[] = [];
-    const yGap = 120; // Vertical gap between generations
-    const xGap = 180; // Horizontal gap between members
-
-    // Simple positioning logic (adjust as needed)
-    // This might need a more robust layout algorithm for dynamic data
-    // For simplicity, we'll keep the hardcoded positions for the initial data
-    // and use random positions for newly added members.
-    // A better approach would involve calculating positions based on relationships.
-    const positions: { [key: string]: { x: number; y: number } } = {
-      ggp1: { x: 0 * xGap, y: 0 * yGap },
-      ggm1: { x: 1 * xGap, y: 0 * yGap },
-      gp1: { x: 0 * xGap, y: 1 * yGap },
-      gm1: { x: 1 * xGap, y: 1 * yGap },
-      ga1: { x: 2 * xGap, y: 1 * yGap },
-      gu1: { x: 3 * xGap, y: 1 * yGap },
-      p1: { x: 0 * xGap, y: 2 * yGap },
-      m1: { x: 1 * xGap, y: 2 * yGap },
-      cousin1: { x: 2 * xGap, y: 2 * yGap },
-      cousin1_spouse: { x: 3 * xGap, y: 2 * yGap },
-      c1: { x: 0 * xGap, y: 3 * yGap },
-      c2: { x: 1 * xGap, y: 3 * yGap },
-      second_cousin1: { x: 2 * xGap, y: 3 * yGap },
-    };
-
-    familyMembers.forEach((member) => {
-      nodes.push({
-        id: member.id,
-        // Display name and birth year (optional: add death year if exists)
-        data: { label: `${member.fullName}
-(${member.birthDate?.substring(0, 4) || 'N/A'})` },
-        position: positions[member.id] || { x: Math.random() * 500 + 50, y: Math.random() * 400 + 50 }, // Fallback/new member position
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        style: {
-          border: '1px solid #777',
-          padding: 10,
-          background: '#fff',
-          textAlign: 'center',
-          width: 150, // Adjust node width
-        },
-      });
-
-      // Add edges from child to parents
-      const commonEdgeStyle = {
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-          },
-      };
-      // Ensure parentId exists in the current familyMembers list before creating edge
-      if (member.parentId1 && familyMembers.some(p => p.id === member.parentId1)) {
-        edges.push({ id: `e-${member.id}-p1`, source: member.parentId1, target: member.id, ...commonEdgeStyle });
-      }
-      if (member.parentId2 && familyMembers.some(p => p.id === member.parentId2)) {
-        edges.push({ id: `e-${member.id}-p2`, source: member.parentId2, target: member.id, ...commonEdgeStyle });
-      }
-      // Potential: Add spouse edges here if spouseId is added to FamilyMember type
-    });
-
-    return { initialNodes: nodes, initialEdges: edges };
+  // --- Calculate layout using Dagre ---
+  const { layoutedNodes, layoutedEdges } = useMemo(() => {
+    return getLayoutedElements(familyMembers, 'TB'); // Use the layout function
   }, [familyMembers]); // Recalculate when familyMembers changes
 
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  // --- State for React Flow nodes and edges ---
+  const [nodes, setNodes] = useState<Node[]>(layoutedNodes);
+  const [edges, setEdges] = useState<Edge[]>(layoutedEdges);
 
-  // Update nodes and edges when initialNodes/initialEdges change (due to familyMembers update)
+  // Update nodes and edges state when the layout changes
   useEffect(() => {
-    setNodes(initialNodes);
-  }, [initialNodes]);
+    setNodes(layoutedNodes);
+  }, [layoutedNodes]);
 
   useEffect(() => {
-    setEdges(initialEdges);
-  }, [initialEdges]);
+    setEdges(layoutedEdges);
+  }, [layoutedEdges]);
 
-
+  // --- React Flow Handlers ---
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes]
+    [setNodes] // Dependency on setNodes is correct
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
+    [setEdges] // Dependency on setEdges is correct
   );
 
   // --- Form Handling ---
@@ -214,7 +231,7 @@ export default function Home() {
   };
 
   // --- Edit Member ---
-  const handleEditMember = (memberId: string) => {
+  const handleEditMember = useCallback((memberId: string) => {
     const memberToEdit = familyMembers.find(m => m.id === memberId);
     if (memberToEdit) {
       setEditingMemberId(memberId);
@@ -224,8 +241,16 @@ export default function Home() {
           parentId1: memberToEdit.parentId1 ?? "", // Use empty string for select default
           parentId2: memberToEdit.parentId2 ?? "", // Use empty string for select default
       });
+      // Scroll the form into view (optional, good UX)
+      const formElement = document.getElementById('member-form');
+      formElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  };
+  }, [familyMembers, setEditingMemberId, setFormData]); // Add dependencies
+
+  // --- React Flow Node Click Handler ---
+  const handleNodeClick: NodeMouseHandler = useCallback((event, node) => {
+    handleEditMember(node.id); // Call the existing edit handler with the node's ID
+  }, [handleEditMember]); // Dependency on handleEditMember
 
   // --- Remove Member ---
   const handleRemoveMember = (memberId: string) => {
@@ -287,19 +312,21 @@ export default function Home() {
       <main className="flex-grow container mx-auto p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
 
         {/* === Family Tree Visualization Section (uses React Flow) === */}
-        {/* ... (ReactFlow section remains largely the same, ensure nodes/edges props use state) ... */}
-        <section className="md:col-span-2 border rounded-lg p-4 shadow relative overflow-hidden bg-gray-50" style={{ height: '600px' }}> {/* Added height */}
-          <h2 className="text-lg font-semibold mb-4 absolute top-4 left-4 z-10 bg-white p-1 rounded">Family Tree Visualization</h2>
+        <section className="md:col-span-2 border rounded-lg p-4 shadow relative overflow-hidden bg-gray-50" style={{ height: '70vh' }}> {/* Increased height */}
+          <h2 className="text-lg font-semibold mb-4 absolute top-4 left-4 z-10 bg-white p-1 rounded shadow-sm">Family Tree Visualization</h2>
            <ReactFlow
-              nodes={nodes}
-              edges={edges}
+              nodes={nodes} // Use state variable
+              edges={edges} // Use state variable
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
-              fitView // Zooms/pans to fit nodes initially
+              onNodeClick={handleNodeClick} // <<< Ensure this prop is present
+              fitView // Zooms/pans to fit nodes initially and on layout changes
+              fitViewOptions={{ padding: 0.2 }} // Add some padding on fitView
+              nodesDraggable={false} // Optionally disable manual dragging if layout is fully automatic
               className="bg-gradient-to-br from-gray-50 to-gray-100" // Example background
             >
               <Controls /> {/* Adds zoom/pan controls */}
-              <Background variant={BackgroundVariant.Dots} gap={12} size={1} /> {/* Use BackgroundVariant enum */}
+              <Background variant={BackgroundVariant.Dots} gap={15} size={1} /> {/* Adjusted background */}
             </ReactFlow>
           {/* Export buttons (functionality not implemented here) */}
           <div className="absolute bottom-4 right-4 flex gap-2 z-10">
@@ -426,35 +453,38 @@ export default function Home() {
           </form>
 
            {/* Existing Members List with Edit/Remove Buttons */}
-           <div className="mt-4 flex-grow">
-                <h3 className="text-md font-medium mb-2">Existing Members</h3>
-                <ul className="text-sm text-gray-600 space-y-1 max-h-48 overflow-y-auto border rounded p-2 bg-gray-50">
-                   {familyMembers.length > 0 ? (
-                        familyMembers.map(member => (
-                            <li key={member.id} className="flex justify-between items-center group">
-                                <span>{member.fullName}</span>
-                                <span className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        onClick={() => handleEditMember(member.id)}
-                                        className="text-blue-500 hover:text-blue-700 text-xs font-semibold"
-                                        title="Edit"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleRemoveMember(member.id)}
-                                        className="text-red-500 hover:text-red-700 text-xs font-semibold"
-                                        title="Remove"
-                                    >
-                                        Remove
-                                    </button>
-                                </span>
-                            </li>
-                        ))
-                    ) : (
-                        <li className="text-gray-500">No members yet.</li>
-                    )}
-                </ul>
+           <div className="mt-4 flex-grow overflow-hidden flex flex-col"> {/* Allow list to take remaining space */}
+                <h3 className="text-md font-medium mb-2 flex-shrink-0">Existing Members ({familyMembers.length})</h3>
+                <div className="flex-grow overflow-y-auto border rounded p-2 bg-gray-50"> {/* Make list scrollable */}
+                    <ul className="text-sm text-gray-600 space-y-1">
+                       {familyMembers.length > 0 ? (
+                            // Sort members alphabetically for the list view
+                            [...familyMembers].sort((a, b) => a.fullName.localeCompare(b.fullName)).map(member => (
+                                <li key={member.id} className="flex justify-between items-center group p-1 hover:bg-gray-100 rounded">
+                                    <span>{member.fullName}</span>
+                                    <span className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            onClick={() => handleEditMember(member.id)}
+                                            className="text-blue-500 hover:text-blue-700 text-xs font-semibold"
+                                            title="Edit"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleRemoveMember(member.id)}
+                                            className="text-red-500 hover:text-red-700 text-xs font-semibold"
+                                            title="Remove"
+                                        >
+                                            Remove
+                                        </button>
+                                    </span>
+                                </li>
+                            ))
+                        ) : (
+                            <li className="text-gray-500 italic">No members yet.</li>
+                        )}
+                    </ul>
+                </div>
            </div>
 
            {/* ... Account Status Section (no changes needed) ... */}
