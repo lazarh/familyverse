@@ -1,26 +1,194 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Base */
+  --background: #ffffff; /* Light mode body background */
+  --foreground: #171717; /* Light mode body text */
+  --app-bg: #f3f4f6; /* gray-100 */
+  --border-color: #d1d5db; /* gray-300 - Default border */
+  --border-color-light: #e5e7eb; /* gray-200 */
+  --border-color-medium: #9ca3af; /* gray-400 */
+  --border-color-dark: #6b7280; /* gray-500 */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Header */
+  --header-bg: #1f2937; /* gray-800 */
+  --header-text: #ffffff; /* white */
+
+  /* Text */
+  --text-primary: #171717; /* foreground */
+  --text-secondary: #374151; /* gray-700 */
+  --text-muted: #6b7280; /* gray-600 */
+  --text-subtle: #9ca3af; /* gray-500 */
+  --text-inverted: #ffffff; /* white */
+  --text-link: #3b82f6; /* blue-500 - Assuming for links */
+
+  /* Buttons - Primary (e.g., Add) */
+  --btn-primary-bg: #6366f1; /* indigo-500 */
+  --btn-primary-bg-hover: #4f46e5; /* indigo-700 */
+  --btn-primary-text: #ffffff; /* white */
+
+  /* Buttons - Secondary (e.g., Login) */
+  --btn-secondary-bg: #3b82f6; /* blue-500 */
+  --btn-secondary-bg-hover: #1d4ed8; /* blue-700 */
+  --btn-secondary-text: #ffffff; /* white */
+
+  /* Buttons - Success (e.g., Update, Register) */
+  --btn-success-bg: #22c55e; /* green-500 */
+  --btn-success-bg-hover: #15803d; /* green-700 */
+  --btn-success-text: #ffffff; /* white */
+
+  /* Buttons - Danger (e.g., Logout, Remove Checkbox) */
+  --btn-danger-bg: #ef4444; /* red-500 */
+  --btn-danger-bg-hover: #b91c1c; /* red-700 */
+  --btn-danger-text: #ffffff; /* white */
+  --btn-danger-ring: #dc2626; /* red-600 */
+
+  /* Buttons - Warning (e.g., Upgrade Trial) */
+  --btn-warning-bg: #eab308; /* yellow-500 */
+  --btn-warning-bg-hover: #ca8a04; /* yellow-600 */
+  --btn-warning-text: #ffffff; /* white */
+
+  /* Buttons - Neutral/Subtle (e.g., Export, Cancel) */
+  --btn-neutral-bg: #d1d5db; /* gray-300 */
+  --btn-neutral-bg-hover: #9ca3af; /* gray-400 */
+  --btn-neutral-text: #1f2937; /* gray-800 */
+  --btn-cancel-bg: #9ca3af; /* gray-400 */
+  --btn-cancel-bg-hover: #6b7280; /* gray-500 */
+  --btn-cancel-text: #ffffff; /* white */
+
+  /* Sections */
+  --section-bg: #ffffff; /* white */
+  --section-bg-alt: #f9fafb; /* gray-50 */
+  --section-bg-subtle: #f3f4f6; /* gray-100 */
+  --section-border: var(--border-color);
+
+  /* Forms */
+  --form-input-bg: #ffffff; /* white */
+  --form-input-border: var(--border-color);
+  --form-label-text: var(--text-secondary);
+  --form-file-btn-bg: #eef2ff; /* indigo-50 */
+  --form-file-btn-text: #4338ca; /* indigo-700 */
+  --form-file-btn-bg-hover: #e0e7ff; /* indigo-100 */
+  --form-checkbox-accent: var(--btn-danger-ring); /* red-600 */
+
+  /* Alerts/Status */
+  --alert-info-bg: #eff6ff; /* blue-50 */
+  --alert-info-border: #bfdbfe; /* blue-200 */
+  --alert-info-text: #1e40af; /* blue-800 */
+  --alert-success-bg: #f0fdf4; /* green-50 */
+  --alert-success-border: #bbf7d0; /* green-200 */
+  --alert-success-text: #166534; /* green-800 */
+  --alert-warning-bg: #fefce8; /* yellow-50 */
+  --alert-warning-border: #fde68a; /* yellow-300 */
+  --alert-warning-text: #854d0e; /* yellow-800 */
+  --alert-error-bg: #fef2f2; /* red-100 */
+  --alert-error-border: #fecaca; /* red-300 */
+  --alert-error-text: #b91c1c; /* red-700 */
+
+  /* ReactFlow Nodes/Edges */
+  --node-border: #777777;
+  --node-bg: #ffffff;
+  --edge-stroke: #555555;
+
+  /* Footer */
+  --footer-bg: #e5e7eb; /* gray-200 */
+  --footer-text: var(--text-muted); /* gray-600 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Redefine variables for dark mode */
     --background: #0a0a0a;
     --foreground: #ededed;
+    --app-bg: #171717; /* near black */
+    --border-color: #404040; /* gray-700 */
+    --border-color-light: #262626; /* gray-800 */
+    --border-color-medium: #525252; /* gray-600 */
+    --border-color-dark: #737373; /* gray-500 */
+
+    /* Header */
+    --header-bg: #1f2937; /* gray-800 - Keep same or make darker? */
+    --header-text: #ffffff; /* white */
+
+    /* Text */
+    --text-primary: #ededed; /* foreground */
+    --text-secondary: #a3a3a3; /* gray-400 */
+    --text-muted: #737373; /* gray-500 */
+    --text-subtle: #525252; /* gray-600 */
+    --text-inverted: #171717; /* near black */
+    --text-link: #60a5fa; /* blue-400 */
+
+    /* Buttons - Adapt hover states */
+    --btn-primary-bg: #4f46e5; /* indigo-600 */
+    --btn-primary-bg-hover: #6366f1; /* indigo-500 */
+    --btn-primary-text: #ffffff;
+
+    --btn-secondary-bg: #2563eb; /* blue-600 */
+    --btn-secondary-bg-hover: #3b82f6; /* blue-500 */
+    --btn-secondary-text: #ffffff;
+
+    --btn-success-bg: #16a34a; /* green-600 */
+    --btn-success-bg-hover: #22c55e; /* green-500 */
+    --btn-success-text: #ffffff;
+
+    --btn-danger-bg: #dc2626; /* red-600 */
+    --btn-danger-bg-hover: #ef4444; /* red-500 */
+    --btn-danger-text: #ffffff;
+    --btn-danger-ring: #f87171; /* red-400 */
+
+    --btn-warning-bg: #d97706; /* yellow-600 */
+    --btn-warning-bg-hover: #eab308; /* yellow-500 */
+    --btn-warning-text: #ffffff;
+
+    --btn-neutral-bg: #525252; /* gray-600 */
+    --btn-neutral-bg-hover: #737373; /* gray-500 */
+    --btn-neutral-text: #ededed; /* foreground */
+    --btn-cancel-bg: #737373; /* gray-500 */
+    --btn-cancel-bg-hover: #a3a3a3; /* gray-400 */
+    --btn-cancel-text: #171717; /* near black */
+
+    /* Sections */
+    --section-bg: #1f2937; /* gray-800 - Example */
+    --section-bg-alt: #262626; /* gray-800 */
+    --section-bg-subtle: #171717; /* near black */
+    --section-border: #404040;
+
+    /* Forms */
+    --form-input-bg: #262626; /* gray-800 */
+    --form-input-border: #404040;
+    --form-label-text: var(--text-secondary);
+    --form-file-btn-bg: #3730a3; /* indigo-800 */
+    --form-file-btn-text: #c7d2fe; /* indigo-200 */
+    --form-file-btn-bg-hover: #4338ca; /* indigo-700 */
+    --form-checkbox-accent: var(--btn-danger-ring); /* red-400 */
+
+    /* Alerts/Status */
+    --alert-info-bg: #1e3a8a; /* blue-900 */
+    --alert-info-border: #1e40af; /* blue-800 */
+    --alert-info-text: #93c5fd; /* blue-300 */
+    --alert-success-bg: #14532d; /* green-900 */
+    --alert-success-border: #166534; /* green-800 */
+    --alert-success-text: #86efac; /* green-300 */
+    --alert-warning-bg: #78350f; /* yellow-900 */
+    --alert-warning-border: #854d0e; /* yellow-800 */
+    --alert-warning-text: #fcd34d; /* yellow-300 */
+    --alert-error-bg: #991b1b; /* red-900 */
+    --alert-error-border: #b91c1c; /* red-800 */
+    --alert-error-text: #fca5a5; /* red-300 */
+
+    /* ReactFlow Nodes/Edges */
+    --node-border: #737373; /* gray-500 */
+    --node-bg: #262626; /* gray-800 */
+    --edge-stroke: #a3a3a3; /* gray-400 */
+
+    /* Footer */
+    --footer-bg: #1f2937; /* gray-800 */
+    --footer-text: var(--text-muted); /* gray-500 */
   }
 }
 
 body {
-  background: var(--background);
+  background: var(--app-bg); /* Use app background */
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
