@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, ChangeEvent, FormEvent } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import FamilyNode from './components/FamilyNode';
+import FamilyTreeGraph from './components/FamilyTreeGraph'; // Import the new graph component
 import { FamilyMember } from '@/generated/prisma'; // Corrected import path
 import Image from 'next/image'; // Import next/image
 
@@ -243,20 +243,18 @@ export default function HomePage() {
   }
 
   const renderFamilyTree = () => {
-    if (familyMembers.length === 0) {
+    if (familyMembers.length === 0 && !isLoading) {
       return <p className="text-center text-gray-500">No family members yet. Add one to get started!</p>;
     }
+    if (isLoading) {
+      return <p className="text-center text-gray-500">Loading family tree...</p>;
+    }
     return (
-      <div className="flex flex-wrap gap-4 justify-center">
-        {familyMembers.map(member => (
-          <FamilyNode
-            key={member.id}
-            member={member}
-            onClick={handleNodeClick}
-            isSelected={selectedMember?.id === member.id}
-          />
-        ))}
-      </div>
+      <FamilyTreeGraph
+        familyMembers={familyMembers}
+        onNodeClick={handleNodeClick}
+        selectedMemberId={selectedMember?.id}
+      />
     );
   };
 
