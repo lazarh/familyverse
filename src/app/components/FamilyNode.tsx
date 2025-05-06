@@ -1,36 +1,40 @@
-import React, { memo } from 'react';
-import { Handle, Position, NodeProps } from 'reactflow';
+import React from 'react';
+import Image from 'next/image'; // Import next/image
+import { FamilyMember } from '@/generated/prisma'; // Corrected import path
 
-// Define the expected data structure for the custom node
-interface FamilyNodeData {
-  label: string;
-  pictureUrl?: string | null;
+interface FamilyNodeProps {
+  member: FamilyMember;
+  onClick: (member: FamilyMember) => void;
+  isSelected: boolean;
 }
 
-// Define the props for the FamilyNode component, extending NodeProps
-interface FamilyNodeProps extends NodeProps<FamilyNodeData> {}
-
-const FamilyNode: React.FC<FamilyNodeProps> = ({ data }) => {
-  const defaultPicture = '/default-avatar.jpg'; // Path to a default avatar image (updated extension)
+const FamilyNode: React.FC<FamilyNodeProps> = ({ member, onClick, isSelected }) => {
+  const defaultAvatar = '/default-avatar.jpg';
+  const pictureUrl = member.pictureUrl || defaultAvatar;
 
   return (
-    <>
-      {/* Handles for incoming/outgoing connections */}
-      <Handle type="target" position={Position.Top} style={{ background: '#555' }} />
-      <div style={{ display: 'flex', alignItems: 'center', padding: '5px' }}>
-        <img
-          src={data.pictureUrl || defaultPicture}
-          alt={data.label}
-          style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
-          onError={(e) => { (e.target as HTMLImageElement).src = defaultPicture; }} // Fallback to default avatar on error
+    <div
+      className={`family-node p-2 border rounded-lg shadow-md cursor-pointer flex flex-col items-center text-center ${isSelected ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'}`}
+      onClick={() => onClick(member)}
+      style={{ width: '120px' }}
+    >
+      <div className="w-16 h-16 rounded-full overflow-hidden mb-2 relative">
+        <Image
+          src={pictureUrl}
+          alt={`${member.fullName}'s picture`}
+          layout="fill" // Use layout="fill" for responsive images within a sized container
+          objectFit="cover" // Ensure the image covers the area
+          onError={(e) => {
+            // Type assertion for the event target
+            (e.target as HTMLImageElement).src = defaultAvatar;
+            (e.target as HTMLImageElement).srcset = ''; // Clear srcset as well if using responsive images
+          }}
         />
-        <div style={{ fontSize: '11px', lineHeight: '1.2', whiteSpace: 'pre-wrap', textAlign: 'left' }}>
-          {data.label}
-        </div>
       </div>
-      <Handle type="source" position={Position.Bottom} style={{ background: '#555' }} />
-    </>
+      <span className="text-sm font-medium truncate w-full">{member.fullName}</span>
+      <span className="text-xs text-gray-500">{member.gender}</span>
+    </div>
   );
 };
 
-export default memo(FamilyNode);
+export default FamilyNode;
