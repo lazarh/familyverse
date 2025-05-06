@@ -56,17 +56,26 @@ RUN npm ci --omit=dev
 # If using pnpm:
 # RUN pnpm install --prod --frozen-lockfile
 
+# Ensure Prisma Client is generated for the runner environment
+COPY --from=builder /app/prisma ./prisma/
+RUN rm -f /app/prisma/dev.db* # Ensure a clean slate for migrations, including WAL/SHM files
+RUN npx prisma generate
+# Ensure the 'nextjs' user has necessary permissions for the generated Prisma client.
+# prisma generate creates ../src/generated/prisma relative to the schema path.
+# WORKDIR is /app, schema is in /app/prisma, so client is in /app/src/generated/prisma.
+RUN mkdir -p /app/src && chown -R nextjs:nodejs /app/src/generated/prisma
+
+# Apply database migrations
+RUN npx prisma migrate deploy
+# Ensure the 'nextjs' user owns the database file and its directory.
+RUN chown -R nextjs:nodejs /app/prisma
 
 # Copy the built application from the builder stage
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder /app/next.config.ts ./next.config.ts
-# Copy prisma schema and migrations for runtime (if needed, e.g., for running migrations or if schema is read at runtime)
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-# Copy the generated Prisma client, including the query engine for Alpine
-COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/generated/prisma
+# The Prisma client and schema/migrations are now sourced from the runner's earlier steps.
 
-# Change ownership of the app directory
 USER nextjs
 
 # Expose the port the app runs on
