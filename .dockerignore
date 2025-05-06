@@ -1,0 +1,34 @@
+# Node modules
+node_modules
+
+# Next.js build output
+.next
+
+# Local environment variables
+.env*.local
+
+# Prisma development database
+prisma/dev.db
+prisma/dev.db-journal
+
+# Git directory
+.git
+
+# Docker ignore file itself
+.dockerignore
+
+# Prisma generated client
+src/generated/prisma
+
+# npm debug log
+npm-debug.log*
+
+# yarn error log
+yarn-error.log
+yarn-debug.log
+
+# pnpm debug log
+pnpm-debug.log*
+
+# VSCode settings
+.vscode
