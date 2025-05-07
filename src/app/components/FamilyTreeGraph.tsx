@@ -31,7 +31,6 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => 
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   dagreGraph.setGraph({ rankdir: direction });
-
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
   });
@@ -59,10 +58,9 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => 
   return { nodes, edges };
 };
 
-
 const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNodeClick, selectedMemberId }) => {
   const nodeTypes = useMemo(() => ({ familyNode: FamilyNode }), []);
-
+  
   const initialNodes: Node[] = useMemo(() => {
     return familyMembers.map((member) => ({
       id: member.id,
@@ -80,44 +78,53 @@ const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNode
     const edges: Edge[] = [];
     familyMembers.forEach(member => {
       if (member.parentId1) {
-        edges.push({
-          id: `e-${member.parentId1}-${member.id}`,
-          source: member.parentId1,
-          target: member.id,
-          type: 'smoothstep',
-          label: 'Parent',
-          labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black, increased weight/size
-          labelBgPadding: [4, 2],
-          labelBgBorderRadius: 2,
-          labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 }, // Ensured white background
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            color: '#000000', // Make arrow black
-          },
-          style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
-        });
+        if (initialNodes.find(node => node.id === member.parentId1)) {
+          edges.push({
+            id: `e-${member.parentId1}-${member.id}`,
+            source: member.parentId1,
+            target: member.id,
+            type: 'smoothstep',
+            label: 'Parent',
+            labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black, increased weight/size
+            labelBgPadding: [4, 2],
+            labelBgBorderRadius: 2,
+            labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 }, // Ensured white background
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              color: '#000000', // Make arrow black
+            },
+            style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
+          });
+        } else {
+          console.warn(`InitialEdges: Source node with ID ${member.parentId1} not found for child ${member.id}. Edge not created.`);
+        }
       }
       if (member.parentId2) {
-        edges.push({
-          id: `e-${member.parentId2}-${member.id}`,
-          source: member.parentId2,
-          target: member.id,
-          type: 'smoothstep',
-          label: 'Parent',
-          labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black, increased weight/size
-          labelBgPadding: [4, 2],
-          labelBgBorderRadius: 2,
-          labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 }, // Ensured white background
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            color: '#000000', // Make arrow black
-          },
-          style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
-        });
+        if (initialNodes.find(node => node.id === member.parentId2)) {
+          edges.push({
+            id: `e-${member.parentId2}-${member.id}`,
+            source: member.parentId2,
+            target: member.id,
+            type: 'smoothstep',
+            label: 'Parent',
+            labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black, increased weight/size
+            labelBgPadding: [4, 2],
+            labelBgBorderRadius: 2,
+            labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 }, // Ensured white background
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              color: '#000000', // Make arrow black
+            },
+            style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
+          });
+        } else {
+          console.warn(`InitialEdges: Source node with ID ${member.parentId2} not found for child ${member.id}. Edge not created.`);
+        }
       }
     });
+    console.log('Initial Edges:', edges);
     return edges;
-  }, [familyMembers]);
+  }, [familyMembers, initialNodes]); // Added initialNodes to dependency array
 
   const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
     initialNodes,
@@ -139,40 +146,52 @@ const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNode
       },
       position: { x: 0, y: 0 }, // Will be updated by layout
     }));
+    console.log('useEffect - Generated Node IDs:', newNodes.map(n => n.id));
 
     const newEdges: Edge[] = [];
     familyMembers.forEach(member => {
       if (member.parentId1) {
-        newEdges.push({
-          id: `e-${member.parentId1}-${member.id}`,
-          source: member.parentId1,
-          target: member.id,
-          type: 'smoothstep',
-          label: 'Parent',
-          labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black
-          labelBgPadding: [4, 2],
-          labelBgBorderRadius: 2,
-          labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
-          markerEnd: { type: MarkerType.ArrowClosed, color: '#000000' }, // Make arrow black
-          style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
-        });
+        if (newNodes.find(node => node.id === member.parentId1)) {
+          console.log('useEffect - Creating edge for parentId1:', member.parentId1, 'to child:', member.id);
+          newEdges.push({
+            id: `e-${member.parentId1}-${member.id}`,
+            source: member.parentId1,
+            target: member.id,
+            type: 'smoothstep',
+            label: 'Parent',
+            labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black
+            labelBgPadding: [4, 2],
+            labelBgBorderRadius: 2,
+            labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
+            markerEnd: { type: MarkerType.ArrowClosed, color: '#000000' }, // Make arrow black
+            style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
+          });
+        } else {
+          console.warn(`useEffect - Source node with ID ${member.parentId1} not found for child ${member.id}. Edge not created.`);
+        }
       }
       if (member.parentId2) {
-        newEdges.push({
-          id: `e-${member.parentId2}-${member.id}`,
-          source: member.parentId2,
-          target: member.id,
-          type: 'smoothstep',
-          label: 'Parent',
-          labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black
-          labelBgPadding: [4, 2],
-          labelBgBorderRadius: 2,
-          labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
-          markerEnd: { type: MarkerType.ArrowClosed, color: '#000000' }, // Make arrow black
-          style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
-        });
+        if (newNodes.find(node => node.id === member.parentId2)) {
+          console.log('useEffect - Creating edge for parentId2:', member.parentId2, 'to child:', member.id);
+          newEdges.push({
+            id: `e-${member.parentId2}-${member.id}`,
+            source: member.parentId2,
+            target: member.id,
+            type: 'smoothstep',
+            label: 'Parent',
+            labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black
+            labelBgPadding: [4, 2],
+            labelBgBorderRadius: 2,
+            labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
+            markerEnd: { type: MarkerType.ArrowClosed, color: '#000000' }, // Make arrow black
+            style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
+          });
+        } else {
+          console.warn(`useEffect - Source node with ID ${member.parentId2} not found for child ${member.id}. Edge not created.`);
+        }
       }
     });
+    console.log('useEffect - Generated Edges:', JSON.stringify(newEdges, null, 2));
     
     const { nodes: reLayoutedNodes, edges: reLayoutedEdges } = getLayoutedElements(newNodes, newEdges);
     setNodes(reLayoutedNodes);

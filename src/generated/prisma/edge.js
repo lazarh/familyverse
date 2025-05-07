@@ -138,7 +138,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/user/Documents/git/familyverse/src/generated/prisma",
+      "value": "/home/def/Documents/git/familyverse/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -149,15 +149,18 @@ const config = {
         "fromEnvVar": null,
         "value": "debian-openssl-3.0.x",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-musl-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/user/Documents/git/familyverse/prisma/schema.prisma",
+    "sourceFilePath": "/home/def/Documents/git/familyverse/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.7.0",
@@ -166,7 +169,7 @@ const config = {
     "db"
   ],
   "activeProvider": "sqlite",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -175,8 +178,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\" // Changed from postgresql\n  url      = \"file:./dev.db\" // Changed from env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  password  String // Will store the hashed password\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  familyMembers FamilyMember[] // Relation to FamilyMember\n}\n\nmodel FamilyMember {\n  id         String    @id @default(uuid())\n  fullName   String\n  gender     String // Consider using an Enum if your DB supports it\n  birthDate  DateTime? // Removed @db.Date\n  deathDate  DateTime? // Removed @db.Date\n  birthPlace String?\n  pictureUrl String?\n\n  // Self-referencing relations for parents\n  parentId1 String?\n  parentId2 String?\n\n  // Define the relation to self for children\n  children1 FamilyMember[] @relation(\"Parent1Children\")\n  children2 FamilyMember[] @relation(\"Parent2Children\")\n\n  // Define the relation fields for parents (optional, improves clarity)\n  parent1 FamilyMember? @relation(\"Parent1Children\", fields: [parentId1], references: [id], onDelete: SetNull, onUpdate: Cascade)\n  parent2 FamilyMember? @relation(\"Parent2Children\", fields: [parentId2], references: [id], onDelete: SetNull, onUpdate: Cascade)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Add relation to User\n  userId String\n  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // Add onDelete: Cascade\n\n  @@index([userId]) // Add index for querying by user\n}\n",
-  "inlineSchemaHash": "7759888660520dcd5d4632ac1272a968968d182b8bfdc1c913945b9c00515202",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"sqlite\" // Changed from postgresql\n  url      = \"file:./dev.db\" // Changed from env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  password  String // Will store the hashed password\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  familyMembers FamilyMember[] // Relation to FamilyMember\n}\n\nmodel FamilyMember {\n  id         String    @id @default(uuid())\n  fullName   String\n  gender     String // Consider using an Enum if your DB supports it\n  birthDate  DateTime? // Removed @db.Date\n  deathDate  DateTime? // Removed @db.Date\n  birthPlace String?\n  pictureUrl String?\n\n  // Self-referencing relations for parents\n  parentId1 String?\n  parentId2 String?\n\n  // Define the relation to self for children\n  children1 FamilyMember[] @relation(\"Parent1Children\")\n  children2 FamilyMember[] @relation(\"Parent2Children\")\n\n  // Define the relation fields for parents (optional, improves clarity)\n  parent1 FamilyMember? @relation(\"Parent1Children\", fields: [parentId1], references: [id], onDelete: SetNull, onUpdate: Cascade)\n  parent2 FamilyMember? @relation(\"Parent2Children\", fields: [parentId2], references: [id], onDelete: SetNull, onUpdate: Cascade)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Add relation to User\n  userId String\n  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // Add onDelete: Cascade\n\n  @@index([userId]) // Add index for querying by user\n}\n",
+  "inlineSchemaHash": "a405604cd7dcfa9fba4b5595acf0c6132ffa71150cee9c112be109b0daa7240d",
   "copyEngine": true
 }
 config.dirname = '/'
