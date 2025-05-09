@@ -7,9 +7,12 @@ import { getServerSession } from 'next-auth/next'; // Import getServerSession
 import { authOptions } from '@/lib/authOptions'; // Correct the import path for authOptions
 
 // Helper function to get user ID from session
-async function getUserIdFromSession(): Promise<string | null> {
+async function getUserIdFromSession(): Promise<number | null> {
   const session = await getServerSession(authOptions);
-  return (session?.user as { id: string })?.id ?? null;
+  const userIdString = (session?.user as { id: string })?.id;
+  if (!userIdString) return null;
+  const userId = parseInt(userIdString, 10);
+  return isNaN(userId) ? null : userId;
 }
 
 // GET /api/family-members - Fetch all family members for the logged-in user
@@ -57,7 +60,7 @@ export async function POST(request: Request) {
     }
 
     const memberData: Prisma.FamilyMemberCreateInput = {
-      user: { connect: { id: userId } },
+      user: { connect: { id: userId } }, // userId is now a number
       fullName: formData.get('fullName') as string,
       gender: formData.get('gender') as string,
       birthPlace: formData.get('birthPlace') as string | null,
@@ -86,14 +89,24 @@ export async function POST(request: Request) {
       }
     }
 
-    const parentId1 = formData.get('parentId1') as string | null;
-    if (parentId1) {
-      memberData.parent1 = { connect: { id: parentId1 } };
+    const parentId1String = formData.get('parentId1') as string | null;
+    if (parentId1String && parentId1String !== '') {
+      const parentId1 = parseInt(parentId1String, 10);
+      if (!isNaN(parentId1)) {
+        memberData.parent1 = { connect: { id: parentId1 } };
+      } else {
+        console.warn(`Invalid parentId1 format: ${parentId1String}. Skipping connection.`);
+      }
     }
 
-    const parentId2 = formData.get('parentId2') as string | null;
-    if (parentId2) {
-      memberData.parent2 = { connect: { id: parentId2 } };
+    const parentId2String = formData.get('parentId2') as string | null;
+    if (parentId2String && parentId2String !== '') {
+      const parentId2 = parseInt(parentId2String, 10);
+      if (!isNaN(parentId2)) {
+        memberData.parent2 = { connect: { id: parentId2 } };
+      } else {
+        console.warn(`Invalid parentId2 format: ${parentId2String}. Skipping connection.`);
+      }
     }
 
     let picturePath: string | null = null;

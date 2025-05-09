@@ -137,7 +137,6 @@ const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNode
     const newEdges: Edge[] = [];
     familyMembers.forEach(member => {
       if (member.parentId1) {
-        console.log('ParentId1:', member.parentId1);
         newEdges.push({
           id: `e${member.parentId1.toString()}-${member.id.toString()}`,
           source: member.parentId1.toString(),
@@ -173,9 +172,6 @@ const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNode
 
   // Add detailed logging for edge creation and React Flow configuration
   useEffect(() => {
-    console.log('Nodes:', nodes.map(node => node.id));
-    console.log('Edges:', edges.map(edge => ({ id: edge.id, source: edge.source, target: edge.target })));
-
     edges.forEach(edge => {
       if (!nodes.some(node => node.id === edge.source)) {
         console.error(`Edge source ID ${edge.source} does not match any node ID.`);

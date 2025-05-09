@@ -33,8 +33,11 @@ const FamilyNode: React.FC<CustomFamilyNodeProps> = ({ data }) => {
         <Image
           src={pictureUrl}
           alt={`${member.fullName}'s picture`}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           fill
           onError={(e) => {
+            console.error('Error loading image:', e);
+            console.log('Picture URL:', pictureUrl); // Debugging line
             (e.target as HTMLImageElement).src = defaultAvatar;
             (e.target as HTMLImageElement).srcset = '';
           }}
