@@ -81,47 +81,35 @@ const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNode
   // Remove `sourceHandle` from edges to avoid referencing non-existent handles
   const initialEdges: Edge[] = useMemo(() => {
     const edges: Edge[] = [];
-    // familyMembers.forEach(member => {
-    //   if (member.parentId1 !== null && member.id !== null) {
-    //     edges.push({
-    //       id: `e${member.parentId1.toString()}a-${member.id.toString()}`,
-    //       source: member.id.toString(),
-    //       target: member.parentId1.toString(),
-    //       sourceHandle: 'a',
-    //       type: 'smoothstep',
-    //       label: 'Parent',
-    //       labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 },
-    //       labelBgPadding: [4, 2],
-    //       labelBgBorderRadius: 2,
-    //       labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
-    //       markerEnd: {
-    //         type: MarkerType.ArrowClosed,
-    //         color: '#000000',
-    //       },
-    //       style: { strokeWidth: 1.5, stroke: '#000000' },
-    //     });
-    //   }
+    familyMembers.forEach(member => {
+      if (member.parentId1 !== null && member.id !== null) {
+        edges.push({
+          id: `e${member.parentId1.toString()}-${member.id.toString()}`,
+          source: member.id.toString(),
+          target: member.parentId1.toString(),
+          type: 'smoothstep',
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: '#000000',
+          },
+          style: { strokeWidth: 1.5, stroke: '#000000' },
+        });
+      }
 
-    //   if (member.parentId2 !== null && member.id !== null) {
-    //     edges.push({
-    //       id: `e${member.parentId2.toString()}b-${member.id.toString()}`,
-    //       source: member.id.toString(),
-    //       target: member.parentId2.toString(),
-    //       sourceHandle: 'b',
-    //       type: 'smoothstep',
-    //       label: 'Parent',
-    //       labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 },
-    //       labelBgPadding: [4, 2],
-    //       labelBgBorderRadius: 2,
-    //       labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
-    //       markerEnd: {
-    //         type: MarkerType.ArrowClosed,
-    //         color: '#000000',
-    //       },
-    //       style: { strokeWidth: 1.5, stroke: '#000000' },
-    //     });
-    //   }
-    // });
+      if (member.parentId2 !== null && member.id !== null) {
+        edges.push({
+          id: `e${member.parentId2.toString()}-${member.id.toString()}`,
+          source: member.id.toString(),
+          target: member.parentId2.toString(),
+          type: 'smoothstep',
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: '#000000',
+          },
+          style: { strokeWidth: 1.5, stroke: '#000000' },
+        });
+      }
+    });
     return edges;
   }, [familyMembers]);
 
@@ -151,32 +139,20 @@ const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNode
       if (member.parentId1) {
         console.log('ParentId1:', member.parentId1);
         newEdges.push({
-          id: `e${member.parentId1.toString()}a-${member.id.toString()}`,
+          id: `e${member.parentId1.toString()}-${member.id.toString()}`,
           source: member.parentId1.toString(),
           target: member.id.toString(),
-          sourceHandle: 'a',
           type: 'smoothstep',
-          label: 'Parent',
-          labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black
-          labelBgPadding: [4, 2],
-          labelBgBorderRadius: 2,
-          labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
           markerEnd: { type: MarkerType.ArrowClosed, color: '#000000' }, // Make arrow black
           style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
         });
       }
       if (member.parentId2) {
         newEdges.push({
-          id: `e${member.parentId2.toString()}b-${member.id.toString()}`,
+          id: `e${member.parentId2.toString()}-${member.id.toString()}`,
           source: member.parentId2.toString(),
           target: member.id.toString(),
-          sourceHandle: 'b',
           type: 'smoothstep',
-          label: 'Parent',
-          labelStyle: { fill: '#000000', fontWeight: 600, fontSize: 11 }, // Changed fill to black
-          labelBgPadding: [4, 2],
-          labelBgBorderRadius: 2,
-          labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
           markerEnd: { type: MarkerType.ArrowClosed, color: '#000000' }, // Make arrow black
           style: { strokeWidth: 1.5, stroke: '#000000' }, // Changed stroke to black
         });
