@@ -13,14 +13,14 @@ async function getUserIdFromSession(): Promise<string | null> {
   return (session?.user as { id: string })?.id ?? null;
 }
 
+// Update the `checkOwnership` function to handle numeric IDs
 // Helper function to check ownership
-async function checkOwnership(memberId: string, userId: string): Promise<boolean> {
+async function checkOwnership(memberId: number, userId: number): Promise<boolean> {
   if (!memberId || !userId) return false;
   try {
-    // Explicitly select userId and type the result
-    const member: { userId: string } | null = await prisma.familyMember.findUnique({
+    const member = await prisma.familyMember.findUnique({
       where: { id: memberId },
-      select: { userId: true }, // Re-add select for userId
+      select: { userId: true },
     });
     return !!member && member.userId === userId;
   } catch (error) {
@@ -31,9 +31,14 @@ async function checkOwnership(memberId: string, userId: string): Promise<boolean
 
 // GET /api/family-members/[id] - Fetch a single family member by ID if owned by user
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const sessionUserId = await getUserIdFromSession();
-  if (!sessionUserId) {
+  // Ensure `getUserIdFromSession` handles null properly
+  const sessionUserIdString = await getUserIdFromSession();
+  if (!sessionUserIdString) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+  const sessionUserId = parseInt(sessionUserIdString, 10);
+  if (isNaN(sessionUserId)) {
+    return NextResponse.json({ message: 'Invalid session user ID' }, { status: 400 });
   }
   const { id } = await params;
   if (!id) {
@@ -81,7 +86,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ message: 'Member ID is required' }, { status: 400 });
   }
 
-  const isOwner = await checkOwnership(id, userId);
+  // Ensure the `id` is converted to an integer before querying
+  const numericId = parseInt(id, 10);
+  if (isNaN(numericId)) {
+    return NextResponse.json({ message: 'Invalid member ID format' }, { status: 400 });
+  }
+
+  const isOwner = await checkOwnership(numericId, userId);
   if (!isOwner) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }
@@ -95,7 +106,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     let oldPicturePath: string | null = null;
 
     const existingMember = await prisma.familyMember.findUnique({
-      where: { id },
+      where: { id: numericId },
       select: { pictureUrl: true },
     });
     if (!existingMember) {
@@ -150,9 +161,19 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             console.warn(`Invalid date format for ${key}: ${value}. Skipping update.`);
           }
         } else if (key === 'parentId1') {
-          updateData.parent1 = value === '' ? { disconnect: true } : { connect: { id: value } };
+          const parentId1 = value === '' ? null : parseInt(value, 10);
+          if (parentId1 === null || !isNaN(parentId1)) {
+            updateData.parent1 = parentId1 === null ? { disconnect: true } : { connect: { id: parentId1 } };
+          } else {
+            console.warn(`Invalid parentId1 format: ${value}. Skipping update.`);
+          }
         } else if (key === 'parentId2') {
-          updateData.parent2 = value === '' ? { disconnect: true } : { connect: { id: value } };
+          const parentId2 = value === '' ? null : parseInt(value, 10);
+          if (parentId2 === null || !isNaN(parentId2)) {
+            updateData.parent2 = parentId2 === null ? { disconnect: true } : { connect: { id: parentId2 } };
+          } else {
+            console.warn(`Invalid parentId2 format: ${value}. Skipping update.`);
+          }
         } else if (key in prisma.familyMember.fields) {
           (updateData as Record<string, unknown>)[key] = value === '' ? null : value;
         } else {
@@ -163,13 +184,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     if (Object.keys(updateData).length === 0) {
       if (newPicturePath === undefined && !removePictureFlag) {
-        const currentMember = await prisma.familyMember.findUnique({ where: { id } });
+        const currentMember = await prisma.familyMember.findUnique({ where: { id: numericId } });
         return NextResponse.json(currentMember);
       }
     }
 
     const updatedMember = await prisma.familyMember.update({
-      where: { id: id },
+      where: { id: numericId },
       data: updateData,
     });
 
@@ -219,7 +240,13 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return NextResponse.json({ message: 'Member ID is required' }, { status: 400 });
   }
 
-  const isOwner = await checkOwnership(id, userId);
+  // Ensure the `id` is converted to an integer before querying
+  const numericId = parseInt(id, 10);
+  if (isNaN(numericId)) {
+    return NextResponse.json({ message: 'Invalid member ID format' }, { status: 400 });
+  }
+
+  const isOwner = await checkOwnership(numericId, userId);
   if (!isOwner) {
     return NextResponse.json({ message: 'Family member not found or access denied' }, { status: 404 });
   }
@@ -228,7 +255,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
   try {
     const member = await prisma.familyMember.findUnique({
-      where: { id: id },
+      where: { id: numericId },
       select: { pictureUrl: true },
     });
 
@@ -237,7 +264,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     }
 
     await prisma.familyMember.delete({
-      where: { id: id },
+      where: { id: numericId },
     });
 
     if (pictureToDelete) {

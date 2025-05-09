@@ -16,7 +16,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String // Will store the hashed password
   createdAt DateTime @default(now())
@@ -26,7 +26,7 @@ model User {
 }
 
 model FamilyMember {
-  id         String    @id @default(uuid())
+  id         Int       @id @default(autoincrement())
   fullName   String
   gender     String // Consider using an Enum if your DB supports it
   birthDate  DateTime? // Removed @db.Date
@@ -35,8 +35,8 @@ model FamilyMember {
   pictureUrl String?
 
   // Self-referencing relations for parents
-  parentId1 String?
-  parentId2 String?
+  parentId1 Int?
+  parentId2 Int?
 
   // Define the relation to self for children
   children1 FamilyMember[] @relation("Parent1Children")
@@ -50,8 +50,8 @@ model FamilyMember {
   updatedAt DateTime @updatedAt
 
   // Add relation to User
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // Add onDelete: Cascade
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade) // Add onDelete: Cascade
 
   @@index([userId]) // Add index for querying by user
 }

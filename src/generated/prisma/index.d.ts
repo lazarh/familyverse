@@ -1036,12 +1036,22 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
 
+  export type UserAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    id: number | null
+  }
+
   export type UserMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     email: string | null
     password: string | null
     createdAt: Date | null
@@ -1049,7 +1059,7 @@ export namespace Prisma {
   }
 
   export type UserMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     email: string | null
     password: string | null
     createdAt: Date | null
@@ -1065,6 +1075,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    id?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -1129,6 +1147,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1159,17 +1189,21 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
 
   export type UserGroupByOutputType = {
-    id: string
+    id: number
     email: string
     password: string
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1236,7 +1270,7 @@ export namespace Prisma {
       familyMembers: Prisma.$FamilyMemberPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       email: string
       password: string
       createdAt: Date
@@ -1665,7 +1699,7 @@ export namespace Prisma {
    * Fields of the User model
    */
   interface UserFieldRefs {
-    readonly id: FieldRef<"User", 'String'>
+    readonly id: FieldRef<"User", 'Int'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -2104,38 +2138,54 @@ export namespace Prisma {
 
   export type AggregateFamilyMember = {
     _count: FamilyMemberCountAggregateOutputType | null
+    _avg: FamilyMemberAvgAggregateOutputType | null
+    _sum: FamilyMemberSumAggregateOutputType | null
     _min: FamilyMemberMinAggregateOutputType | null
     _max: FamilyMemberMaxAggregateOutputType | null
   }
 
+  export type FamilyMemberAvgAggregateOutputType = {
+    id: number | null
+    parentId1: number | null
+    parentId2: number | null
+    userId: number | null
+  }
+
+  export type FamilyMemberSumAggregateOutputType = {
+    id: number | null
+    parentId1: number | null
+    parentId2: number | null
+    userId: number | null
+  }
+
   export type FamilyMemberMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     fullName: string | null
     gender: string | null
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
     pictureUrl: string | null
-    parentId1: string | null
-    parentId2: string | null
+    parentId1: number | null
+    parentId2: number | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: string | null
+    userId: number | null
   }
 
   export type FamilyMemberMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     fullName: string | null
     gender: string | null
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
     pictureUrl: string | null
-    parentId1: string | null
-    parentId2: string | null
+    parentId1: number | null
+    parentId2: number | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: string | null
+    userId: number | null
   }
 
   export type FamilyMemberCountAggregateOutputType = {
@@ -2154,6 +2204,20 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type FamilyMemberAvgAggregateInputType = {
+    id?: true
+    parentId1?: true
+    parentId2?: true
+    userId?: true
+  }
+
+  export type FamilyMemberSumAggregateInputType = {
+    id?: true
+    parentId1?: true
+    parentId2?: true
+    userId?: true
+  }
 
   export type FamilyMemberMinAggregateInputType = {
     id?: true
@@ -2239,6 +2303,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: FamilyMemberAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FamilyMemberSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: FamilyMemberMinAggregateInputType
@@ -2269,24 +2345,28 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: FamilyMemberCountAggregateInputType | true
+    _avg?: FamilyMemberAvgAggregateInputType
+    _sum?: FamilyMemberSumAggregateInputType
     _min?: FamilyMemberMinAggregateInputType
     _max?: FamilyMemberMaxAggregateInputType
   }
 
   export type FamilyMemberGroupByOutputType = {
-    id: string
+    id: number
     fullName: string
     gender: string
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
     pictureUrl: string | null
-    parentId1: string | null
-    parentId2: string | null
+    parentId1: number | null
+    parentId2: number | null
     createdAt: Date
     updatedAt: Date
-    userId: string
+    userId: number
     _count: FamilyMemberCountAggregateOutputType | null
+    _avg: FamilyMemberAvgAggregateOutputType | null
+    _sum: FamilyMemberSumAggregateOutputType | null
     _min: FamilyMemberMinAggregateOutputType | null
     _max: FamilyMemberMaxAggregateOutputType | null
   }
@@ -2407,18 +2487,18 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       fullName: string
       gender: string
       birthDate: Date | null
       deathDate: Date | null
       birthPlace: string | null
       pictureUrl: string | null
-      parentId1: string | null
-      parentId2: string | null
+      parentId1: number | null
+      parentId2: number | null
       createdAt: Date
       updatedAt: Date
-      userId: string
+      userId: number
     }, ExtArgs["result"]["familyMember"]>
     composites: {}
   }
@@ -2847,18 +2927,18 @@ export namespace Prisma {
    * Fields of the FamilyMember model
    */
   interface FamilyMemberFieldRefs {
-    readonly id: FieldRef<"FamilyMember", 'String'>
+    readonly id: FieldRef<"FamilyMember", 'Int'>
     readonly fullName: FieldRef<"FamilyMember", 'String'>
     readonly gender: FieldRef<"FamilyMember", 'String'>
     readonly birthDate: FieldRef<"FamilyMember", 'DateTime'>
     readonly deathDate: FieldRef<"FamilyMember", 'DateTime'>
     readonly birthPlace: FieldRef<"FamilyMember", 'String'>
     readonly pictureUrl: FieldRef<"FamilyMember", 'String'>
-    readonly parentId1: FieldRef<"FamilyMember", 'String'>
-    readonly parentId2: FieldRef<"FamilyMember", 'String'>
+    readonly parentId1: FieldRef<"FamilyMember", 'Int'>
+    readonly parentId2: FieldRef<"FamilyMember", 'Int'>
     readonly createdAt: FieldRef<"FamilyMember", 'DateTime'>
     readonly updatedAt: FieldRef<"FamilyMember", 'DateTime'>
-    readonly userId: FieldRef<"FamilyMember", 'String'>
+    readonly userId: FieldRef<"FamilyMember", 'Int'>
   }
     
 
@@ -3419,6 +3499,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
@@ -3433,9 +3520,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'Float'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
   /**
    * Deep Input Types
@@ -3446,7 +3533,7 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    id?: StringFilter<"User"> | string
+    id?: IntFilter<"User"> | number
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -3464,7 +3551,7 @@ export namespace Prisma {
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     email?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
@@ -3482,15 +3569,17 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
     AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"User"> | string
+    id?: IntWithAggregatesFilter<"User"> | number
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -3501,18 +3590,18 @@ export namespace Prisma {
     AND?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
     OR?: FamilyMemberWhereInput[]
     NOT?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
-    id?: StringFilter<"FamilyMember"> | string
+    id?: IntFilter<"FamilyMember"> | number
     fullName?: StringFilter<"FamilyMember"> | string
     gender?: StringFilter<"FamilyMember"> | string
     birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
     pictureUrl?: StringNullableFilter<"FamilyMember"> | string | null
-    parentId1?: StringNullableFilter<"FamilyMember"> | string | null
-    parentId2?: StringNullableFilter<"FamilyMember"> | string | null
+    parentId1?: IntNullableFilter<"FamilyMember"> | number | null
+    parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    userId?: StringFilter<"FamilyMember"> | string
+    userId?: IntFilter<"FamilyMember"> | number
     children1?: FamilyMemberListRelationFilter
     children2?: FamilyMemberListRelationFilter
     parent1?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
@@ -3541,7 +3630,7 @@ export namespace Prisma {
   }
 
   export type FamilyMemberWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     AND?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
     OR?: FamilyMemberWhereInput[]
     NOT?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
@@ -3551,11 +3640,11 @@ export namespace Prisma {
     deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
     pictureUrl?: StringNullableFilter<"FamilyMember"> | string | null
-    parentId1?: StringNullableFilter<"FamilyMember"> | string | null
-    parentId2?: StringNullableFilter<"FamilyMember"> | string | null
+    parentId1?: IntNullableFilter<"FamilyMember"> | number | null
+    parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    userId?: StringFilter<"FamilyMember"> | string
+    userId?: IntFilter<"FamilyMember"> | number
     children1?: FamilyMemberListRelationFilter
     children2?: FamilyMemberListRelationFilter
     parent1?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
@@ -3577,30 +3666,31 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     _count?: FamilyMemberCountOrderByAggregateInput
+    _avg?: FamilyMemberAvgOrderByAggregateInput
     _max?: FamilyMemberMaxOrderByAggregateInput
     _min?: FamilyMemberMinOrderByAggregateInput
+    _sum?: FamilyMemberSumOrderByAggregateInput
   }
 
   export type FamilyMemberScalarWhereWithAggregatesInput = {
     AND?: FamilyMemberScalarWhereWithAggregatesInput | FamilyMemberScalarWhereWithAggregatesInput[]
     OR?: FamilyMemberScalarWhereWithAggregatesInput[]
     NOT?: FamilyMemberScalarWhereWithAggregatesInput | FamilyMemberScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"FamilyMember"> | string
+    id?: IntWithAggregatesFilter<"FamilyMember"> | number
     fullName?: StringWithAggregatesFilter<"FamilyMember"> | string
     gender?: StringWithAggregatesFilter<"FamilyMember"> | string
     birthDate?: DateTimeNullableWithAggregatesFilter<"FamilyMember"> | Date | string | null
     deathDate?: DateTimeNullableWithAggregatesFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
     pictureUrl?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
-    parentId1?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
-    parentId2?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    parentId1?: IntNullableWithAggregatesFilter<"FamilyMember"> | number | null
+    parentId2?: IntNullableWithAggregatesFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
-    userId?: StringWithAggregatesFilter<"FamilyMember"> | string
+    userId?: IntWithAggregatesFilter<"FamilyMember"> | number
   }
 
   export type UserCreateInput = {
-    id?: string
     email: string
     password: string
     createdAt?: Date | string
@@ -3609,7 +3699,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateInput = {
-    id?: string
+    id?: number
     email: string
     password: string
     createdAt?: Date | string
@@ -3618,7 +3708,6 @@ export namespace Prisma {
   }
 
   export type UserUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3627,7 +3716,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3636,7 +3725,7 @@ export namespace Prisma {
   }
 
   export type UserCreateManyInput = {
-    id?: string
+    id?: number
     email: string
     password: string
     createdAt?: Date | string
@@ -3644,7 +3733,6 @@ export namespace Prisma {
   }
 
   export type UserUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3652,7 +3740,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3660,7 +3748,6 @@ export namespace Prisma {
   }
 
   export type FamilyMemberCreateInput = {
-    id?: string
     fullName: string
     gender: string
     birthDate?: Date | string | null
@@ -3677,24 +3764,23 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedCreateInput = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
-    parentId2?: string | null
+    parentId1?: number | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
 
   export type FamilyMemberUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3711,39 +3797,38 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
 
   export type FamilyMemberCreateManyInput = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
-    parentId2?: string | null
+    parentId1?: number | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
   }
 
   export type FamilyMemberUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3755,18 +3840,29 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3812,6 +3908,10 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type UserAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
@@ -3826,6 +3926,26 @@ export namespace Prisma {
     password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -3884,6 +4004,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type FamilyMemberNullableScalarRelationFilter = {
     is?: FamilyMemberWhereInput | null
     isNot?: FamilyMemberWhereInput | null
@@ -3911,6 +4042,13 @@ export namespace Prisma {
     parentId2?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type FamilyMemberAvgOrderByAggregateInput = {
+    id?: SortOrder
+    parentId1?: SortOrder
+    parentId2?: SortOrder
     userId?: SortOrder
   }
 
@@ -3944,6 +4082,13 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
+  export type FamilyMemberSumOrderByAggregateInput = {
+    id?: SortOrder
+    parentId1?: SortOrder
+    parentId2?: SortOrder
+    userId?: SortOrder
+  }
+
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -3973,6 +4118,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type FamilyMemberCreateNestedManyWithoutUserInput = {
@@ -4009,6 +4170,14 @@ export namespace Prisma {
     update?: FamilyMemberUpdateWithWhereUniqueWithoutUserInput | FamilyMemberUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: FamilyMemberUpdateManyWithWhereWithoutUserInput | FamilyMemberUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type FamilyMemberUncheckedUpdateManyWithoutUserNestedInput = {
@@ -4135,6 +4304,14 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFamilyMembersInput, UserUpdateWithoutFamilyMembersInput>, UserUncheckedUpdateWithoutFamilyMembersInput>
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput = {
     create?: XOR<FamilyMemberCreateWithoutParent1Input, FamilyMemberUncheckedCreateWithoutParent1Input> | FamilyMemberCreateWithoutParent1Input[] | FamilyMemberUncheckedCreateWithoutParent1Input[]
     connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent1Input | FamilyMemberCreateOrConnectWithoutParent1Input[]
@@ -4163,6 +4340,17 @@ export namespace Prisma {
     deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -4188,6 +4376,33 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -4203,17 +4418,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -4255,6 +4459,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -4267,17 +4482,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4297,8 +4501,34 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type FamilyMemberCreateWithoutUserInput = {
-    id?: string
     fullName: string
     gender: string
     birthDate?: Date | string | null
@@ -4314,15 +4544,15 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedCreateWithoutUserInput = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
-    parentId2?: string | null
+    parentId1?: number | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
@@ -4358,22 +4588,21 @@ export namespace Prisma {
     AND?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
     OR?: FamilyMemberScalarWhereInput[]
     NOT?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
-    id?: StringFilter<"FamilyMember"> | string
+    id?: IntFilter<"FamilyMember"> | number
     fullName?: StringFilter<"FamilyMember"> | string
     gender?: StringFilter<"FamilyMember"> | string
     birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
     pictureUrl?: StringNullableFilter<"FamilyMember"> | string | null
-    parentId1?: StringNullableFilter<"FamilyMember"> | string | null
-    parentId2?: StringNullableFilter<"FamilyMember"> | string | null
+    parentId1?: IntNullableFilter<"FamilyMember"> | number | null
+    parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    userId?: StringFilter<"FamilyMember"> | string
+    userId?: IntFilter<"FamilyMember"> | number
   }
 
   export type FamilyMemberCreateWithoutParent1Input = {
-    id?: string
     fullName: string
     gender: string
     birthDate?: Date | string | null
@@ -4389,17 +4618,17 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedCreateWithoutParent1Input = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId2?: string | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
@@ -4414,7 +4643,6 @@ export namespace Prisma {
   }
 
   export type FamilyMemberCreateWithoutParent2Input = {
-    id?: string
     fullName: string
     gender: string
     birthDate?: Date | string | null
@@ -4430,17 +4658,17 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedCreateWithoutParent2Input = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
+    parentId1?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
@@ -4455,7 +4683,6 @@ export namespace Prisma {
   }
 
   export type FamilyMemberCreateWithoutChildren1Input = {
-    id?: string
     fullName: string
     gender: string
     birthDate?: Date | string | null
@@ -4471,18 +4698,18 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedCreateWithoutChildren1Input = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
-    parentId2?: string | null
+    parentId1?: number | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
 
@@ -4492,7 +4719,6 @@ export namespace Prisma {
   }
 
   export type FamilyMemberCreateWithoutChildren2Input = {
-    id?: string
     fullName: string
     gender: string
     birthDate?: Date | string | null
@@ -4508,18 +4734,18 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedCreateWithoutChildren2Input = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
-    parentId2?: string | null
+    parentId1?: number | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
   }
 
@@ -4529,7 +4755,6 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutFamilyMembersInput = {
-    id?: string
     email: string
     password: string
     createdAt?: Date | string
@@ -4537,7 +4762,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutFamilyMembersInput = {
-    id?: string
+    id?: number
     email: string
     password: string
     createdAt?: Date | string
@@ -4593,7 +4818,6 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUpdateWithoutChildren1Input = {
-    id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4609,18 +4833,18 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateWithoutChildren1Input = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
 
@@ -4636,7 +4860,6 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUpdateWithoutChildren2Input = {
-    id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4652,18 +4875,18 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateWithoutChildren2Input = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
   }
 
@@ -4679,7 +4902,6 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutFamilyMembersInput = {
-    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4687,7 +4909,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedUpdateWithoutFamilyMembersInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4695,21 +4917,20 @@ export namespace Prisma {
   }
 
   export type FamilyMemberCreateManyUserInput = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
-    parentId2?: string | null
+    parentId1?: number | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type FamilyMemberUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4725,15 +4946,15 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
@@ -4741,49 +4962,48 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FamilyMemberCreateManyParent1Input = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId2?: string | null
+    parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
   }
 
   export type FamilyMemberCreateManyParent2Input = {
-    id?: string
+    id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
     pictureUrl?: string | null
-    parentId1?: string | null
+    parentId1?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId: number
   }
 
   export type FamilyMemberUpdateWithoutParent1Input = {
-    id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4799,37 +5019,36 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateWithoutParent1Input = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
 
   export type FamilyMemberUncheckedUpdateManyWithoutParent1Input = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId2?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type FamilyMemberUpdateWithoutParent2Input = {
-    id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4845,33 +5064,33 @@ export namespace Prisma {
   }
 
   export type FamilyMemberUncheckedUpdateWithoutParent2Input = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
 
   export type FamilyMemberUncheckedUpdateManyWithoutParent2Input = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
     pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    parentId1?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
 

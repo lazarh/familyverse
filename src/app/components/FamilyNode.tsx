@@ -27,11 +27,11 @@ const FamilyNode: React.FC<CustomFamilyNodeProps> = ({ data }) => {
       style={{ width: '150px' }} // Increased width slightly for better presentation
     >
       <div className="w-20 h-20 rounded-full overflow-hidden mb-2 relative border-2 border-gray-200">
+        {/* Replace legacy 'layout' and 'objectFit' props with 'fill' for Next.js 13 compatibility */}
         <Image
           src={pictureUrl}
           alt={`${member.fullName}'s picture`}
-          layout="fill"
-          objectFit="cover"
+          fill
           onError={(e) => {
             (e.target as HTMLImageElement).src = defaultAvatar;
             (e.target as HTMLImageElement).srcset = '';

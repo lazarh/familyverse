@@ -65,18 +65,19 @@ export default function HomePage() {
     }
   }, [session, status, router, fetchFamilyMembers]);
 
+  // Fix type mismatches by converting numbers to strings where necessary
   const handleNodeClick = (member: FamilyMember) => {
     setSelectedMember(member);
     const memberDataForForm: PageFormData = {
-      id: member.id,
+      id: member.id.toString(), // Convert number to string
       fullName: member.fullName,
       gender: member.gender,
       birthDate: member.birthDate ? new Date(member.birthDate).toISOString().split('T')[0] : '',
       deathDate: member.deathDate ? new Date(member.deathDate).toISOString().split('T')[0] : '',
       birthPlace: member.birthPlace,
       pictureUrl: member.pictureUrl, // Keep this for consistency if needed by other logic
-      parentId1: member.parentId1,
-      parentId2: member.parentId2,
+      parentId1: member.parentId1?.toString() || null, // Convert number to string or null
+      parentId2: member.parentId2?.toString() || null, // Convert number to string or null
     };
     setFormData(memberDataForForm);
     setPicturePreview(member.pictureUrl || null);
@@ -253,7 +254,7 @@ export default function HomePage() {
       <FamilyTreeGraph
         familyMembers={familyMembers}
         onNodeClick={handleNodeClick}
-        selectedMemberId={selectedMember?.id}
+        selectedMemberId={selectedMember?.id?.toString() || null} // Convert number to string or null
       />
     );
   };
@@ -306,9 +307,11 @@ export default function HomePage() {
                   <Image
                     src={picturePreview || '/default-avatar.jpg'}
                     alt="Profile picture preview"
-                    layout="fill"
-                    objectFit="cover"
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/default-avatar.jpg'; (e.target as HTMLImageElement).srcset = ''; }}
+                    fill
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/default-avatar.jpg';
+                      (e.target as HTMLImageElement).srcset = '';
+                    }}
                   />
                 </div>
                 <input

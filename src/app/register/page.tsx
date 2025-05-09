@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'; // Import Link for navigation
+import Image from 'next/image'; // Ensure Image is imported from 'next/image'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -126,6 +127,9 @@ export default function RegisterPage() {
             Log in
           </Link>
         </p>
+        <div className="mt-4">
+          <Image src="/default-avatar.jpg" alt="Default Avatar" fill />
+        </div>
       </form>
     </div>
   );
