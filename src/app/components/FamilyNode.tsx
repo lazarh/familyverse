@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { FamilyMember } from '@/generated/prisma'; // Corrected import path
-import { NodeProps } from 'reactflow'; // Import NodeProps
+import { NodeProps, Handle, Position } from 'reactflow'; // Import NodeProps, Handle, and Position
 
 // Props for the custom node, extending React Flow's NodeProps
 interface CustomFamilyNodeProps extends NodeProps {
@@ -26,6 +26,8 @@ const FamilyNode: React.FC<CustomFamilyNodeProps> = ({ data }) => {
       onClick={() => onClick(member)}
       style={{ width: '150px' }} // Increased width slightly for better presentation
     >
+      <Handle type="target" position={Position.Top} className="w-3 h-3 bg-blue-500 rounded-full border-2 border-white" />
+      <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-blue-500 rounded-full border-2 border-white" />
       <div className="w-20 h-20 rounded-full overflow-hidden mb-2 relative border-2 border-gray-200">
         {/* Replace legacy 'layout' and 'objectFit' props with 'fill' for Next.js 13 compatibility */}
         <Image
