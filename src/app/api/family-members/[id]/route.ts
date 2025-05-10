@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { writeFile, mkdir, unlink } from 'fs/promises';
-import path from 'path';
-// Import Prisma types
 import { Prisma } from '@/generated/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
@@ -58,7 +55,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         birthDate: true,
         deathDate: true,
         birthPlace: true,
-        pictureUrl: true,
+        picture: true, // Changed from pictureUrl to picture
         parentId1: true,
         parentId2: true,
         createdAt: true,
@@ -100,53 +97,29 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   try {
     const formData = await request.formData();
-
     const file = formData.get('picture') as File | null;
+    const removePictureFlag = formData.get('removePicture') === 'true';
 
     const updateData: Prisma.FamilyMemberUpdateInput = {};
-    let newPicturePath: string | null | undefined = undefined; // undefined means no change, null means remove
-    let oldPicturePath: string | null = null;
 
     const existingMember = await prisma.familyMember.findUnique({
       where: { id: numericId },
-      select: { pictureUrl: true },
+      select: { picture: true }, // Select picture (Bytes)
     });
+
     if (!existingMember) {
       return NextResponse.json({ message: 'Family member not found' }, { status: 404 });
     }
-    oldPicturePath = existingMember.pictureUrl ?? null;
-
-    const removePictureFlag = formData.get('removePicture') === 'true';
 
     if (removePictureFlag) {
-      newPicturePath = null; // Explicitly set to null for removal
-      updateData.pictureUrl = null;
+      updateData.picture = null;
     } else if (file && file.size > 0) {
-      const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'family-member-pictures');
-      try {
-        await mkdir(uploadDir, { recursive: true });
-      } catch (err: unknown) {
-        if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code !== 'EEXIST') {
-          console.error('Failed to create upload directory during update:', err);
-          return NextResponse.json({ message: 'Server error creating upload directory' }, { status: 500 });
-        } else if (typeof err === 'object' && err !== null && !('code' in err) && !((err as { code: string })?.code === 'EEXIST')) {
-          console.error('Failed to create upload directory (unknown error type):', err);
-          return NextResponse.json({ message: 'Server error creating upload directory' }, { status: 500 });
-        }
-      }
-      const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-      const extension = path.extname(file.name) || '.jpg';
-      const filenameBase = path.basename(file.name, path.extname(file.name)).replace(/[^a-zA-Z0-9_-]/g, '');
-      const filename = `${filenameBase || 'upload'}-${uniqueSuffix}${extension}`;
-      const filePath = path.join(uploadDir, filename);
       const buffer = Buffer.from(await file.arrayBuffer());
-      await writeFile(filePath, buffer);
-      newPicturePath = `/uploads/family-member-pictures/${filename}`;
-      updateData.pictureUrl = newPicturePath;
+      updateData.picture = buffer;
     }
 
     formData.forEach((value, key) => {
-      if (key === 'picture' || key === 'removePicture' || key === 'id' || key === 'userId' || key === 'createdAt' || key === 'updatedAt' || key === 'pictureUrl') return;
+      if (key === 'picture' || key === 'removePicture' || key === 'id' || key === 'userId' || key === 'createdAt' || key === 'updatedAt') return;
 
       if (typeof value === 'string') {
         if (key === 'birthDate' || key === 'deathDate') {
@@ -182,29 +155,14 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     });
 
     if (Object.keys(updateData).length === 0) {
-      if (newPicturePath === undefined && !removePictureFlag) {
-        return NextResponse.json(existingMember);
-      }
+      const currentMemberForNoOp = await prisma.familyMember.findUnique({ where: { id: numericId } });
+      return NextResponse.json(currentMemberForNoOp);
     }
 
     const updatedMember = await prisma.familyMember.update({
       where: { id: numericId },
       data: updateData,
     });
-
-    if ((newPicturePath !== undefined) && oldPicturePath && oldPicturePath !== newPicturePath) {
-      try {
-        const fullOldPath = path.join(process.cwd(), 'public', oldPicturePath);
-        await unlink(fullOldPath);
-        console.log(`Deleted old picture: ${oldPicturePath}`);
-      } catch (unlinkError: unknown) {
-        if (typeof unlinkError === 'object' && unlinkError !== null && 'code' in unlinkError && (unlinkError as { code: string }).code !== 'ENOENT') {
-          console.error(`Failed to delete old picture ${oldPicturePath}:`, unlinkError);
-        } else if (typeof unlinkError === 'object' && unlinkError !== null && !('code' in unlinkError)) {
-          console.error(`Failed to delete old picture ${oldPicturePath} (unknown error type):`, unlinkError);
-        }
-      }
-    }
 
     return NextResponse.json(updatedMember);
   } catch (error: unknown) {
@@ -246,35 +204,10 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return NextResponse.json({ message: 'Family member not found or access denied' }, { status: 404 });
   }
 
-  let pictureToDelete: string | null = null;
-
   try {
-    const member = await prisma.familyMember.findUnique({
-      where: { id: numericId },
-      select: { pictureUrl: true },
-    });
-
-    if (member && member.pictureUrl) {
-      pictureToDelete = member.pictureUrl;
-    }
-
     await prisma.familyMember.delete({
       where: { id: numericId },
     });
-
-    if (pictureToDelete) {
-      try {
-        const fullPath = path.join(process.cwd(), 'public', pictureToDelete);
-        await unlink(fullPath);
-        console.log(`Deleted picture file: ${pictureToDelete}`);
-      } catch (unlinkError: unknown) {
-        if (typeof unlinkError === 'object' && unlinkError !== null && 'code' in unlinkError && (unlinkError as { code: string }).code !== 'ENOENT') {
-          console.error(`Failed to delete picture file ${pictureToDelete}:`, unlinkError);
-        } else if (typeof unlinkError === 'object' && unlinkError !== null && !('code' in unlinkError)) {
-          console.error(`Failed to delete picture file ${pictureToDelete} (unknown error type):`, unlinkError);
-        }
-      }
-    }
 
     return NextResponse.json({ message: 'Family member deleted successfully' }, { status: 200 });
   } catch (error: unknown) {

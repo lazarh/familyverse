@@ -32,7 +32,7 @@ model FamilyMember {
   birthDate  DateTime? // Removed @db.Date
   deathDate  DateTime? // Removed @db.Date
   birthPlace String?
-  pictureUrl String?
+  picture    Bytes? // Changed from pictureUrl String?
 
   // Self-referencing relations for parents
   parentId1 Int?

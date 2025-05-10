@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { writeFile, mkdir } from 'fs/promises'; // For file system operations
-import path from 'path'; // For path manipulation
 import { Prisma } from '@/generated/prisma'; // Corrected import path
 import { getServerSession } from 'next-auth/next'; // Import getServerSession
 import { authOptions } from '@/lib/authOptions'; // Correct the import path for authOptions
@@ -25,6 +23,20 @@ export async function GET() {
   try {
     const familyMembers = await prisma.familyMember.findMany({
       where: { userId: userId }, // Filter by userId
+      select: { // Explicitly select all fields needed by the frontend
+        id: true,
+        fullName: true,
+        gender: true,
+        birthDate: true,
+        deathDate: true,
+        birthPlace: true,
+        picture: true, // Keep as Bytes, will be handled by client
+        parentId1: true,
+        parentId2: true,
+        createdAt: true,
+        updatedAt: true,
+        userId: true,
+      },
       orderBy: {
         birthDate: 'asc', // Optional: Order by birth date
       },
@@ -64,7 +76,6 @@ export async function POST(request: Request) {
       fullName: formData.get('fullName') as string,
       gender: formData.get('gender') as string,
       birthPlace: formData.get('birthPlace') as string | null,
-      pictureUrl: null, // Initialize pictureUrl as null
     };
 
     const birthDateStr = formData.get('birthDate') as string | null;
@@ -109,29 +120,9 @@ export async function POST(request: Request) {
       }
     }
 
-    let picturePath: string | null = null;
     if (file && file.size > 0) {
-      const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'family-member-pictures');
-      try {
-        await mkdir(uploadDir, { recursive: true });
-      } catch (err: unknown) {
-        if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code !== 'EEXIST') {
-          console.error('Failed to create upload directory:', err);
-          return NextResponse.json({ message: 'Server error creating upload directory' }, { status: 500 });
-        } else if (typeof err === 'object' && err !== null && !('code' in err)) {
-          console.error('Failed to create upload directory (unknown error type):', err);
-          return NextResponse.json({ message: 'Server error creating upload directory' }, { status: 500 });
-        }
-      }
-      const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-      const extension = path.extname(file.name) || '.jpg';
-      const filenameBase = path.basename(file.name, path.extname(file.name)).replace(/[^a-zA-Z0-9_-]/g, '');
-      const filename = `${filenameBase || 'upload'}-${uniqueSuffix}${extension}`;
-      const filePath = path.join(uploadDir, filename);
       const buffer = Buffer.from(await file.arrayBuffer());
-      await writeFile(filePath, buffer);
-      picturePath = `/uploads/family-member-pictures/${filename}`;
-      memberData.pictureUrl = picturePath;
+      memberData.picture = buffer; // Image stored as Bytes
     }
 
     const newMember = await prisma.familyMember.create({

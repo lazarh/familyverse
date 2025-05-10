@@ -132,7 +132,7 @@ exports.Prisma.FamilyMemberScalarFieldEnum = {
   birthDate: 'birthDate',
   deathDate: 'deathDate',
   birthPlace: 'birthPlace',
-  pictureUrl: 'pictureUrl',
+  picture: 'picture',
   parentId1: 'parentId1',
   parentId2: 'parentId2',
   createdAt: 'createdAt',

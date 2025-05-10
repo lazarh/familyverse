@@ -2165,7 +2165,7 @@ export namespace Prisma {
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
-    pictureUrl: string | null
+    picture: Uint8Array | null
     parentId1: number | null
     parentId2: number | null
     createdAt: Date | null
@@ -2180,7 +2180,7 @@ export namespace Prisma {
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
-    pictureUrl: string | null
+    picture: Uint8Array | null
     parentId1: number | null
     parentId2: number | null
     createdAt: Date | null
@@ -2195,7 +2195,7 @@ export namespace Prisma {
     birthDate: number
     deathDate: number
     birthPlace: number
-    pictureUrl: number
+    picture: number
     parentId1: number
     parentId2: number
     createdAt: number
@@ -2226,7 +2226,7 @@ export namespace Prisma {
     birthDate?: true
     deathDate?: true
     birthPlace?: true
-    pictureUrl?: true
+    picture?: true
     parentId1?: true
     parentId2?: true
     createdAt?: true
@@ -2241,7 +2241,7 @@ export namespace Prisma {
     birthDate?: true
     deathDate?: true
     birthPlace?: true
-    pictureUrl?: true
+    picture?: true
     parentId1?: true
     parentId2?: true
     createdAt?: true
@@ -2256,7 +2256,7 @@ export namespace Prisma {
     birthDate?: true
     deathDate?: true
     birthPlace?: true
-    pictureUrl?: true
+    picture?: true
     parentId1?: true
     parentId2?: true
     createdAt?: true
@@ -2358,7 +2358,7 @@ export namespace Prisma {
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
-    pictureUrl: string | null
+    picture: Uint8Array | null
     parentId1: number | null
     parentId2: number | null
     createdAt: Date
@@ -2392,7 +2392,7 @@ export namespace Prisma {
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    pictureUrl?: boolean
+    picture?: boolean
     parentId1?: boolean
     parentId2?: boolean
     createdAt?: boolean
@@ -2413,7 +2413,7 @@ export namespace Prisma {
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    pictureUrl?: boolean
+    picture?: boolean
     parentId1?: boolean
     parentId2?: boolean
     createdAt?: boolean
@@ -2431,7 +2431,7 @@ export namespace Prisma {
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    pictureUrl?: boolean
+    picture?: boolean
     parentId1?: boolean
     parentId2?: boolean
     createdAt?: boolean
@@ -2449,7 +2449,7 @@ export namespace Prisma {
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    pictureUrl?: boolean
+    picture?: boolean
     parentId1?: boolean
     parentId2?: boolean
     createdAt?: boolean
@@ -2457,7 +2457,7 @@ export namespace Prisma {
     userId?: boolean
   }
 
-  export type FamilyMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "gender" | "birthDate" | "deathDate" | "birthPlace" | "pictureUrl" | "parentId1" | "parentId2" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["familyMember"]>
+  export type FamilyMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "gender" | "birthDate" | "deathDate" | "birthPlace" | "picture" | "parentId1" | "parentId2" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["familyMember"]>
   export type FamilyMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     children1?: boolean | FamilyMember$children1Args<ExtArgs>
     children2?: boolean | FamilyMember$children2Args<ExtArgs>
@@ -2493,7 +2493,7 @@ export namespace Prisma {
       birthDate: Date | null
       deathDate: Date | null
       birthPlace: string | null
-      pictureUrl: string | null
+      picture: Uint8Array | null
       parentId1: number | null
       parentId2: number | null
       createdAt: Date
@@ -2933,7 +2933,7 @@ export namespace Prisma {
     readonly birthDate: FieldRef<"FamilyMember", 'DateTime'>
     readonly deathDate: FieldRef<"FamilyMember", 'DateTime'>
     readonly birthPlace: FieldRef<"FamilyMember", 'String'>
-    readonly pictureUrl: FieldRef<"FamilyMember", 'String'>
+    readonly picture: FieldRef<"FamilyMember", 'Bytes'>
     readonly parentId1: FieldRef<"FamilyMember", 'Int'>
     readonly parentId2: FieldRef<"FamilyMember", 'Int'>
     readonly createdAt: FieldRef<"FamilyMember", 'DateTime'>
@@ -3466,7 +3466,7 @@ export namespace Prisma {
     birthDate: 'birthDate',
     deathDate: 'deathDate',
     birthPlace: 'birthPlace',
-    pictureUrl: 'pictureUrl',
+    picture: 'picture',
     parentId1: 'parentId1',
     parentId2: 'parentId2',
     createdAt: 'createdAt',
@@ -3516,6 +3516,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes'
+   */
+  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
     
 
 
@@ -3596,7 +3603,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
-    pictureUrl?: StringNullableFilter<"FamilyMember"> | string | null
+    picture?: BytesNullableFilter<"FamilyMember"> | Uint8Array | null
     parentId1?: IntNullableFilter<"FamilyMember"> | number | null
     parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
@@ -3616,7 +3623,7 @@ export namespace Prisma {
     birthDate?: SortOrderInput | SortOrder
     deathDate?: SortOrderInput | SortOrder
     birthPlace?: SortOrderInput | SortOrder
-    pictureUrl?: SortOrderInput | SortOrder
+    picture?: SortOrderInput | SortOrder
     parentId1?: SortOrderInput | SortOrder
     parentId2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -3639,7 +3646,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
-    pictureUrl?: StringNullableFilter<"FamilyMember"> | string | null
+    picture?: BytesNullableFilter<"FamilyMember"> | Uint8Array | null
     parentId1?: IntNullableFilter<"FamilyMember"> | number | null
     parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
@@ -3659,7 +3666,7 @@ export namespace Prisma {
     birthDate?: SortOrderInput | SortOrder
     deathDate?: SortOrderInput | SortOrder
     birthPlace?: SortOrderInput | SortOrder
-    pictureUrl?: SortOrderInput | SortOrder
+    picture?: SortOrderInput | SortOrder
     parentId1?: SortOrderInput | SortOrder
     parentId2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -3682,7 +3689,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableWithAggregatesFilter<"FamilyMember"> | Date | string | null
     deathDate?: DateTimeNullableWithAggregatesFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
-    pictureUrl?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
+    picture?: BytesNullableWithAggregatesFilter<"FamilyMember"> | Uint8Array | null
     parentId1?: IntNullableWithAggregatesFilter<"FamilyMember"> | number | null
     parentId2?: IntNullableWithAggregatesFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
@@ -3753,7 +3760,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
@@ -3770,7 +3777,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     parentId2?: number | null
     createdAt?: Date | string
@@ -3786,7 +3793,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
@@ -3803,7 +3810,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3820,7 +3827,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     parentId2?: number | null
     createdAt?: Date | string
@@ -3834,7 +3841,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3846,7 +3853,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4004,6 +4011,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BytesNullableFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -4037,7 +4051,7 @@ export namespace Prisma {
     birthDate?: SortOrder
     deathDate?: SortOrder
     birthPlace?: SortOrder
-    pictureUrl?: SortOrder
+    picture?: SortOrder
     parentId1?: SortOrder
     parentId2?: SortOrder
     createdAt?: SortOrder
@@ -4059,7 +4073,7 @@ export namespace Prisma {
     birthDate?: SortOrder
     deathDate?: SortOrder
     birthPlace?: SortOrder
-    pictureUrl?: SortOrder
+    picture?: SortOrder
     parentId1?: SortOrder
     parentId2?: SortOrder
     createdAt?: SortOrder
@@ -4074,7 +4088,7 @@ export namespace Prisma {
     birthDate?: SortOrder
     deathDate?: SortOrder
     birthPlace?: SortOrder
-    pictureUrl?: SortOrder
+    picture?: SortOrder
     parentId1?: SortOrder
     parentId2?: SortOrder
     createdAt?: SortOrder
@@ -4118,6 +4132,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BytesNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBytesNullableFilter<$PrismaModel>
+    _max?: NestedBytesNullableFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4246,6 +4270,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type NullableBytesFieldUpdateOperationsInput = {
+    set?: Uint8Array | null
   }
 
   export type FamilyMemberUpdateManyWithoutParent1NestedInput = {
@@ -4459,6 +4487,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBytesNullableFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  }
+
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -4501,6 +4536,16 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type NestedBytesNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBytesNullableFilter<$PrismaModel>
+    _max?: NestedBytesNullableFilter<$PrismaModel>
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -4534,7 +4579,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
@@ -4550,7 +4595,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     parentId2?: number | null
     createdAt?: Date | string
@@ -4594,7 +4639,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
     birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
-    pictureUrl?: StringNullableFilter<"FamilyMember"> | string | null
+    picture?: BytesNullableFilter<"FamilyMember"> | Uint8Array | null
     parentId1?: IntNullableFilter<"FamilyMember"> | number | null
     parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
@@ -4608,7 +4653,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
@@ -4624,7 +4669,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4648,7 +4693,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
@@ -4664,7 +4709,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4688,7 +4733,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children2?: FamilyMemberCreateNestedManyWithoutParent2Input
@@ -4704,7 +4749,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     parentId2?: number | null
     createdAt?: Date | string
@@ -4724,7 +4769,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
@@ -4740,7 +4785,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     parentId2?: number | null
     createdAt?: Date | string
@@ -4823,7 +4868,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
@@ -4839,7 +4884,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4865,7 +4910,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
@@ -4881,7 +4926,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4923,7 +4968,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     parentId2?: number | null
     createdAt?: Date | string
@@ -4936,7 +4981,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
@@ -4952,7 +4997,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4968,7 +5013,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4982,7 +5027,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4996,7 +5041,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    pictureUrl?: string | null
+    picture?: Uint8Array | null
     parentId1?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5009,7 +5054,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
@@ -5025,7 +5070,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5041,7 +5086,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5054,7 +5099,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
@@ -5070,7 +5115,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5086,7 +5131,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    pictureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
