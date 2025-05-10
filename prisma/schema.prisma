@@ -22,7 +22,30 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
+  userFamilies UserFamily[] // Relation to the UserFamily join table
+}
+
+model Family {
+  id            Int       @id @default(autoincrement())
+  name          String?   // Optional name for the family, e.g., "The Simpsons Family"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
   familyMembers FamilyMember[] // Relation to FamilyMember
+  userFamilies  UserFamily[]   // Relation to the UserFamily join table
+}
+
+// Join table for User and Family (many-to-many)
+model UserFamily {
+  userId    Int
+  familyId  Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  // role   String?  // Optional: e.g., "admin", "member" for role-based access within a family
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, familyId])
 }
 
 model FamilyMember {
@@ -50,8 +73,8 @@ model FamilyMember {
   updatedAt DateTime @updatedAt
 
   // Add relation to User
-  userId Int
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // Add onDelete: Cascade
-
-  @@index([userId]) // Add index for querying by user
+  // Relation to Family
+  familyId Int
+  family   Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  @@index([familyId]) // Add index for querying by family
 }

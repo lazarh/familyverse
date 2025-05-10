@@ -1,53 +1,62 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { Prisma } from '@/generated/prisma';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/authOptions';
+import { getUserIdFromSession } from '@/lib/sessionUtils'; // Import shared utility
 
-// Helper function to get user ID from session
-async function getUserIdFromSession(): Promise<number | null> {
-  const session = await getServerSession(authOptions);
-  const userIdString = (session?.user as { id: string })?.id;
-  if (!userIdString) return null;
-  const userId = parseInt(userIdString, 10);
-  return isNaN(userId) ? null : userId;
-}
-
-// Update the `checkOwnership` function to handle numeric IDs
-// Helper function to check ownership
-async function checkOwnership(memberId: number, userId: number): Promise<boolean> {
-  if (isNaN(memberId) || isNaN(userId)) return false;
+// New helper function to check if the user is authorized for a specific family member's family
+async function isUserAuthorizedForFamilyMember(memberId: number, userId: number): Promise<boolean> {
+  if (isNaN(memberId) || isNaN(userId)) {
+    console.error('Invalid input: memberId or userId is NaN.');
+    return false;
+  }
   try {
     const member = await prisma.familyMember.findUnique({
       where: { id: memberId },
-      select: { userId: true },
+      select: { familyId: true },
     });
-    return !!member && member.userId === userId;
+
+    if (!member || member.familyId === null) {
+      return false;
+    }
+
+    const userFamilyLink = await prisma.userFamily.findUnique({
+      where: {
+        userId_familyId: {
+          userId: userId,
+          familyId: member.familyId,
+        },
+      },
+    });
+    return !!userFamilyLink;
   } catch (error) {
-    console.error(`Error checking ownership for member ${memberId}:`, error);
+    console.error(`Error checking family membership for member ${memberId} and user ${userId}:`, error);
     return false;
   }
 }
 
-// GET /api/family-members/[id] - Fetch a single family member by ID if owned by user
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+// GET /api/family-members/[id] - Fetch a single family member by ID
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   const sessionUserId = await getUserIdFromSession();
   if (sessionUserId === null) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const { id: idString } = await params;
+  const { id: idString } = params;
   if (!idString) {
-    return NextResponse.json({ message: 'Member ID is required' }, { status: 400 });
+    return NextResponse.json({ message: 'Family member ID is required' }, { status: 400 });
   }
   const id = parseInt(idString, 10);
   if (isNaN(id)) {
-    return NextResponse.json({ message: 'Invalid member ID format' }, { status: 400 });
+    return NextResponse.json({ message: 'Invalid family member ID format' }, { status: 400 });
+  }
+
+  const isAuthorized = await isUserAuthorizedForFamilyMember(id, sessionUserId);
+  if (!isAuthorized) {
+    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }
 
   try {
-    const member = await prisma.familyMember.findUnique({
-      where: { id: id },
+    const familyMember = await prisma.familyMember.findUnique({
+      where: { id },
       select: {
         id: true,
         fullName: true,
@@ -55,172 +64,157 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         birthDate: true,
         deathDate: true,
         birthPlace: true,
-        picture: true, // Changed from pictureUrl to picture
+        picture: true,
         parentId1: true,
         parentId2: true,
         createdAt: true,
         updatedAt: true,
-        userId: true,
+        familyId: true,
       },
     });
 
-    if (!member || member.userId !== sessionUserId) {
+    if (!familyMember) {
       return NextResponse.json({ message: 'Family member not found' }, { status: 404 });
     }
-    return NextResponse.json(member);
+    return NextResponse.json(familyMember);
   } catch (error) {
     console.error(`Failed to fetch family member ${id}:`, error);
     return NextResponse.json({ message: 'Failed to fetch family member' }, { status: 500 });
   }
 }
 
-// PATCH /api/family-members/[id] - Update a family member by ID if owned by user
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+// PATCH /api/family-members/[id] - Update a family member by ID
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   const sessionUserId = await getUserIdFromSession();
   if (sessionUserId === null) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
-  const { id: idString } = await params;
+  const { id: idString } = params;
   if (!idString) {
-    return NextResponse.json({ message: 'Member ID is required' }, { status: 400 });
+    return NextResponse.json({ message: 'Family member ID is required' }, { status: 400 });
   }
 
   const numericId = parseInt(idString, 10);
   if (isNaN(numericId)) {
-    return NextResponse.json({ message: 'Invalid member ID format' }, { status: 400 });
+    return NextResponse.json({ message: 'Invalid family member ID format' }, { status: 400 });
   }
 
-  const isOwner = await checkOwnership(numericId, sessionUserId);
-  if (!isOwner) {
+  const isAuthorized = await isUserAuthorizedForFamilyMember(numericId, sessionUserId);
+  if (!isAuthorized) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }
 
   try {
-    const formData = await request.formData();
-    const file = formData.get('picture') as File | null;
-    const removePictureFlag = formData.get('removePicture') === 'true';
+    const formDataPayload = await request.formData();
+    const updateData: Record<string, any> = {};
+    let pictureActionTaken = false; // To ensure only one picture operation is prioritized
 
-    const updateData: Prisma.FamilyMemberUpdateInput = {};
+    for (const [key, value] of formDataPayload.entries()) {
+      if (key === 'picture' && value instanceof File) {
+        if (value.size > 0) { // Process file only if it has content
+          const buffer = Buffer.from(await value.arrayBuffer());
+          updateData.picture = buffer;
+          pictureActionTaken = true;
+        }
+        // If file is empty, it's ignored, existing picture remains unless 'removePicture' is true
+      } else if (typeof value === 'string') {
+        if (key === 'id' || key === 'familyId') {
+          // Skip id and familyId, should not be updatable from client payload this way
+          continue;
+        }
 
-    const existingMember = await prisma.familyMember.findUnique({
-      where: { id: numericId },
-      select: { picture: true }, // Select picture (Bytes)
-    });
-
-    if (!existingMember) {
-      return NextResponse.json({ message: 'Family member not found' }, { status: 404 });
-    }
-
-    if (removePictureFlag) {
-      updateData.picture = null;
-    } else if (file && file.size > 0) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      updateData.picture = buffer;
-    }
-
-    formData.forEach((value, key) => {
-      if (key === 'picture' || key === 'removePicture' || key === 'id' || key === 'userId' || key === 'createdAt' || key === 'updatedAt') return;
-
-      if (typeof value === 'string') {
-        if (key === 'birthDate' || key === 'deathDate') {
-          if (value === '') {
+        if (key === 'removePicture' && value === 'true') {
+          if (!pictureActionTaken) { // Prioritize actual file upload if both sent
+            updateData.picture = null;
+            pictureActionTaken = true;
+          }
+        } else if (key === 'pictureUrl') {
+          if (!pictureActionTaken && value.startsWith('data:image') && value.includes('base64,')) {
+            const base64Data = value.substring(value.indexOf('base64,') + 7);
+            if (base64Data) { // Only process if there's actual base64 data
+              updateData.picture = Buffer.from(base64Data, 'base64');
+              pictureActionTaken = true;
+            }
+            // If base64Data is empty (e.g., "data:image/jpeg;base64,"), do nothing here.
+            // This means an empty data URL won't change the picture unless removePicture is also true.
+          }
+          // Crucially, do not add 'pictureUrl' key itself to updateData
+        } else if (key === 'birthDate' || key === 'deathDate') {
+          updateData[key] = value ? new Date(value) : null;
+        } else if (key === 'parentId1' || key === 'parentId2') {
+          if (value === '' || value === null || value === undefined) {
             updateData[key] = null;
-          } else if (!isNaN(Date.parse(value))) {
-            const date = new Date(value);
-            date.setUTCHours(0, 0, 0, 0);
-            updateData[key] = date;
           } else {
-            console.warn(`Invalid date format for ${key}: ${value}. Skipping update.`);
+            const parsedId = parseInt(value, 10);
+            if (isNaN(parsedId)) {
+              return NextResponse.json({ message: `Invalid ${key} format: '${value}' is not a number.` }, { status: 400 });
+            }
+            updateData[key] = parsedId;
           }
-        } else if (key === 'parentId1') {
-          const parentId1 = value === '' ? null : parseInt(value, 10);
-          if (parentId1 === null || !isNaN(parentId1)) {
-            updateData.parent1 = parentId1 === null ? { disconnect: true } : { connect: { id: parentId1 } };
-          } else {
-            console.warn(`Invalid parentId1 format: ${value}. Skipping update.`);
-          }
-        } else if (key === 'parentId2') {
-          const parentId2 = value === '' ? null : parseInt(value, 10);
-          if (parentId2 === null || !isNaN(parentId2)) {
-            updateData.parent2 = parentId2 === null ? { disconnect: true } : { connect: { id: parentId2 } };
-          } else {
-            console.warn(`Invalid parentId2 format: ${value}. Skipping update.`);
-          }
-        } else if (key in prisma.familyMember.fields) {
-          (updateData as Record<string, unknown>)[key] = value === '' ? null : value;
-        } else {
-          console.warn(`Skipping unknown form field: ${key}`);
+        } else if (key !== 'removePicture') { // Ensure 'removePicture' itself isn't added
+          updateData[key] = value;
         }
       }
-    });
-
-    if (Object.keys(updateData).length === 0) {
-      const currentMemberForNoOp = await prisma.familyMember.findUnique({ where: { id: numericId } });
-      return NextResponse.json(currentMemberForNoOp);
     }
+
+    if (Object.keys(updateData).length === 0 && !pictureActionTaken) {
+      // No actual data fields are changing, and no picture actions were taken.
+      // This could happen if only 'id', 'familyId', or an empty 'pictureUrl' was sent.
+      // Return a 304 Not Modified or the current object, or a specific message.
+      // For simplicity, let's fetch and return the current member if no changes.
+      // However, Prisma's update with empty data might just work fine (no-op).
+      // If Prisma throws error on empty data, then handle here.
+      // For now, let Prisma handle it; it usually doesn't update if data is identical or empty.
+    }
+    
+    // console.log(`Processed updateData for member ${numericId}:`, updateData);
 
     const updatedMember = await prisma.familyMember.update({
       where: { id: numericId },
       data: updateData,
     });
-
     return NextResponse.json(updatedMember);
   } catch (error: unknown) {
-    console.error(`Failed to update family member ${idString}:`, error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2025') {
-        return NextResponse.json({ message: 'Family member not found' }, { status: 404 });
-      }
-      if (error.code === 'P2003') {
-        return NextResponse.json({ message: 'Invalid parent ID provided.' }, { status: 400 });
-      }
-      if (error.code === 'P2002') {
-        return NextResponse.json({ message: 'Update failed due to unique constraint.' }, { status: 409 });
-      }
+    console.error(`Failed to update family member ${numericId}:`, error);
+    if (error instanceof Error && error.message.includes('already consumed')) {
+        return NextResponse.json({ message: 'Request body already consumed or malformed.' }, { status: 400 });
     }
-    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-    return NextResponse.json({ message: `Failed to update family member: ${errorMessage}` }, { status: 500 });
+    if (error instanceof SyntaxError) { // Should not happen if using formData, but as a fallback
+        return NextResponse.json({ message: 'Invalid JSON payload if not using FormData.' }, { status: 400 });
+    }
+    // Catch other potential errors during formData processing or Prisma update
+    return NextResponse.json({ message: 'Failed to update family member due to an internal error.' }, { status: 500 });
   }
 }
 
-// DELETE /api/family-members/[id] - Delete a family member by ID if owned by user
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+// DELETE /api/family-members/[id] - Delete a family member by ID
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   const sessionUserId = await getUserIdFromSession();
   if (sessionUserId === null) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
-  const { id: idString } = await params;
+  const { id: idString } = params;
   if (!idString) {
-    return NextResponse.json({ message: 'Member ID is required' }, { status: 400 });
+    return NextResponse.json({ message: 'Family member ID is required' }, { status: 400 });
   }
 
   const numericId = parseInt(idString, 10);
   if (isNaN(numericId)) {
-    return NextResponse.json({ message: 'Invalid member ID format' }, { status: 400 });
+    return NextResponse.json({ message: 'Invalid family member ID format' }, { status: 400 });
   }
 
-  const isOwner = await checkOwnership(numericId, sessionUserId);
-  if (!isOwner) {
-    return NextResponse.json({ message: 'Family member not found or access denied' }, { status: 404 });
+  const isAuthorized = await isUserAuthorizedForFamilyMember(numericId, sessionUserId);
+  if (!isAuthorized) {
+    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }
 
   try {
     await prisma.familyMember.delete({
       where: { id: numericId },
     });
-
     return NextResponse.json({ message: 'Family member deleted successfully' }, { status: 200 });
   } catch (error: unknown) {
-    console.error(`Failed to delete family member ${idString}:`, error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2025') {
-        return NextResponse.json({ message: 'Family member not found' }, { status: 404 });
-      }
-      if (error.code === 'P2003') {
-        return NextResponse.json({ message: 'Cannot delete member: They are referenced as a parent by another member.' }, { status: 409 });
-      }
-    }
-    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-    return NextResponse.json({ message: `Failed to delete family member: ${errorMessage}` }, { status: 500 });
+    console.error(`Failed to delete family member ${numericId}:`, error);
+    return NextResponse.json({ message: 'Failed to delete family member' }, { status: 500 });
   }
 }

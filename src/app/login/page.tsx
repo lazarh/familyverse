@@ -23,9 +23,25 @@ export default function LoginPage() {
     if (result?.error) {
       setError('Invalid email or password'); // Or use result.error for more specific messages
     } else if (result?.ok) {
-      // Redirect to home page or dashboard upon successful login
-      router.push('/');
-      router.refresh(); // Refresh server components
+      // Fetch user's families
+      try {
+        const res = await fetch('/api/families');
+        if (res.ok) {
+          const families = await res.json();
+          if (families && families.length > 0) {
+            router.push('/'); // User has families, redirect to main page
+          } else {
+            router.push('/create-family'); // User has no families, redirect to create family page
+          }
+          router.refresh(); // Refresh server components
+        } else {
+          // Handle error fetching families, perhaps redirect to a generic error page or show a message
+          setError('Could not fetch family details. Please try again.');
+        }
+      } catch (fetchError) {
+        console.error("Failed to fetch families:", fetchError);
+        setError('An error occurred while checking your family status.');
+      }
     } else {
       setError('An unexpected error occurred. Please try again.');
     }

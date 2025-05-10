@@ -1,44 +1,62 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { Prisma } from '@/generated/prisma'; // Corrected import path
-import { getServerSession } from 'next-auth/next'; // Import getServerSession
-import { authOptions } from '@/lib/authOptions'; // Correct the import path for authOptions
+import { getUserIdFromSession } from '@/lib/sessionUtils';
+import { Prisma } from '@/generated/prisma'; // Correct import for Prisma namespace
 
-// Helper function to get user ID from session
-async function getUserIdFromSession(): Promise<number | null> {
-  const session = await getServerSession(authOptions);
-  const userIdString = (session?.user as { id: string })?.id;
-  if (!userIdString) return null;
-  const userId = parseInt(userIdString, 10);
-  return isNaN(userId) ? null : userId;
-}
-
-// GET /api/family-members - Fetch all family members for the logged-in user
-export async function GET() {
+// GET /api/family-members - Fetch all family members for the families the logged-in user belongs to.
+// Expects a `familyId` query parameter to specify which family's members to fetch.
+export async function GET(request: Request) {
   const userId = await getUserIdFromSession();
   if (!userId) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
+  const { searchParams } = new URL(request.url);
+  const familyIdString = searchParams.get('familyId');
+
+  if (!familyIdString) {
+    return NextResponse.json({ message: 'familyId query parameter is required' }, { status: 400 });
+  }
+
+  const familyId = parseInt(familyIdString, 10);
+  if (isNaN(familyId)) {
+    return NextResponse.json({ message: 'Invalid familyId format' }, { status: 400 });
+  }
+
   try {
+    // Check if the user is part of the requested family
+    const userFamilyLink = await prisma.userFamily.findUnique({
+      where: {
+        userId_familyId: {
+          userId: userId,
+          familyId: familyId,
+        },
+      },
+    });
+
+    if (!userFamilyLink) {
+      return NextResponse.json({ message: 'Forbidden: User is not a member of this family' }, { status: 403 });
+    }
+
+    // Fetch family members for the specified family
     const familyMembers = await prisma.familyMember.findMany({
-      where: { userId: userId }, // Filter by userId
-      select: { // Explicitly select all fields needed by the frontend
+      where: { familyId: familyId }, // Filter by familyId
+      select: {
         id: true,
         fullName: true,
         gender: true,
         birthDate: true,
         deathDate: true,
         birthPlace: true,
-        picture: true, // Keep as Bytes, will be handled by client
+        picture: true,
         parentId1: true,
         parentId2: true,
         createdAt: true,
         updatedAt: true,
-        userId: true,
+        familyId: true, // Ensure familyId is selected
       },
       orderBy: {
-        birthDate: 'asc', // Optional: Order by birth date
+        birthDate: 'asc',
       },
     });
     return NextResponse.json(familyMembers);
@@ -48,7 +66,8 @@ export async function GET() {
   }
 }
 
-// POST /api/family-members - Create a new family member for the logged-in user
+// POST /api/family-members - Create a new family member for a specific family.
+// Expects `familyId` in the request body.
 export async function POST(request: Request) {
   const userId = await getUserIdFromSession();
   if (!userId) {
@@ -57,87 +76,98 @@ export async function POST(request: Request) {
 
   try {
     const formData = await request.formData();
-    const file = formData.get('picture') as File | null;
+    const familyIdString = formData.get('familyId') as string | null;
+    const fullName = formData.get('fullName') as string | null;
+    const gender = formData.get('gender') as string | null;
+    const birthDateString = formData.get('birthDate') as string | null;
+    const deathDateString = formData.get('deathDate') as string | null;
+    const birthPlace = formData.get('birthPlace') as string | null;
+    const pictureFile = formData.get('picture') as File | null;
+    const parentId1String = formData.get('parentId1') as string | null;
+    const parentId2String = formData.get('parentId2') as string | null;
 
-    const requiredFields = ['fullName', 'gender'];
-    const missingRequiredFields: string[] = [];
-    requiredFields.forEach(field => {
-      if (!formData.has(field) || !formData.get(field)) {
-        missingRequiredFields.push(field);
-      }
-    });
-
-    if (missingRequiredFields.length > 0) {
-      return NextResponse.json({ message: `Missing required fields: ${missingRequiredFields.join(', ')}` }, { status: 400 });
+    if (!familyIdString || !fullName || !gender) {
+      return NextResponse.json({ message: 'Missing required fields: familyId, fullName, gender' }, { status: 400 });
     }
 
-    const memberData: Prisma.FamilyMemberCreateInput = {
-      user: { connect: { id: userId } }, // userId is now a number
-      fullName: formData.get('fullName') as string,
-      gender: formData.get('gender') as string,
-      birthPlace: formData.get('birthPlace') as string | null,
+    const familyId = parseInt(familyIdString, 10);
+    if (isNaN(familyId)) {
+      return NextResponse.json({ message: 'Invalid familyId format' }, { status: 400 });
+    }
+
+    // Check if the user is part of the family they are trying to add a member to
+    const userFamilyLink = await prisma.userFamily.findUnique({
+      where: {
+        userId_familyId: {
+          userId: userId,
+          familyId: familyId,
+        },
+      },
+    });
+
+    if (!userFamilyLink) {
+      return NextResponse.json({ message: 'Forbidden: You are not a member of this family' }, { status: 403 });
+    }
+
+    let pictureBuffer: Buffer | undefined = undefined;
+    if (pictureFile) {
+      const arrayBuffer = await pictureFile.arrayBuffer();
+      pictureBuffer = Buffer.from(arrayBuffer);
+    }
+
+    const data: Prisma.FamilyMemberCreateInput = {
+      fullName,
+      gender,
+      family: { connect: { id: familyId } }, // Link to the specified family
+      birthDate: birthDateString ? new Date(birthDateString) : null,
+      deathDate: deathDateString ? new Date(deathDateString) : null,
+      birthPlace: birthPlace || null,
+      picture: pictureBuffer,
+      // Correctly map parentId1 and parentId2 to parent1 and parent2 relations
+      parent1: parentId1String ? { connect: { id: parseInt(parentId1String, 10) } } : undefined,
+      parent2: parentId2String ? { connect: { id: parseInt(parentId2String, 10) } } : undefined,
     };
 
-    const birthDateStr = formData.get('birthDate') as string | null;
-    if (birthDateStr) {
-      const birthDate = new Date(birthDateStr);
-      if (!isNaN(birthDate.getTime())) {
-        birthDate.setUTCHours(0, 0, 0, 0);
-        memberData.birthDate = birthDate;
-      } else {
-        console.warn(`Invalid birthDate format: ${birthDateStr}. Skipping.`);
-      }
+    // Ensure parent IDs are valid numbers if provided
+    if (parentId1String && isNaN(parseInt(parentId1String, 10))) {
+      return NextResponse.json({ message: 'Invalid parentId1 format' }, { status: 400 });
+    }
+    if (parentId2String && isNaN(parseInt(parentId2String, 10))) {
+      return NextResponse.json({ message: 'Invalid parentId2 format' }, { status: 400 });
     }
 
-    const deathDateStr = formData.get('deathDate') as string | null;
-    if (deathDateStr) {
-      const deathDate = new Date(deathDateStr);
-      if (!isNaN(deathDate.getTime())) {
-        deathDate.setUTCHours(0, 0, 0, 0);
-        memberData.deathDate = deathDate;
-      } else {
-        console.warn(`Invalid deathDate format: ${deathDateStr}. Skipping.`);
-      }
-    }
-
-    const parentId1String = formData.get('parentId1') as string | null;
-    if (parentId1String && parentId1String !== '') {
-      const parentId1 = parseInt(parentId1String, 10);
-      if (!isNaN(parentId1)) {
-        memberData.parent1 = { connect: { id: parentId1 } };
-      } else {
-        console.warn(`Invalid parentId1 format: ${parentId1String}. Skipping connection.`);
-      }
-    }
-
-    const parentId2String = formData.get('parentId2') as string | null;
-    if (parentId2String && parentId2String !== '') {
-      const parentId2 = parseInt(parentId2String, 10);
-      if (!isNaN(parentId2)) {
-        memberData.parent2 = { connect: { id: parentId2 } };
-      } else {
-        console.warn(`Invalid parentId2 format: ${parentId2String}. Skipping connection.`);
-      }
-    }
-
-    if (file && file.size > 0) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      memberData.picture = buffer; // Image stored as Bytes
-    }
-
-    const newMember = await prisma.familyMember.create({
-      data: memberData,
+    const newFamilyMember = await prisma.familyMember.create({
+      data,
+      select: {
+        id: true,
+        fullName: true,
+        gender: true,
+        birthDate: true,
+        deathDate: true,
+        birthPlace: true,
+        parentId1: true, // Keep selecting parentId1 and parentId2 if needed for response
+        parentId2: true,
+        createdAt: true,
+        updatedAt: true,
+        familyId: true,
+      },
     });
 
-    return NextResponse.json(newMember, { status: 201 });
+    return NextResponse.json(newFamilyMember, { status: 201 });
   } catch (error: unknown) {
-    console.error('Failed to create family member:', error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2003') {
-        return NextResponse.json({ message: 'Invalid parent ID provided.' }, { status: 400 });
+    console.error("Failed to create family member:", error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) { // Use Prisma.PrismaClientKnownRequestError
+      if (error.code === 'P2002') { // Unique constraint violation
+        return NextResponse.json({ message: 'A unique constraint was violated.', details: error.meta }, { status: 409 });
+      }
+      if (error.code === 'P2025') { // Record to connect not found (e.g. familyId or parentId)
+        const target = (error.meta?.target as string[] | undefined)?.join(', ') || 'related record';
+        return NextResponse.json({ message: `Failed to create family member. The specified ${target} was not found.` }, { status: 400 });
       }
     }
-    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-    return NextResponse.json({ message: `Failed to create family member: ${errorMessage}` }, { status: 500 });
+    if (error instanceof SyntaxError) { // Error parsing formData or JSON
+        return NextResponse.json({ message: 'Invalid request format' }, { status: 400 });
+    }
+    return NextResponse.json({ message: 'Failed to create family member' }, { status: 500 });
   }
 }

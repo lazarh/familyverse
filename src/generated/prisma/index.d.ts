@@ -19,6 +19,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model Family
+ * 
+ */
+export type Family = $Result.DefaultSelection<Prisma.$FamilyPayload>
+/**
+ * Model UserFamily
+ * 
+ */
+export type UserFamily = $Result.DefaultSelection<Prisma.$UserFamilyPayload>
+/**
  * Model FamilyMember
  * 
  */
@@ -158,6 +168,26 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.family`: Exposes CRUD operations for the **Family** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Families
+    * const families = await prisma.family.findMany()
+    * ```
+    */
+  get family(): Prisma.FamilyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userFamily`: Exposes CRUD operations for the **UserFamily** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserFamilies
+    * const userFamilies = await prisma.userFamily.findMany()
+    * ```
+    */
+  get userFamily(): Prisma.UserFamilyDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.familyMember`: Exposes CRUD operations for the **FamilyMember** model.
@@ -609,6 +639,8 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    Family: 'Family',
+    UserFamily: 'UserFamily',
     FamilyMember: 'FamilyMember'
   };
 
@@ -628,7 +660,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "familyMember"
+      modelProps: "user" | "family" | "userFamily" | "familyMember"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -703,6 +735,154 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Family: {
+        payload: Prisma.$FamilyPayload<ExtArgs>
+        fields: Prisma.FamilyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FamilyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FamilyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          findFirst: {
+            args: Prisma.FamilyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FamilyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          findMany: {
+            args: Prisma.FamilyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>[]
+          }
+          create: {
+            args: Prisma.FamilyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          createMany: {
+            args: Prisma.FamilyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FamilyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>[]
+          }
+          delete: {
+            args: Prisma.FamilyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          update: {
+            args: Prisma.FamilyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          deleteMany: {
+            args: Prisma.FamilyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FamilyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FamilyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>[]
+          }
+          upsert: {
+            args: Prisma.FamilyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyPayload>
+          }
+          aggregate: {
+            args: Prisma.FamilyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFamily>
+          }
+          groupBy: {
+            args: Prisma.FamilyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FamilyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FamilyCountArgs<ExtArgs>
+            result: $Utils.Optional<FamilyCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserFamily: {
+        payload: Prisma.$UserFamilyPayload<ExtArgs>
+        fields: Prisma.UserFamilyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserFamilyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserFamilyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>
+          }
+          findFirst: {
+            args: Prisma.UserFamilyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserFamilyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>
+          }
+          findMany: {
+            args: Prisma.UserFamilyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>[]
+          }
+          create: {
+            args: Prisma.UserFamilyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>
+          }
+          createMany: {
+            args: Prisma.UserFamilyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserFamilyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>[]
+          }
+          delete: {
+            args: Prisma.UserFamilyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>
+          }
+          update: {
+            args: Prisma.UserFamilyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserFamilyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserFamilyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserFamilyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserFamilyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFamilyPayload>
+          }
+          aggregate: {
+            args: Prisma.UserFamilyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserFamily>
+          }
+          groupBy: {
+            args: Prisma.UserFamilyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserFamilyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserFamilyCountArgs<ExtArgs>
+            result: $Utils.Optional<UserFamilyCountAggregateOutputType> | number
           }
         }
       }
@@ -865,6 +1045,8 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    family?: FamilyOmit
+    userFamily?: UserFamilyOmit
     familyMember?: FamilyMemberOmit
   }
 
@@ -960,11 +1142,11 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    familyMembers: number
+    userFamilies: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    familyMembers?: boolean | UserCountOutputTypeCountFamilyMembersArgs
+    userFamilies?: boolean | UserCountOutputTypeCountUserFamiliesArgs
   }
 
   // Custom InputTypes
@@ -981,8 +1163,48 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountFamilyMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountUserFamiliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserFamilyWhereInput
+  }
+
+
+  /**
+   * Count Type FamilyCountOutputType
+   */
+
+  export type FamilyCountOutputType = {
+    familyMembers: number
+    userFamilies: number
+  }
+
+  export type FamilyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    familyMembers?: boolean | FamilyCountOutputTypeCountFamilyMembersArgs
+    userFamilies?: boolean | FamilyCountOutputTypeCountUserFamiliesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FamilyCountOutputType without action
+   */
+  export type FamilyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyCountOutputType
+     */
+    select?: FamilyCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FamilyCountOutputType without action
+   */
+  export type FamilyCountOutputTypeCountFamilyMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FamilyMemberWhereInput
+  }
+
+  /**
+   * FamilyCountOutputType without action
+   */
+  export type FamilyCountOutputTypeCountUserFamiliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserFamilyWhereInput
   }
 
 
@@ -1228,7 +1450,7 @@ export namespace Prisma {
     password?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    familyMembers?: boolean | User$familyMembersArgs<ExtArgs>
+    userFamilies?: boolean | User$userFamiliesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1258,7 +1480,7 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    familyMembers?: boolean | User$familyMembersArgs<ExtArgs>
+    userFamilies?: boolean | User$userFamiliesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1267,7 +1489,7 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      familyMembers: Prisma.$FamilyMemberPayload<ExtArgs>[]
+      userFamilies: Prisma.$UserFamilyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1669,7 +1891,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    familyMembers<T extends User$familyMembersArgs<ExtArgs> = {}>(args?: Subset<T, User$familyMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userFamilies<T extends User$userFamiliesArgs<ExtArgs> = {}>(args?: Subset<T, User$userFamiliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2090,27 +2312,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.familyMembers
+   * User.userFamilies
    */
-  export type User$familyMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$userFamiliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the UserFamily
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: UserFamilySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the UserFamily
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: UserFamilyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
-    where?: FamilyMemberWhereInput
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
-    cursor?: FamilyMemberWhereUniqueInput
+    include?: UserFamilyInclude<ExtArgs> | null
+    where?: UserFamilyWhereInput
+    orderBy?: UserFamilyOrderByWithRelationInput | UserFamilyOrderByWithRelationInput[]
+    cursor?: UserFamilyWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+    distinct?: UserFamilyScalarFieldEnum | UserFamilyScalarFieldEnum[]
   }
 
   /**
@@ -2133,6 +2355,2212 @@ export namespace Prisma {
 
 
   /**
+   * Model Family
+   */
+
+  export type AggregateFamily = {
+    _count: FamilyCountAggregateOutputType | null
+    _avg: FamilyAvgAggregateOutputType | null
+    _sum: FamilySumAggregateOutputType | null
+    _min: FamilyMinAggregateOutputType | null
+    _max: FamilyMaxAggregateOutputType | null
+  }
+
+  export type FamilyAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type FamilySumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type FamilyMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FamilyMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FamilyCountAggregateOutputType = {
+    id: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FamilyAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type FamilySumAggregateInputType = {
+    id?: true
+  }
+
+  export type FamilyMinAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FamilyMaxAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FamilyCountAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FamilyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Family to aggregate.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Families
+    **/
+    _count?: true | FamilyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FamilyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FamilySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FamilyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FamilyMaxAggregateInputType
+  }
+
+  export type GetFamilyAggregateType<T extends FamilyAggregateArgs> = {
+        [P in keyof T & keyof AggregateFamily]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFamily[P]>
+      : GetScalarType<T[P], AggregateFamily[P]>
+  }
+
+
+
+
+  export type FamilyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyWhereInput
+    orderBy?: FamilyOrderByWithAggregationInput | FamilyOrderByWithAggregationInput[]
+    by: FamilyScalarFieldEnum[] | FamilyScalarFieldEnum
+    having?: FamilyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FamilyCountAggregateInputType | true
+    _avg?: FamilyAvgAggregateInputType
+    _sum?: FamilySumAggregateInputType
+    _min?: FamilyMinAggregateInputType
+    _max?: FamilyMaxAggregateInputType
+  }
+
+  export type FamilyGroupByOutputType = {
+    id: number
+    name: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FamilyCountAggregateOutputType | null
+    _avg: FamilyAvgAggregateOutputType | null
+    _sum: FamilySumAggregateOutputType | null
+    _min: FamilyMinAggregateOutputType | null
+    _max: FamilyMaxAggregateOutputType | null
+  }
+
+  type GetFamilyGroupByPayload<T extends FamilyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FamilyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FamilyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FamilyGroupByOutputType[P]>
+            : GetScalarType<T[P], FamilyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FamilySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    familyMembers?: boolean | Family$familyMembersArgs<ExtArgs>
+    userFamilies?: boolean | Family$userFamiliesArgs<ExtArgs>
+    _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["family"]>
+
+  export type FamilySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["family"]>
+
+  export type FamilySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["family"]>
+
+  export type FamilySelectScalar = {
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FamilyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["family"]>
+  export type FamilyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    familyMembers?: boolean | Family$familyMembersArgs<ExtArgs>
+    userFamilies?: boolean | Family$userFamiliesArgs<ExtArgs>
+    _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FamilyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FamilyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $FamilyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Family"
+    objects: {
+      familyMembers: Prisma.$FamilyMemberPayload<ExtArgs>[]
+      userFamilies: Prisma.$UserFamilyPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["family"]>
+    composites: {}
+  }
+
+  type FamilyGetPayload<S extends boolean | null | undefined | FamilyDefaultArgs> = $Result.GetResult<Prisma.$FamilyPayload, S>
+
+  type FamilyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FamilyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FamilyCountAggregateInputType | true
+    }
+
+  export interface FamilyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Family'], meta: { name: 'Family' } }
+    /**
+     * Find zero or one Family that matches the filter.
+     * @param {FamilyFindUniqueArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FamilyFindUniqueArgs>(args: SelectSubset<T, FamilyFindUniqueArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Family that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FamilyFindUniqueOrThrowArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FamilyFindUniqueOrThrowArgs>(args: SelectSubset<T, FamilyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Family that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyFindFirstArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FamilyFindFirstArgs>(args?: SelectSubset<T, FamilyFindFirstArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Family that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyFindFirstOrThrowArgs} args - Arguments to find a Family
+     * @example
+     * // Get one Family
+     * const family = await prisma.family.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FamilyFindFirstOrThrowArgs>(args?: SelectSubset<T, FamilyFindFirstOrThrowArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Families that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Families
+     * const families = await prisma.family.findMany()
+     * 
+     * // Get first 10 Families
+     * const families = await prisma.family.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const familyWithIdOnly = await prisma.family.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FamilyFindManyArgs>(args?: SelectSubset<T, FamilyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Family.
+     * @param {FamilyCreateArgs} args - Arguments to create a Family.
+     * @example
+     * // Create one Family
+     * const Family = await prisma.family.create({
+     *   data: {
+     *     // ... data to create a Family
+     *   }
+     * })
+     * 
+     */
+    create<T extends FamilyCreateArgs>(args: SelectSubset<T, FamilyCreateArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Families.
+     * @param {FamilyCreateManyArgs} args - Arguments to create many Families.
+     * @example
+     * // Create many Families
+     * const family = await prisma.family.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FamilyCreateManyArgs>(args?: SelectSubset<T, FamilyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Families and returns the data saved in the database.
+     * @param {FamilyCreateManyAndReturnArgs} args - Arguments to create many Families.
+     * @example
+     * // Create many Families
+     * const family = await prisma.family.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Families and only return the `id`
+     * const familyWithIdOnly = await prisma.family.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FamilyCreateManyAndReturnArgs>(args?: SelectSubset<T, FamilyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Family.
+     * @param {FamilyDeleteArgs} args - Arguments to delete one Family.
+     * @example
+     * // Delete one Family
+     * const Family = await prisma.family.delete({
+     *   where: {
+     *     // ... filter to delete one Family
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FamilyDeleteArgs>(args: SelectSubset<T, FamilyDeleteArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Family.
+     * @param {FamilyUpdateArgs} args - Arguments to update one Family.
+     * @example
+     * // Update one Family
+     * const family = await prisma.family.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FamilyUpdateArgs>(args: SelectSubset<T, FamilyUpdateArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Families.
+     * @param {FamilyDeleteManyArgs} args - Arguments to filter Families to delete.
+     * @example
+     * // Delete a few Families
+     * const { count } = await prisma.family.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FamilyDeleteManyArgs>(args?: SelectSubset<T, FamilyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Families.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Families
+     * const family = await prisma.family.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FamilyUpdateManyArgs>(args: SelectSubset<T, FamilyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Families and returns the data updated in the database.
+     * @param {FamilyUpdateManyAndReturnArgs} args - Arguments to update many Families.
+     * @example
+     * // Update many Families
+     * const family = await prisma.family.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Families and only return the `id`
+     * const familyWithIdOnly = await prisma.family.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FamilyUpdateManyAndReturnArgs>(args: SelectSubset<T, FamilyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Family.
+     * @param {FamilyUpsertArgs} args - Arguments to update or create a Family.
+     * @example
+     * // Update or create a Family
+     * const family = await prisma.family.upsert({
+     *   create: {
+     *     // ... data to create a Family
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Family we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FamilyUpsertArgs>(args: SelectSubset<T, FamilyUpsertArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Families.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyCountArgs} args - Arguments to filter Families to count.
+     * @example
+     * // Count the number of Families
+     * const count = await prisma.family.count({
+     *   where: {
+     *     // ... the filter for the Families we want to count
+     *   }
+     * })
+    **/
+    count<T extends FamilyCountArgs>(
+      args?: Subset<T, FamilyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FamilyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Family.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FamilyAggregateArgs>(args: Subset<T, FamilyAggregateArgs>): Prisma.PrismaPromise<GetFamilyAggregateType<T>>
+
+    /**
+     * Group by Family.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FamilyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FamilyGroupByArgs['orderBy'] }
+        : { orderBy?: FamilyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FamilyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFamilyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Family model
+   */
+  readonly fields: FamilyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Family.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FamilyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    familyMembers<T extends Family$familyMembersArgs<ExtArgs> = {}>(args?: Subset<T, Family$familyMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userFamilies<T extends Family$userFamiliesArgs<ExtArgs> = {}>(args?: Subset<T, Family$userFamiliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Family model
+   */
+  interface FamilyFieldRefs {
+    readonly id: FieldRef<"Family", 'Int'>
+    readonly name: FieldRef<"Family", 'String'>
+    readonly createdAt: FieldRef<"Family", 'DateTime'>
+    readonly updatedAt: FieldRef<"Family", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Family findUnique
+   */
+  export type FamilyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family findUniqueOrThrow
+   */
+  export type FamilyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family findFirst
+   */
+  export type FamilyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Families.
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Families.
+     */
+    distinct?: FamilyScalarFieldEnum | FamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Family findFirstOrThrow
+   */
+  export type FamilyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Family to fetch.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Families.
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Families.
+     */
+    distinct?: FamilyScalarFieldEnum | FamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Family findMany
+   */
+  export type FamilyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which Families to fetch.
+     */
+    where?: FamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Families to fetch.
+     */
+    orderBy?: FamilyOrderByWithRelationInput | FamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Families.
+     */
+    cursor?: FamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Families from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Families.
+     */
+    skip?: number
+    distinct?: FamilyScalarFieldEnum | FamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Family create
+   */
+  export type FamilyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Family.
+     */
+    data: XOR<FamilyCreateInput, FamilyUncheckedCreateInput>
+  }
+
+  /**
+   * Family createMany
+   */
+  export type FamilyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Families.
+     */
+    data: FamilyCreateManyInput | FamilyCreateManyInput[]
+  }
+
+  /**
+   * Family createManyAndReturn
+   */
+  export type FamilyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * The data used to create many Families.
+     */
+    data: FamilyCreateManyInput | FamilyCreateManyInput[]
+  }
+
+  /**
+   * Family update
+   */
+  export type FamilyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Family.
+     */
+    data: XOR<FamilyUpdateInput, FamilyUncheckedUpdateInput>
+    /**
+     * Choose, which Family to update.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family updateMany
+   */
+  export type FamilyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Families.
+     */
+    data: XOR<FamilyUpdateManyMutationInput, FamilyUncheckedUpdateManyInput>
+    /**
+     * Filter which Families to update
+     */
+    where?: FamilyWhereInput
+    /**
+     * Limit how many Families to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Family updateManyAndReturn
+   */
+  export type FamilyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * The data used to update Families.
+     */
+    data: XOR<FamilyUpdateManyMutationInput, FamilyUncheckedUpdateManyInput>
+    /**
+     * Filter which Families to update
+     */
+    where?: FamilyWhereInput
+    /**
+     * Limit how many Families to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Family upsert
+   */
+  export type FamilyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Family to update in case it exists.
+     */
+    where: FamilyWhereUniqueInput
+    /**
+     * In case the Family found by the `where` argument doesn't exist, create a new Family with this data.
+     */
+    create: XOR<FamilyCreateInput, FamilyUncheckedCreateInput>
+    /**
+     * In case the Family was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FamilyUpdateInput, FamilyUncheckedUpdateInput>
+  }
+
+  /**
+   * Family delete
+   */
+  export type FamilyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+    /**
+     * Filter which Family to delete.
+     */
+    where: FamilyWhereUniqueInput
+  }
+
+  /**
+   * Family deleteMany
+   */
+  export type FamilyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Families to delete
+     */
+    where?: FamilyWhereInput
+    /**
+     * Limit how many Families to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Family.familyMembers
+   */
+  export type Family$familyMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMember
+     */
+    select?: FamilyMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMember
+     */
+    omit?: FamilyMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMemberInclude<ExtArgs> | null
+    where?: FamilyMemberWhereInput
+    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    cursor?: FamilyMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Family.userFamilies
+   */
+  export type Family$userFamiliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    where?: UserFamilyWhereInput
+    orderBy?: UserFamilyOrderByWithRelationInput | UserFamilyOrderByWithRelationInput[]
+    cursor?: UserFamilyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserFamilyScalarFieldEnum | UserFamilyScalarFieldEnum[]
+  }
+
+  /**
+   * Family without action
+   */
+  export type FamilyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Family
+     */
+    select?: FamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Family
+     */
+    omit?: FamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserFamily
+   */
+
+  export type AggregateUserFamily = {
+    _count: UserFamilyCountAggregateOutputType | null
+    _avg: UserFamilyAvgAggregateOutputType | null
+    _sum: UserFamilySumAggregateOutputType | null
+    _min: UserFamilyMinAggregateOutputType | null
+    _max: UserFamilyMaxAggregateOutputType | null
+  }
+
+  export type UserFamilyAvgAggregateOutputType = {
+    userId: number | null
+    familyId: number | null
+  }
+
+  export type UserFamilySumAggregateOutputType = {
+    userId: number | null
+    familyId: number | null
+  }
+
+  export type UserFamilyMinAggregateOutputType = {
+    userId: number | null
+    familyId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserFamilyMaxAggregateOutputType = {
+    userId: number | null
+    familyId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserFamilyCountAggregateOutputType = {
+    userId: number
+    familyId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserFamilyAvgAggregateInputType = {
+    userId?: true
+    familyId?: true
+  }
+
+  export type UserFamilySumAggregateInputType = {
+    userId?: true
+    familyId?: true
+  }
+
+  export type UserFamilyMinAggregateInputType = {
+    userId?: true
+    familyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserFamilyMaxAggregateInputType = {
+    userId?: true
+    familyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserFamilyCountAggregateInputType = {
+    userId?: true
+    familyId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserFamilyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserFamily to aggregate.
+     */
+    where?: UserFamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFamilies to fetch.
+     */
+    orderBy?: UserFamilyOrderByWithRelationInput | UserFamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserFamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFamilies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFamilies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserFamilies
+    **/
+    _count?: true | UserFamilyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserFamilyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserFamilySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserFamilyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserFamilyMaxAggregateInputType
+  }
+
+  export type GetUserFamilyAggregateType<T extends UserFamilyAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserFamily]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserFamily[P]>
+      : GetScalarType<T[P], AggregateUserFamily[P]>
+  }
+
+
+
+
+  export type UserFamilyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserFamilyWhereInput
+    orderBy?: UserFamilyOrderByWithAggregationInput | UserFamilyOrderByWithAggregationInput[]
+    by: UserFamilyScalarFieldEnum[] | UserFamilyScalarFieldEnum
+    having?: UserFamilyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserFamilyCountAggregateInputType | true
+    _avg?: UserFamilyAvgAggregateInputType
+    _sum?: UserFamilySumAggregateInputType
+    _min?: UserFamilyMinAggregateInputType
+    _max?: UserFamilyMaxAggregateInputType
+  }
+
+  export type UserFamilyGroupByOutputType = {
+    userId: number
+    familyId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: UserFamilyCountAggregateOutputType | null
+    _avg: UserFamilyAvgAggregateOutputType | null
+    _sum: UserFamilySumAggregateOutputType | null
+    _min: UserFamilyMinAggregateOutputType | null
+    _max: UserFamilyMaxAggregateOutputType | null
+  }
+
+  type GetUserFamilyGroupByPayload<T extends UserFamilyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserFamilyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserFamilyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserFamilyGroupByOutputType[P]>
+            : GetScalarType<T[P], UserFamilyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserFamilySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    familyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userFamily"]>
+
+  export type UserFamilySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    familyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userFamily"]>
+
+  export type UserFamilySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    familyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userFamily"]>
+
+  export type UserFamilySelectScalar = {
+    userId?: boolean
+    familyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserFamilyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "familyId" | "createdAt" | "updatedAt", ExtArgs["result"]["userFamily"]>
+  export type UserFamilyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+  export type UserFamilyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+  export type UserFamilyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+
+  export type $UserFamilyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserFamily"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      family: Prisma.$FamilyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      userId: number
+      familyId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userFamily"]>
+    composites: {}
+  }
+
+  type UserFamilyGetPayload<S extends boolean | null | undefined | UserFamilyDefaultArgs> = $Result.GetResult<Prisma.$UserFamilyPayload, S>
+
+  type UserFamilyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserFamilyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserFamilyCountAggregateInputType | true
+    }
+
+  export interface UserFamilyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserFamily'], meta: { name: 'UserFamily' } }
+    /**
+     * Find zero or one UserFamily that matches the filter.
+     * @param {UserFamilyFindUniqueArgs} args - Arguments to find a UserFamily
+     * @example
+     * // Get one UserFamily
+     * const userFamily = await prisma.userFamily.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserFamilyFindUniqueArgs>(args: SelectSubset<T, UserFamilyFindUniqueArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserFamily that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserFamilyFindUniqueOrThrowArgs} args - Arguments to find a UserFamily
+     * @example
+     * // Get one UserFamily
+     * const userFamily = await prisma.userFamily.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserFamilyFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFamilyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserFamily that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFamilyFindFirstArgs} args - Arguments to find a UserFamily
+     * @example
+     * // Get one UserFamily
+     * const userFamily = await prisma.userFamily.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserFamilyFindFirstArgs>(args?: SelectSubset<T, UserFamilyFindFirstArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserFamily that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFamilyFindFirstOrThrowArgs} args - Arguments to find a UserFamily
+     * @example
+     * // Get one UserFamily
+     * const userFamily = await prisma.userFamily.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserFamilyFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFamilyFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserFamilies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFamilyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserFamilies
+     * const userFamilies = await prisma.userFamily.findMany()
+     * 
+     * // Get first 10 UserFamilies
+     * const userFamilies = await prisma.userFamily.findMany({ take: 10 })
+     * 
+     * // Only select the `userId`
+     * const userFamilyWithUserIdOnly = await prisma.userFamily.findMany({ select: { userId: true } })
+     * 
+     */
+    findMany<T extends UserFamilyFindManyArgs>(args?: SelectSubset<T, UserFamilyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserFamily.
+     * @param {UserFamilyCreateArgs} args - Arguments to create a UserFamily.
+     * @example
+     * // Create one UserFamily
+     * const UserFamily = await prisma.userFamily.create({
+     *   data: {
+     *     // ... data to create a UserFamily
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserFamilyCreateArgs>(args: SelectSubset<T, UserFamilyCreateArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserFamilies.
+     * @param {UserFamilyCreateManyArgs} args - Arguments to create many UserFamilies.
+     * @example
+     * // Create many UserFamilies
+     * const userFamily = await prisma.userFamily.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserFamilyCreateManyArgs>(args?: SelectSubset<T, UserFamilyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserFamilies and returns the data saved in the database.
+     * @param {UserFamilyCreateManyAndReturnArgs} args - Arguments to create many UserFamilies.
+     * @example
+     * // Create many UserFamilies
+     * const userFamily = await prisma.userFamily.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserFamilies and only return the `userId`
+     * const userFamilyWithUserIdOnly = await prisma.userFamily.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserFamilyCreateManyAndReturnArgs>(args?: SelectSubset<T, UserFamilyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserFamily.
+     * @param {UserFamilyDeleteArgs} args - Arguments to delete one UserFamily.
+     * @example
+     * // Delete one UserFamily
+     * const UserFamily = await prisma.userFamily.delete({
+     *   where: {
+     *     // ... filter to delete one UserFamily
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserFamilyDeleteArgs>(args: SelectSubset<T, UserFamilyDeleteArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserFamily.
+     * @param {UserFamilyUpdateArgs} args - Arguments to update one UserFamily.
+     * @example
+     * // Update one UserFamily
+     * const userFamily = await prisma.userFamily.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserFamilyUpdateArgs>(args: SelectSubset<T, UserFamilyUpdateArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserFamilies.
+     * @param {UserFamilyDeleteManyArgs} args - Arguments to filter UserFamilies to delete.
+     * @example
+     * // Delete a few UserFamilies
+     * const { count } = await prisma.userFamily.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserFamilyDeleteManyArgs>(args?: SelectSubset<T, UserFamilyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserFamilies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFamilyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserFamilies
+     * const userFamily = await prisma.userFamily.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserFamilyUpdateManyArgs>(args: SelectSubset<T, UserFamilyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserFamilies and returns the data updated in the database.
+     * @param {UserFamilyUpdateManyAndReturnArgs} args - Arguments to update many UserFamilies.
+     * @example
+     * // Update many UserFamilies
+     * const userFamily = await prisma.userFamily.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserFamilies and only return the `userId`
+     * const userFamilyWithUserIdOnly = await prisma.userFamily.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserFamilyUpdateManyAndReturnArgs>(args: SelectSubset<T, UserFamilyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserFamily.
+     * @param {UserFamilyUpsertArgs} args - Arguments to update or create a UserFamily.
+     * @example
+     * // Update or create a UserFamily
+     * const userFamily = await prisma.userFamily.upsert({
+     *   create: {
+     *     // ... data to create a UserFamily
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserFamily we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserFamilyUpsertArgs>(args: SelectSubset<T, UserFamilyUpsertArgs<ExtArgs>>): Prisma__UserFamilyClient<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserFamilies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFamilyCountArgs} args - Arguments to filter UserFamilies to count.
+     * @example
+     * // Count the number of UserFamilies
+     * const count = await prisma.userFamily.count({
+     *   where: {
+     *     // ... the filter for the UserFamilies we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserFamilyCountArgs>(
+      args?: Subset<T, UserFamilyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserFamilyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserFamily.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFamilyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserFamilyAggregateArgs>(args: Subset<T, UserFamilyAggregateArgs>): Prisma.PrismaPromise<GetUserFamilyAggregateType<T>>
+
+    /**
+     * Group by UserFamily.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFamilyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserFamilyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserFamilyGroupByArgs['orderBy'] }
+        : { orderBy?: UserFamilyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserFamilyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserFamilyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserFamily model
+   */
+  readonly fields: UserFamilyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserFamily.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserFamilyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    family<T extends FamilyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FamilyDefaultArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserFamily model
+   */
+  interface UserFamilyFieldRefs {
+    readonly userId: FieldRef<"UserFamily", 'Int'>
+    readonly familyId: FieldRef<"UserFamily", 'Int'>
+    readonly createdAt: FieldRef<"UserFamily", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserFamily", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserFamily findUnique
+   */
+  export type UserFamilyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFamily to fetch.
+     */
+    where: UserFamilyWhereUniqueInput
+  }
+
+  /**
+   * UserFamily findUniqueOrThrow
+   */
+  export type UserFamilyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFamily to fetch.
+     */
+    where: UserFamilyWhereUniqueInput
+  }
+
+  /**
+   * UserFamily findFirst
+   */
+  export type UserFamilyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFamily to fetch.
+     */
+    where?: UserFamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFamilies to fetch.
+     */
+    orderBy?: UserFamilyOrderByWithRelationInput | UserFamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserFamilies.
+     */
+    cursor?: UserFamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFamilies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFamilies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserFamilies.
+     */
+    distinct?: UserFamilyScalarFieldEnum | UserFamilyScalarFieldEnum[]
+  }
+
+  /**
+   * UserFamily findFirstOrThrow
+   */
+  export type UserFamilyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFamily to fetch.
+     */
+    where?: UserFamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFamilies to fetch.
+     */
+    orderBy?: UserFamilyOrderByWithRelationInput | UserFamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserFamilies.
+     */
+    cursor?: UserFamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFamilies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFamilies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserFamilies.
+     */
+    distinct?: UserFamilyScalarFieldEnum | UserFamilyScalarFieldEnum[]
+  }
+
+  /**
+   * UserFamily findMany
+   */
+  export type UserFamilyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFamilies to fetch.
+     */
+    where?: UserFamilyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFamilies to fetch.
+     */
+    orderBy?: UserFamilyOrderByWithRelationInput | UserFamilyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserFamilies.
+     */
+    cursor?: UserFamilyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFamilies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFamilies.
+     */
+    skip?: number
+    distinct?: UserFamilyScalarFieldEnum | UserFamilyScalarFieldEnum[]
+  }
+
+  /**
+   * UserFamily create
+   */
+  export type UserFamilyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserFamily.
+     */
+    data: XOR<UserFamilyCreateInput, UserFamilyUncheckedCreateInput>
+  }
+
+  /**
+   * UserFamily createMany
+   */
+  export type UserFamilyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserFamilies.
+     */
+    data: UserFamilyCreateManyInput | UserFamilyCreateManyInput[]
+  }
+
+  /**
+   * UserFamily createManyAndReturn
+   */
+  export type UserFamilyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserFamilies.
+     */
+    data: UserFamilyCreateManyInput | UserFamilyCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserFamily update
+   */
+  export type UserFamilyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserFamily.
+     */
+    data: XOR<UserFamilyUpdateInput, UserFamilyUncheckedUpdateInput>
+    /**
+     * Choose, which UserFamily to update.
+     */
+    where: UserFamilyWhereUniqueInput
+  }
+
+  /**
+   * UserFamily updateMany
+   */
+  export type UserFamilyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserFamilies.
+     */
+    data: XOR<UserFamilyUpdateManyMutationInput, UserFamilyUncheckedUpdateManyInput>
+    /**
+     * Filter which UserFamilies to update
+     */
+    where?: UserFamilyWhereInput
+    /**
+     * Limit how many UserFamilies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserFamily updateManyAndReturn
+   */
+  export type UserFamilyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * The data used to update UserFamilies.
+     */
+    data: XOR<UserFamilyUpdateManyMutationInput, UserFamilyUncheckedUpdateManyInput>
+    /**
+     * Filter which UserFamilies to update
+     */
+    where?: UserFamilyWhereInput
+    /**
+     * Limit how many UserFamilies to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserFamily upsert
+   */
+  export type UserFamilyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserFamily to update in case it exists.
+     */
+    where: UserFamilyWhereUniqueInput
+    /**
+     * In case the UserFamily found by the `where` argument doesn't exist, create a new UserFamily with this data.
+     */
+    create: XOR<UserFamilyCreateInput, UserFamilyUncheckedCreateInput>
+    /**
+     * In case the UserFamily was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserFamilyUpdateInput, UserFamilyUncheckedUpdateInput>
+  }
+
+  /**
+   * UserFamily delete
+   */
+  export type UserFamilyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+    /**
+     * Filter which UserFamily to delete.
+     */
+    where: UserFamilyWhereUniqueInput
+  }
+
+  /**
+   * UserFamily deleteMany
+   */
+  export type UserFamilyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserFamilies to delete
+     */
+    where?: UserFamilyWhereInput
+    /**
+     * Limit how many UserFamilies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserFamily without action
+   */
+  export type UserFamilyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFamily
+     */
+    select?: UserFamilySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFamily
+     */
+    omit?: UserFamilyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFamilyInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model FamilyMember
    */
 
@@ -2148,14 +4576,14 @@ export namespace Prisma {
     id: number | null
     parentId1: number | null
     parentId2: number | null
-    userId: number | null
+    familyId: number | null
   }
 
   export type FamilyMemberSumAggregateOutputType = {
     id: number | null
     parentId1: number | null
     parentId2: number | null
-    userId: number | null
+    familyId: number | null
   }
 
   export type FamilyMemberMinAggregateOutputType = {
@@ -2170,7 +4598,7 @@ export namespace Prisma {
     parentId2: number | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: number | null
+    familyId: number | null
   }
 
   export type FamilyMemberMaxAggregateOutputType = {
@@ -2185,7 +4613,7 @@ export namespace Prisma {
     parentId2: number | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: number | null
+    familyId: number | null
   }
 
   export type FamilyMemberCountAggregateOutputType = {
@@ -2200,7 +4628,7 @@ export namespace Prisma {
     parentId2: number
     createdAt: number
     updatedAt: number
-    userId: number
+    familyId: number
     _all: number
   }
 
@@ -2209,14 +4637,14 @@ export namespace Prisma {
     id?: true
     parentId1?: true
     parentId2?: true
-    userId?: true
+    familyId?: true
   }
 
   export type FamilyMemberSumAggregateInputType = {
     id?: true
     parentId1?: true
     parentId2?: true
-    userId?: true
+    familyId?: true
   }
 
   export type FamilyMemberMinAggregateInputType = {
@@ -2231,7 +4659,7 @@ export namespace Prisma {
     parentId2?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
+    familyId?: true
   }
 
   export type FamilyMemberMaxAggregateInputType = {
@@ -2246,7 +4674,7 @@ export namespace Prisma {
     parentId2?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
+    familyId?: true
   }
 
   export type FamilyMemberCountAggregateInputType = {
@@ -2261,7 +4689,7 @@ export namespace Prisma {
     parentId2?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
+    familyId?: true
     _all?: true
   }
 
@@ -2363,7 +4791,7 @@ export namespace Prisma {
     parentId2: number | null
     createdAt: Date
     updatedAt: Date
-    userId: number
+    familyId: number
     _count: FamilyMemberCountAggregateOutputType | null
     _avg: FamilyMemberAvgAggregateOutputType | null
     _sum: FamilyMemberSumAggregateOutputType | null
@@ -2397,12 +4825,12 @@ export namespace Prisma {
     parentId2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
+    familyId?: boolean
     children1?: boolean | FamilyMember$children1Args<ExtArgs>
     children2?: boolean | FamilyMember$children2Args<ExtArgs>
     parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
     parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
     _count?: boolean | FamilyMemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["familyMember"]>
 
@@ -2418,10 +4846,10 @@ export namespace Prisma {
     parentId2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
+    familyId?: boolean
     parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
     parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["familyMember"]>
 
   export type FamilyMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2436,10 +4864,10 @@ export namespace Prisma {
     parentId2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
+    familyId?: boolean
     parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
     parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["familyMember"]>
 
   export type FamilyMemberSelectScalar = {
@@ -2454,27 +4882,27 @@ export namespace Prisma {
     parentId2?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
+    familyId?: boolean
   }
 
-  export type FamilyMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "gender" | "birthDate" | "deathDate" | "birthPlace" | "picture" | "parentId1" | "parentId2" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["familyMember"]>
+  export type FamilyMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "gender" | "birthDate" | "deathDate" | "birthPlace" | "picture" | "parentId1" | "parentId2" | "createdAt" | "updatedAt" | "familyId", ExtArgs["result"]["familyMember"]>
   export type FamilyMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     children1?: boolean | FamilyMember$children1Args<ExtArgs>
     children2?: boolean | FamilyMember$children2Args<ExtArgs>
     parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
     parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
     _count?: boolean | FamilyMemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FamilyMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
     parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }
   export type FamilyMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
     parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
   }
 
   export type $FamilyMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2484,7 +4912,7 @@ export namespace Prisma {
       children2: Prisma.$FamilyMemberPayload<ExtArgs>[]
       parent1: Prisma.$FamilyMemberPayload<ExtArgs> | null
       parent2: Prisma.$FamilyMemberPayload<ExtArgs> | null
-      user: Prisma.$UserPayload<ExtArgs>
+      family: Prisma.$FamilyPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2498,7 +4926,7 @@ export namespace Prisma {
       parentId2: number | null
       createdAt: Date
       updatedAt: Date
-      userId: number
+      familyId: number
     }, ExtArgs["result"]["familyMember"]>
     composites: {}
   }
@@ -2897,7 +5325,7 @@ export namespace Prisma {
     children2<T extends FamilyMember$children2Args<ExtArgs> = {}>(args?: Subset<T, FamilyMember$children2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     parent1<T extends FamilyMember$parent1Args<ExtArgs> = {}>(args?: Subset<T, FamilyMember$parent1Args<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     parent2<T extends FamilyMember$parent2Args<ExtArgs> = {}>(args?: Subset<T, FamilyMember$parent2Args<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    family<T extends FamilyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FamilyDefaultArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2938,7 +5366,7 @@ export namespace Prisma {
     readonly parentId2: FieldRef<"FamilyMember", 'Int'>
     readonly createdAt: FieldRef<"FamilyMember", 'DateTime'>
     readonly updatedAt: FieldRef<"FamilyMember", 'DateTime'>
-    readonly userId: FieldRef<"FamilyMember", 'Int'>
+    readonly familyId: FieldRef<"FamilyMember", 'Int'>
   }
     
 
@@ -3459,6 +5887,26 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const FamilyScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FamilyScalarFieldEnum = (typeof FamilyScalarFieldEnum)[keyof typeof FamilyScalarFieldEnum]
+
+
+  export const UserFamilyScalarFieldEnum: {
+    userId: 'userId',
+    familyId: 'familyId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserFamilyScalarFieldEnum = (typeof UserFamilyScalarFieldEnum)[keyof typeof UserFamilyScalarFieldEnum]
+
+
   export const FamilyMemberScalarFieldEnum: {
     id: 'id',
     fullName: 'fullName',
@@ -3471,7 +5919,7 @@ export namespace Prisma {
     parentId2: 'parentId2',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    userId: 'userId'
+    familyId: 'familyId'
   };
 
   export type FamilyMemberScalarFieldEnum = (typeof FamilyMemberScalarFieldEnum)[keyof typeof FamilyMemberScalarFieldEnum]
@@ -3545,7 +5993,7 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    familyMembers?: FamilyMemberListRelationFilter
+    userFamilies?: UserFamilyListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -3554,7 +6002,7 @@ export namespace Prisma {
     password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    familyMembers?: FamilyMemberOrderByRelationAggregateInput
+    userFamilies?: UserFamilyOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -3566,7 +6014,7 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    familyMembers?: FamilyMemberListRelationFilter
+    userFamilies?: UserFamilyListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -3593,6 +6041,117 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type FamilyWhereInput = {
+    AND?: FamilyWhereInput | FamilyWhereInput[]
+    OR?: FamilyWhereInput[]
+    NOT?: FamilyWhereInput | FamilyWhereInput[]
+    id?: IntFilter<"Family"> | number
+    name?: StringNullableFilter<"Family"> | string | null
+    createdAt?: DateTimeFilter<"Family"> | Date | string
+    updatedAt?: DateTimeFilter<"Family"> | Date | string
+    familyMembers?: FamilyMemberListRelationFilter
+    userFamilies?: UserFamilyListRelationFilter
+  }
+
+  export type FamilyOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    familyMembers?: FamilyMemberOrderByRelationAggregateInput
+    userFamilies?: UserFamilyOrderByRelationAggregateInput
+  }
+
+  export type FamilyWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: FamilyWhereInput | FamilyWhereInput[]
+    OR?: FamilyWhereInput[]
+    NOT?: FamilyWhereInput | FamilyWhereInput[]
+    name?: StringNullableFilter<"Family"> | string | null
+    createdAt?: DateTimeFilter<"Family"> | Date | string
+    updatedAt?: DateTimeFilter<"Family"> | Date | string
+    familyMembers?: FamilyMemberListRelationFilter
+    userFamilies?: UserFamilyListRelationFilter
+  }, "id">
+
+  export type FamilyOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FamilyCountOrderByAggregateInput
+    _avg?: FamilyAvgOrderByAggregateInput
+    _max?: FamilyMaxOrderByAggregateInput
+    _min?: FamilyMinOrderByAggregateInput
+    _sum?: FamilySumOrderByAggregateInput
+  }
+
+  export type FamilyScalarWhereWithAggregatesInput = {
+    AND?: FamilyScalarWhereWithAggregatesInput | FamilyScalarWhereWithAggregatesInput[]
+    OR?: FamilyScalarWhereWithAggregatesInput[]
+    NOT?: FamilyScalarWhereWithAggregatesInput | FamilyScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Family"> | number
+    name?: StringNullableWithAggregatesFilter<"Family"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Family"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Family"> | Date | string
+  }
+
+  export type UserFamilyWhereInput = {
+    AND?: UserFamilyWhereInput | UserFamilyWhereInput[]
+    OR?: UserFamilyWhereInput[]
+    NOT?: UserFamilyWhereInput | UserFamilyWhereInput[]
+    userId?: IntFilter<"UserFamily"> | number
+    familyId?: IntFilter<"UserFamily"> | number
+    createdAt?: DateTimeFilter<"UserFamily"> | Date | string
+    updatedAt?: DateTimeFilter<"UserFamily"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+  }
+
+  export type UserFamilyOrderByWithRelationInput = {
+    userId?: SortOrder
+    familyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    family?: FamilyOrderByWithRelationInput
+  }
+
+  export type UserFamilyWhereUniqueInput = Prisma.AtLeast<{
+    userId_familyId?: UserFamilyUserIdFamilyIdCompoundUniqueInput
+    AND?: UserFamilyWhereInput | UserFamilyWhereInput[]
+    OR?: UserFamilyWhereInput[]
+    NOT?: UserFamilyWhereInput | UserFamilyWhereInput[]
+    userId?: IntFilter<"UserFamily"> | number
+    familyId?: IntFilter<"UserFamily"> | number
+    createdAt?: DateTimeFilter<"UserFamily"> | Date | string
+    updatedAt?: DateTimeFilter<"UserFamily"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+  }, "userId_familyId">
+
+  export type UserFamilyOrderByWithAggregationInput = {
+    userId?: SortOrder
+    familyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserFamilyCountOrderByAggregateInput
+    _avg?: UserFamilyAvgOrderByAggregateInput
+    _max?: UserFamilyMaxOrderByAggregateInput
+    _min?: UserFamilyMinOrderByAggregateInput
+    _sum?: UserFamilySumOrderByAggregateInput
+  }
+
+  export type UserFamilyScalarWhereWithAggregatesInput = {
+    AND?: UserFamilyScalarWhereWithAggregatesInput | UserFamilyScalarWhereWithAggregatesInput[]
+    OR?: UserFamilyScalarWhereWithAggregatesInput[]
+    NOT?: UserFamilyScalarWhereWithAggregatesInput | UserFamilyScalarWhereWithAggregatesInput[]
+    userId?: IntWithAggregatesFilter<"UserFamily"> | number
+    familyId?: IntWithAggregatesFilter<"UserFamily"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"UserFamily"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserFamily"> | Date | string
+  }
+
   export type FamilyMemberWhereInput = {
     AND?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
     OR?: FamilyMemberWhereInput[]
@@ -3608,12 +6167,12 @@ export namespace Prisma {
     parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    userId?: IntFilter<"FamilyMember"> | number
+    familyId?: IntFilter<"FamilyMember"> | number
     children1?: FamilyMemberListRelationFilter
     children2?: FamilyMemberListRelationFilter
     parent1?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
     parent2?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
   }
 
   export type FamilyMemberOrderByWithRelationInput = {
@@ -3628,12 +6187,12 @@ export namespace Prisma {
     parentId2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    familyId?: SortOrder
     children1?: FamilyMemberOrderByRelationAggregateInput
     children2?: FamilyMemberOrderByRelationAggregateInput
     parent1?: FamilyMemberOrderByWithRelationInput
     parent2?: FamilyMemberOrderByWithRelationInput
-    user?: UserOrderByWithRelationInput
+    family?: FamilyOrderByWithRelationInput
   }
 
   export type FamilyMemberWhereUniqueInput = Prisma.AtLeast<{
@@ -3651,12 +6210,12 @@ export namespace Prisma {
     parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    userId?: IntFilter<"FamilyMember"> | number
+    familyId?: IntFilter<"FamilyMember"> | number
     children1?: FamilyMemberListRelationFilter
     children2?: FamilyMemberListRelationFilter
     parent1?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
     parent2?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
   }, "id">
 
   export type FamilyMemberOrderByWithAggregationInput = {
@@ -3671,7 +6230,7 @@ export namespace Prisma {
     parentId2?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    familyId?: SortOrder
     _count?: FamilyMemberCountOrderByAggregateInput
     _avg?: FamilyMemberAvgOrderByAggregateInput
     _max?: FamilyMemberMaxOrderByAggregateInput
@@ -3694,7 +6253,7 @@ export namespace Prisma {
     parentId2?: IntNullableWithAggregatesFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
-    userId?: IntWithAggregatesFilter<"FamilyMember"> | number
+    familyId?: IntWithAggregatesFilter<"FamilyMember"> | number
   }
 
   export type UserCreateInput = {
@@ -3702,7 +6261,7 @@ export namespace Prisma {
     password: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyMembers?: FamilyMemberCreateNestedManyWithoutUserInput
+    userFamilies?: UserFamilyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3711,7 +6270,7 @@ export namespace Prisma {
     password: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutUserInput
+    userFamilies?: UserFamilyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -3719,7 +6278,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyMembers?: FamilyMemberUpdateManyWithoutUserNestedInput
+    userFamilies?: UserFamilyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3728,7 +6287,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutUserNestedInput
+    userFamilies?: UserFamilyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3754,6 +6313,107 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FamilyCreateInput = {
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutFamilyInput
+    userFamilies?: UserFamilyCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyUncheckedCreateInput = {
+    id?: number
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput
+    userFamilies?: UserFamilyUncheckedCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyUpdateInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutFamilyNestedInput
+    userFamilies?: UserFamilyUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput
+    userFamilies?: UserFamilyUncheckedUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyCreateManyInput = {
+    id?: number
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FamilyUpdateManyMutationInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFamilyCreateInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutUserFamiliesInput
+    family: FamilyCreateNestedOneWithoutUserFamiliesInput
+  }
+
+  export type UserFamilyUncheckedCreateInput = {
+    userId: number
+    familyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFamilyUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUserFamiliesNestedInput
+    family?: FamilyUpdateOneRequiredWithoutUserFamiliesNestedInput
+  }
+
+  export type UserFamilyUncheckedUpdateInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFamilyCreateManyInput = {
+    userId: number
+    familyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFamilyUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFamilyUncheckedUpdateManyInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FamilyMemberCreateInput = {
     fullName: string
     gender: string
@@ -3767,7 +6427,7 @@ export namespace Prisma {
     children2?: FamilyMemberCreateNestedManyWithoutParent2Input
     parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
     parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    user: UserCreateNestedOneWithoutFamilyMembersInput
+    family: FamilyCreateNestedOneWithoutFamilyMembersInput
   }
 
   export type FamilyMemberUncheckedCreateInput = {
@@ -3782,7 +6442,7 @@ export namespace Prisma {
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
@@ -3800,7 +6460,7 @@ export namespace Prisma {
     children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
     parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
     parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    user?: UserUpdateOneRequiredWithoutFamilyMembersNestedInput
+    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
   }
 
   export type FamilyMemberUncheckedUpdateInput = {
@@ -3815,7 +6475,7 @@ export namespace Prisma {
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
@@ -3832,7 +6492,7 @@ export namespace Prisma {
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
   }
 
   export type FamilyMemberUpdateManyMutationInput = {
@@ -3858,7 +6518,7 @@ export namespace Prisma {
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -3897,13 +6557,13 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type FamilyMemberListRelationFilter = {
-    every?: FamilyMemberWhereInput
-    some?: FamilyMemberWhereInput
-    none?: FamilyMemberWhereInput
+  export type UserFamilyListRelationFilter = {
+    every?: UserFamilyWhereInput
+    some?: UserFamilyWhereInput
+    none?: UserFamilyWhereInput
   }
 
-  export type FamilyMemberOrderByRelationAggregateInput = {
+  export type UserFamilyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3986,17 +6646,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -4009,6 +6658,124 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type FamilyMemberListRelationFilter = {
+    every?: FamilyMemberWhereInput
+    some?: FamilyMemberWhereInput
+    none?: FamilyMemberWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type FamilyMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FamilyCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FamilyAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type FamilyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FamilyMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FamilySumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type FamilyScalarRelationFilter = {
+    is?: FamilyWhereInput
+    isNot?: FamilyWhereInput
+  }
+
+  export type UserFamilyUserIdFamilyIdCompoundUniqueInput = {
+    userId: number
+    familyId: number
+  }
+
+  export type UserFamilyCountOrderByAggregateInput = {
+    userId?: SortOrder
+    familyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserFamilyAvgOrderByAggregateInput = {
+    userId?: SortOrder
+    familyId?: SortOrder
+  }
+
+  export type UserFamilyMaxOrderByAggregateInput = {
+    userId?: SortOrder
+    familyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserFamilyMinOrderByAggregateInput = {
+    userId?: SortOrder
+    familyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserFamilySumOrderByAggregateInput = {
+    userId?: SortOrder
+    familyId?: SortOrder
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type BytesNullableFilter<$PrismaModel = never> = {
@@ -4034,16 +6801,6 @@ export namespace Prisma {
     isNot?: FamilyMemberWhereInput | null
   }
 
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
   export type FamilyMemberCountOrderByAggregateInput = {
     id?: SortOrder
     fullName?: SortOrder
@@ -4056,14 +6813,14 @@ export namespace Prisma {
     parentId2?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type FamilyMemberAvgOrderByAggregateInput = {
     id?: SortOrder
     parentId1?: SortOrder
     parentId2?: SortOrder
-    userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type FamilyMemberMaxOrderByAggregateInput = {
@@ -4078,7 +6835,7 @@ export namespace Prisma {
     parentId2?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type FamilyMemberMinOrderByAggregateInput = {
@@ -4093,14 +6850,14 @@ export namespace Prisma {
     parentId2?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type FamilyMemberSumOrderByAggregateInput = {
     id?: SortOrder
     parentId1?: SortOrder
     parentId2?: SortOrder
-    userId?: SortOrder
+    familyId?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4115,23 +6872,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type BytesNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4160,18 +6900,18 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type FamilyMemberCreateNestedManyWithoutUserInput = {
-    create?: XOR<FamilyMemberCreateWithoutUserInput, FamilyMemberUncheckedCreateWithoutUserInput> | FamilyMemberCreateWithoutUserInput[] | FamilyMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutUserInput | FamilyMemberCreateOrConnectWithoutUserInput[]
-    createMany?: FamilyMemberCreateManyUserInputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  export type UserFamilyCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserFamilyCreateWithoutUserInput, UserFamilyUncheckedCreateWithoutUserInput> | UserFamilyCreateWithoutUserInput[] | UserFamilyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutUserInput | UserFamilyCreateOrConnectWithoutUserInput[]
+    createMany?: UserFamilyCreateManyUserInputEnvelope
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
   }
 
-  export type FamilyMemberUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<FamilyMemberCreateWithoutUserInput, FamilyMemberUncheckedCreateWithoutUserInput> | FamilyMemberCreateWithoutUserInput[] | FamilyMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutUserInput | FamilyMemberCreateOrConnectWithoutUserInput[]
-    createMany?: FamilyMemberCreateManyUserInputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  export type UserFamilyUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserFamilyCreateWithoutUserInput, UserFamilyUncheckedCreateWithoutUserInput> | UserFamilyCreateWithoutUserInput[] | UserFamilyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutUserInput | UserFamilyCreateOrConnectWithoutUserInput[]
+    createMany?: UserFamilyCreateManyUserInputEnvelope
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -4182,18 +6922,18 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type FamilyMemberUpdateManyWithoutUserNestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutUserInput, FamilyMemberUncheckedCreateWithoutUserInput> | FamilyMemberCreateWithoutUserInput[] | FamilyMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutUserInput | FamilyMemberCreateOrConnectWithoutUserInput[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutUserInput | FamilyMemberUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: FamilyMemberCreateManyUserInputEnvelope
-    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutUserInput | FamilyMemberUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutUserInput | FamilyMemberUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  export type UserFamilyUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserFamilyCreateWithoutUserInput, UserFamilyUncheckedCreateWithoutUserInput> | UserFamilyCreateWithoutUserInput[] | UserFamilyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutUserInput | UserFamilyCreateOrConnectWithoutUserInput[]
+    upsert?: UserFamilyUpsertWithWhereUniqueWithoutUserInput | UserFamilyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserFamilyCreateManyUserInputEnvelope
+    set?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    disconnect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    delete?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    update?: UserFamilyUpdateWithWhereUniqueWithoutUserInput | UserFamilyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserFamilyUpdateManyWithWhereWithoutUserInput | UserFamilyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -4204,18 +6944,134 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutUserInput, FamilyMemberUncheckedCreateWithoutUserInput> | FamilyMemberCreateWithoutUserInput[] | FamilyMemberUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutUserInput | FamilyMemberCreateOrConnectWithoutUserInput[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutUserInput | FamilyMemberUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: FamilyMemberCreateManyUserInputEnvelope
+  export type UserFamilyUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserFamilyCreateWithoutUserInput, UserFamilyUncheckedCreateWithoutUserInput> | UserFamilyCreateWithoutUserInput[] | UserFamilyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutUserInput | UserFamilyCreateOrConnectWithoutUserInput[]
+    upsert?: UserFamilyUpsertWithWhereUniqueWithoutUserInput | UserFamilyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserFamilyCreateManyUserInputEnvelope
+    set?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    disconnect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    delete?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    update?: UserFamilyUpdateWithWhereUniqueWithoutUserInput | UserFamilyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserFamilyUpdateManyWithWhereWithoutUserInput | UserFamilyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
+  }
+
+  export type FamilyMemberCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
+    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  }
+
+  export type UserFamilyCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<UserFamilyCreateWithoutFamilyInput, UserFamilyUncheckedCreateWithoutFamilyInput> | UserFamilyCreateWithoutFamilyInput[] | UserFamilyUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutFamilyInput | UserFamilyCreateOrConnectWithoutFamilyInput[]
+    createMany?: UserFamilyCreateManyFamilyInputEnvelope
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+  }
+
+  export type FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
+    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  }
+
+  export type UserFamilyUncheckedCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<UserFamilyCreateWithoutFamilyInput, UserFamilyUncheckedCreateWithoutFamilyInput> | UserFamilyCreateWithoutFamilyInput[] | UserFamilyUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutFamilyInput | UserFamilyCreateOrConnectWithoutFamilyInput[]
+    createMany?: UserFamilyCreateManyFamilyInputEnvelope
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type FamilyMemberUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput | FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
     set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
     disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
     delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
     connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutUserInput | FamilyMemberUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutUserInput | FamilyMemberUpdateManyWithWhereWithoutUserInput[]
+    update?: FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput | FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: FamilyMemberUpdateManyWithWhereWithoutFamilyInput | FamilyMemberUpdateManyWithWhereWithoutFamilyInput[]
     deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  }
+
+  export type UserFamilyUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<UserFamilyCreateWithoutFamilyInput, UserFamilyUncheckedCreateWithoutFamilyInput> | UserFamilyCreateWithoutFamilyInput[] | UserFamilyUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutFamilyInput | UserFamilyCreateOrConnectWithoutFamilyInput[]
+    upsert?: UserFamilyUpsertWithWhereUniqueWithoutFamilyInput | UserFamilyUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: UserFamilyCreateManyFamilyInputEnvelope
+    set?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    disconnect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    delete?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    update?: UserFamilyUpdateWithWhereUniqueWithoutFamilyInput | UserFamilyUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: UserFamilyUpdateManyWithWhereWithoutFamilyInput | UserFamilyUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
+  }
+
+  export type FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
+    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput | FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
+    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+    update?: FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput | FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: FamilyMemberUpdateManyWithWhereWithoutFamilyInput | FamilyMemberUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  }
+
+  export type UserFamilyUncheckedUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<UserFamilyCreateWithoutFamilyInput, UserFamilyUncheckedCreateWithoutFamilyInput> | UserFamilyCreateWithoutFamilyInput[] | UserFamilyUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: UserFamilyCreateOrConnectWithoutFamilyInput | UserFamilyCreateOrConnectWithoutFamilyInput[]
+    upsert?: UserFamilyUpsertWithWhereUniqueWithoutFamilyInput | UserFamilyUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: UserFamilyCreateManyFamilyInputEnvelope
+    set?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    disconnect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    delete?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
+    update?: UserFamilyUpdateWithWhereUniqueWithoutFamilyInput | UserFamilyUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: UserFamilyUpdateManyWithWhereWithoutFamilyInput | UserFamilyUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutUserFamiliesInput = {
+    create?: XOR<UserCreateWithoutUserFamiliesInput, UserUncheckedCreateWithoutUserFamiliesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserFamiliesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FamilyCreateNestedOneWithoutUserFamiliesInput = {
+    create?: XOR<FamilyCreateWithoutUserFamiliesInput, FamilyUncheckedCreateWithoutUserFamiliesInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutUserFamiliesInput
+    connect?: FamilyWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutUserFamiliesNestedInput = {
+    create?: XOR<UserCreateWithoutUserFamiliesInput, UserUncheckedCreateWithoutUserFamiliesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserFamiliesInput
+    upsert?: UserUpsertWithoutUserFamiliesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserFamiliesInput, UserUpdateWithoutUserFamiliesInput>, UserUncheckedUpdateWithoutUserFamiliesInput>
+  }
+
+  export type FamilyUpdateOneRequiredWithoutUserFamiliesNestedInput = {
+    create?: XOR<FamilyCreateWithoutUserFamiliesInput, FamilyUncheckedCreateWithoutUserFamiliesInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutUserFamiliesInput
+    upsert?: FamilyUpsertWithoutUserFamiliesInput
+    connect?: FamilyWhereUniqueInput
+    update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutUserFamiliesInput, FamilyUpdateWithoutUserFamiliesInput>, FamilyUncheckedUpdateWithoutUserFamiliesInput>
   }
 
   export type FamilyMemberCreateNestedManyWithoutParent1Input = {
@@ -4244,10 +7100,10 @@ export namespace Prisma {
     connect?: FamilyMemberWhereUniqueInput
   }
 
-  export type UserCreateNestedOneWithoutFamilyMembersInput = {
-    create?: XOR<UserCreateWithoutFamilyMembersInput, UserUncheckedCreateWithoutFamilyMembersInput>
-    connectOrCreate?: UserCreateOrConnectWithoutFamilyMembersInput
-    connect?: UserWhereUniqueInput
+  export type FamilyCreateNestedOneWithoutFamilyMembersInput = {
+    create?: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutFamilyMembersInput
+    connect?: FamilyWhereUniqueInput
   }
 
   export type FamilyMemberUncheckedCreateNestedManyWithoutParent1Input = {
@@ -4266,10 +7122,6 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type NullableBytesFieldUpdateOperationsInput = {
@@ -4324,12 +7176,12 @@ export namespace Prisma {
     update?: XOR<XOR<FamilyMemberUpdateToOneWithWhereWithoutChildren2Input, FamilyMemberUpdateWithoutChildren2Input>, FamilyMemberUncheckedUpdateWithoutChildren2Input>
   }
 
-  export type UserUpdateOneRequiredWithoutFamilyMembersNestedInput = {
-    create?: XOR<UserCreateWithoutFamilyMembersInput, UserUncheckedCreateWithoutFamilyMembersInput>
-    connectOrCreate?: UserCreateOrConnectWithoutFamilyMembersInput
-    upsert?: UserUpsertWithoutFamilyMembersInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFamilyMembersInput, UserUpdateWithoutFamilyMembersInput>, UserUncheckedUpdateWithoutFamilyMembersInput>
+  export type FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput = {
+    create?: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutFamilyMembersInput
+    upsert?: FamilyUpsertWithoutFamilyMembersInput
+    connect?: FamilyWhereUniqueInput
+    update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutFamilyMembersInput, FamilyUpdateWithoutFamilyMembersInput>, FamilyUncheckedUpdateWithoutFamilyMembersInput>
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -4462,17 +7314,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -4485,38 +7326,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedBytesNullableFilter<$PrismaModel = never> = {
-    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
-    in?: Uint8Array[] | null
-    notIn?: Uint8Array[] | null
-    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4534,6 +7343,49 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedBytesNullableFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | null
+    notIn?: Uint8Array[] | null
+    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedBytesNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4573,7 +7425,54 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type FamilyMemberCreateWithoutUserInput = {
+  export type UserFamilyCreateWithoutUserInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    family: FamilyCreateNestedOneWithoutUserFamiliesInput
+  }
+
+  export type UserFamilyUncheckedCreateWithoutUserInput = {
+    familyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFamilyCreateOrConnectWithoutUserInput = {
+    where: UserFamilyWhereUniqueInput
+    create: XOR<UserFamilyCreateWithoutUserInput, UserFamilyUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserFamilyCreateManyUserInputEnvelope = {
+    data: UserFamilyCreateManyUserInput | UserFamilyCreateManyUserInput[]
+  }
+
+  export type UserFamilyUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserFamilyWhereUniqueInput
+    update: XOR<UserFamilyUpdateWithoutUserInput, UserFamilyUncheckedUpdateWithoutUserInput>
+    create: XOR<UserFamilyCreateWithoutUserInput, UserFamilyUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserFamilyUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserFamilyWhereUniqueInput
+    data: XOR<UserFamilyUpdateWithoutUserInput, UserFamilyUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserFamilyUpdateManyWithWhereWithoutUserInput = {
+    where: UserFamilyScalarWhereInput
+    data: XOR<UserFamilyUpdateManyMutationInput, UserFamilyUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserFamilyScalarWhereInput = {
+    AND?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
+    OR?: UserFamilyScalarWhereInput[]
+    NOT?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
+    userId?: IntFilter<"UserFamily"> | number
+    familyId?: IntFilter<"UserFamily"> | number
+    createdAt?: DateTimeFilter<"UserFamily"> | Date | string
+    updatedAt?: DateTimeFilter<"UserFamily"> | Date | string
+  }
+
+  export type FamilyMemberCreateWithoutFamilyInput = {
     fullName: string
     gender: string
     birthDate?: Date | string | null
@@ -4588,7 +7487,7 @@ export namespace Prisma {
     parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
   }
 
-  export type FamilyMemberUncheckedCreateWithoutUserInput = {
+  export type FamilyMemberUncheckedCreateWithoutFamilyInput = {
     id?: number
     fullName: string
     gender: string
@@ -4604,29 +7503,50 @@ export namespace Prisma {
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
 
-  export type FamilyMemberCreateOrConnectWithoutUserInput = {
+  export type FamilyMemberCreateOrConnectWithoutFamilyInput = {
     where: FamilyMemberWhereUniqueInput
-    create: XOR<FamilyMemberCreateWithoutUserInput, FamilyMemberUncheckedCreateWithoutUserInput>
+    create: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput>
   }
 
-  export type FamilyMemberCreateManyUserInputEnvelope = {
-    data: FamilyMemberCreateManyUserInput | FamilyMemberCreateManyUserInput[]
+  export type FamilyMemberCreateManyFamilyInputEnvelope = {
+    data: FamilyMemberCreateManyFamilyInput | FamilyMemberCreateManyFamilyInput[]
   }
 
-  export type FamilyMemberUpsertWithWhereUniqueWithoutUserInput = {
+  export type UserFamilyCreateWithoutFamilyInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutUserFamiliesInput
+  }
+
+  export type UserFamilyUncheckedCreateWithoutFamilyInput = {
+    userId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFamilyCreateOrConnectWithoutFamilyInput = {
+    where: UserFamilyWhereUniqueInput
+    create: XOR<UserFamilyCreateWithoutFamilyInput, UserFamilyUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type UserFamilyCreateManyFamilyInputEnvelope = {
+    data: UserFamilyCreateManyFamilyInput | UserFamilyCreateManyFamilyInput[]
+  }
+
+  export type FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput = {
     where: FamilyMemberWhereUniqueInput
-    update: XOR<FamilyMemberUpdateWithoutUserInput, FamilyMemberUncheckedUpdateWithoutUserInput>
-    create: XOR<FamilyMemberCreateWithoutUserInput, FamilyMemberUncheckedCreateWithoutUserInput>
+    update: XOR<FamilyMemberUpdateWithoutFamilyInput, FamilyMemberUncheckedUpdateWithoutFamilyInput>
+    create: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput>
   }
 
-  export type FamilyMemberUpdateWithWhereUniqueWithoutUserInput = {
+  export type FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput = {
     where: FamilyMemberWhereUniqueInput
-    data: XOR<FamilyMemberUpdateWithoutUserInput, FamilyMemberUncheckedUpdateWithoutUserInput>
+    data: XOR<FamilyMemberUpdateWithoutFamilyInput, FamilyMemberUncheckedUpdateWithoutFamilyInput>
   }
 
-  export type FamilyMemberUpdateManyWithWhereWithoutUserInput = {
+  export type FamilyMemberUpdateManyWithWhereWithoutFamilyInput = {
     where: FamilyMemberScalarWhereInput
-    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyWithoutUserInput>
+    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyWithoutFamilyInput>
   }
 
   export type FamilyMemberScalarWhereInput = {
@@ -4644,7 +7564,115 @@ export namespace Prisma {
     parentId2?: IntNullableFilter<"FamilyMember"> | number | null
     createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
     updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    userId?: IntFilter<"FamilyMember"> | number
+    familyId?: IntFilter<"FamilyMember"> | number
+  }
+
+  export type UserFamilyUpsertWithWhereUniqueWithoutFamilyInput = {
+    where: UserFamilyWhereUniqueInput
+    update: XOR<UserFamilyUpdateWithoutFamilyInput, UserFamilyUncheckedUpdateWithoutFamilyInput>
+    create: XOR<UserFamilyCreateWithoutFamilyInput, UserFamilyUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type UserFamilyUpdateWithWhereUniqueWithoutFamilyInput = {
+    where: UserFamilyWhereUniqueInput
+    data: XOR<UserFamilyUpdateWithoutFamilyInput, UserFamilyUncheckedUpdateWithoutFamilyInput>
+  }
+
+  export type UserFamilyUpdateManyWithWhereWithoutFamilyInput = {
+    where: UserFamilyScalarWhereInput
+    data: XOR<UserFamilyUpdateManyMutationInput, UserFamilyUncheckedUpdateManyWithoutFamilyInput>
+  }
+
+  export type UserCreateWithoutUserFamiliesInput = {
+    email: string
+    password: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutUserFamiliesInput = {
+    id?: number
+    email: string
+    password: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutUserFamiliesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUserFamiliesInput, UserUncheckedCreateWithoutUserFamiliesInput>
+  }
+
+  export type FamilyCreateWithoutUserFamiliesInput = {
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyUncheckedCreateWithoutUserFamiliesInput = {
+    id?: number
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyCreateOrConnectWithoutUserFamiliesInput = {
+    where: FamilyWhereUniqueInput
+    create: XOR<FamilyCreateWithoutUserFamiliesInput, FamilyUncheckedCreateWithoutUserFamiliesInput>
+  }
+
+  export type UserUpsertWithoutUserFamiliesInput = {
+    update: XOR<UserUpdateWithoutUserFamiliesInput, UserUncheckedUpdateWithoutUserFamiliesInput>
+    create: XOR<UserCreateWithoutUserFamiliesInput, UserUncheckedCreateWithoutUserFamiliesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUserFamiliesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUserFamiliesInput, UserUncheckedUpdateWithoutUserFamiliesInput>
+  }
+
+  export type UserUpdateWithoutUserFamiliesInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutUserFamiliesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyUpsertWithoutUserFamiliesInput = {
+    update: XOR<FamilyUpdateWithoutUserFamiliesInput, FamilyUncheckedUpdateWithoutUserFamiliesInput>
+    create: XOR<FamilyCreateWithoutUserFamiliesInput, FamilyUncheckedCreateWithoutUserFamiliesInput>
+    where?: FamilyWhereInput
+  }
+
+  export type FamilyUpdateToOneWithWhereWithoutUserFamiliesInput = {
+    where?: FamilyWhereInput
+    data: XOR<FamilyUpdateWithoutUserFamiliesInput, FamilyUncheckedUpdateWithoutUserFamiliesInput>
+  }
+
+  export type FamilyUpdateWithoutUserFamiliesInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyUncheckedUpdateWithoutUserFamiliesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput
   }
 
   export type FamilyMemberCreateWithoutParent1Input = {
@@ -4659,7 +7687,7 @@ export namespace Prisma {
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberCreateNestedManyWithoutParent2Input
     parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    user: UserCreateNestedOneWithoutFamilyMembersInput
+    family: FamilyCreateNestedOneWithoutFamilyMembersInput
   }
 
   export type FamilyMemberUncheckedCreateWithoutParent1Input = {
@@ -4673,7 +7701,7 @@ export namespace Prisma {
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
@@ -4699,7 +7727,7 @@ export namespace Prisma {
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberCreateNestedManyWithoutParent2Input
     parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
-    user: UserCreateNestedOneWithoutFamilyMembersInput
+    family: FamilyCreateNestedOneWithoutFamilyMembersInput
   }
 
   export type FamilyMemberUncheckedCreateWithoutParent2Input = {
@@ -4713,7 +7741,7 @@ export namespace Prisma {
     parentId1?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
@@ -4739,7 +7767,7 @@ export namespace Prisma {
     children2?: FamilyMemberCreateNestedManyWithoutParent2Input
     parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
     parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    user: UserCreateNestedOneWithoutFamilyMembersInput
+    family: FamilyCreateNestedOneWithoutFamilyMembersInput
   }
 
   export type FamilyMemberUncheckedCreateWithoutChildren1Input = {
@@ -4754,7 +7782,7 @@ export namespace Prisma {
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
     children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
   }
 
@@ -4775,7 +7803,7 @@ export namespace Prisma {
     children1?: FamilyMemberCreateNestedManyWithoutParent1Input
     parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
     parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    user: UserCreateNestedOneWithoutFamilyMembersInput
+    family: FamilyCreateNestedOneWithoutFamilyMembersInput
   }
 
   export type FamilyMemberUncheckedCreateWithoutChildren2Input = {
@@ -4790,7 +7818,7 @@ export namespace Prisma {
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
     children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
   }
 
@@ -4799,24 +7827,24 @@ export namespace Prisma {
     create: XOR<FamilyMemberCreateWithoutChildren2Input, FamilyMemberUncheckedCreateWithoutChildren2Input>
   }
 
-  export type UserCreateWithoutFamilyMembersInput = {
-    email: string
-    password: string
+  export type FamilyCreateWithoutFamilyMembersInput = {
+    name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userFamilies?: UserFamilyCreateNestedManyWithoutFamilyInput
   }
 
-  export type UserUncheckedCreateWithoutFamilyMembersInput = {
+  export type FamilyUncheckedCreateWithoutFamilyMembersInput = {
     id?: number
-    email: string
-    password: string
+    name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userFamilies?: UserFamilyUncheckedCreateNestedManyWithoutFamilyInput
   }
 
-  export type UserCreateOrConnectWithoutFamilyMembersInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutFamilyMembersInput, UserUncheckedCreateWithoutFamilyMembersInput>
+  export type FamilyCreateOrConnectWithoutFamilyMembersInput = {
+    where: FamilyWhereUniqueInput
+    create: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
   }
 
   export type FamilyMemberUpsertWithWhereUniqueWithoutParent1Input = {
@@ -4874,7 +7902,7 @@ export namespace Prisma {
     children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
     parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
     parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    user?: UserUpdateOneRequiredWithoutFamilyMembersNestedInput
+    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
   }
 
   export type FamilyMemberUncheckedUpdateWithoutChildren1Input = {
@@ -4889,7 +7917,7 @@ export namespace Prisma {
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
 
@@ -4916,7 +7944,7 @@ export namespace Prisma {
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
     parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
     parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    user?: UserUpdateOneRequiredWithoutFamilyMembersNestedInput
+    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
   }
 
   export type FamilyMemberUncheckedUpdateWithoutChildren2Input = {
@@ -4931,37 +7959,61 @@ export namespace Prisma {
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
   }
 
-  export type UserUpsertWithoutFamilyMembersInput = {
-    update: XOR<UserUpdateWithoutFamilyMembersInput, UserUncheckedUpdateWithoutFamilyMembersInput>
-    create: XOR<UserCreateWithoutFamilyMembersInput, UserUncheckedCreateWithoutFamilyMembersInput>
-    where?: UserWhereInput
+  export type FamilyUpsertWithoutFamilyMembersInput = {
+    update: XOR<FamilyUpdateWithoutFamilyMembersInput, FamilyUncheckedUpdateWithoutFamilyMembersInput>
+    create: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
+    where?: FamilyWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutFamilyMembersInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutFamilyMembersInput, UserUncheckedUpdateWithoutFamilyMembersInput>
+  export type FamilyUpdateToOneWithWhereWithoutFamilyMembersInput = {
+    where?: FamilyWhereInput
+    data: XOR<FamilyUpdateWithoutFamilyMembersInput, FamilyUncheckedUpdateWithoutFamilyMembersInput>
   }
 
-  export type UserUpdateWithoutFamilyMembersInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+  export type FamilyUpdateWithoutFamilyMembersInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userFamilies?: UserFamilyUpdateManyWithoutFamilyNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutFamilyMembersInput = {
+  export type FamilyUncheckedUpdateWithoutFamilyMembersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userFamilies?: UserFamilyUncheckedUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type UserFamilyCreateManyUserInput = {
+    familyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFamilyUpdateWithoutUserInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyUpdateOneRequiredWithoutUserFamiliesNestedInput
+  }
+
+  export type UserFamilyUncheckedUpdateWithoutUserInput = {
+    familyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberCreateManyUserInput = {
+  export type UserFamilyUncheckedUpdateManyWithoutUserInput = {
+    familyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMemberCreateManyFamilyInput = {
     id?: number
     fullName: string
     gender: string
@@ -4975,7 +8027,13 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type FamilyMemberUpdateWithoutUserInput = {
+  export type UserFamilyCreateManyFamilyInput = {
+    userId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FamilyMemberUpdateWithoutFamilyInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4990,7 +8048,7 @@ export namespace Prisma {
     parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateWithoutUserInput = {
+  export type FamilyMemberUncheckedUpdateWithoutFamilyInput = {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -5006,7 +8064,7 @@ export namespace Prisma {
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutUserInput = {
+  export type FamilyMemberUncheckedUpdateManyWithoutFamilyInput = {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -5016,6 +8074,24 @@ export namespace Prisma {
     picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFamilyUpdateWithoutFamilyInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUserFamiliesNestedInput
+  }
+
+  export type UserFamilyUncheckedUpdateWithoutFamilyInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFamilyUncheckedUpdateManyWithoutFamilyInput = {
+    userId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5031,7 +8107,7 @@ export namespace Prisma {
     parentId2?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
   }
 
   export type FamilyMemberCreateManyParent2Input = {
@@ -5045,7 +8121,7 @@ export namespace Prisma {
     parentId1?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: number
+    familyId: number
   }
 
   export type FamilyMemberUpdateWithoutParent1Input = {
@@ -5060,7 +8136,7 @@ export namespace Prisma {
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
     parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    user?: UserUpdateOneRequiredWithoutFamilyMembersNestedInput
+    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
   }
 
   export type FamilyMemberUncheckedUpdateWithoutParent1Input = {
@@ -5074,7 +8150,7 @@ export namespace Prisma {
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
@@ -5090,7 +8166,7 @@ export namespace Prisma {
     parentId2?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
   }
 
   export type FamilyMemberUpdateWithoutParent2Input = {
@@ -5105,7 +8181,7 @@ export namespace Prisma {
     children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
     parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
-    user?: UserUpdateOneRequiredWithoutFamilyMembersNestedInput
+    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
   }
 
   export type FamilyMemberUncheckedUpdateWithoutParent2Input = {
@@ -5119,7 +8195,7 @@ export namespace Prisma {
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
     children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
     children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
@@ -5135,7 +8211,7 @@ export namespace Prisma {
     parentId1?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
   }
 
 

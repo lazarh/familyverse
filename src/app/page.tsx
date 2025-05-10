@@ -12,6 +12,18 @@ interface ApiError {
   message: string;
 }
 
+// Define a type for Family (matching /api/families response)
+interface Family {
+  id: number; // Prisma Int maps to number
+  name: string;
+}
+
+// Define a type for User (matching /api/families/[familyId]/users response)
+interface FamilyUser {
+  id: number;
+  email: string;
+}
+
 // Define a type for the form data state
 interface PageFormData {
   id?: string;
@@ -59,74 +71,131 @@ export default function HomePage() {
   const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
-  const [formData, setFormData] = useState<PageFormData>({}); // Use PageFormData type
+  const [formData, setFormData] = useState<PageFormData>({});
   const [picturePreview, setPicturePreview] = useState<string | null>(null);
   const [pictureFile, setPictureFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchFamilyMembers = useCallback(async () => {
+  const [userFamilies, setUserFamilies] = useState<Family[]>([]);
+  const [selectedFamilyId, setSelectedFamilyId] = useState<number | null>(null);
+
+  // New state for "Add User to Family" modal
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [addUserEmail, setAddUserEmail] = useState('');
+  const [addUserFeedback, setAddUserFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [isAddingUser, setIsAddingUser] = useState(false);
+
+  // New state for "Remove User from Family" modal
+  const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false);
+  const [usersInFamilyForRemoval, setUsersInFamilyForRemoval] = useState<FamilyUser[]>([]);
+  const [selectedUserToRemoveId, setSelectedUserToRemoveId] = useState<string | null>(null);
+  const [removeUserFeedback, setRemoveUserFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [isRemovingUser, setIsRemovingUser] = useState(false);
+  const [isLoadingUsersForRemoval, setIsLoadingUsersForRemoval] = useState(false);
+
+  const fetchFamilyMembers = useCallback(async (familyId: number | null) => {
+    if (!familyId) {
+      setFamilyMembers([]);
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/family-members');
+      const response = await fetch(`/api/family-members?familyId=${familyId}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch family members');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch family members');
       }
       const data: FamilyMember[] = await response.json();
       setFamilyMembers(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setError(err instanceof Error ? err.message : 'An unknown error occurred while fetching members');
+      setFamilyMembers([]);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    if (status === 'loading') return; // Don't do anything while loading
+    if (status === 'loading') return;
     if (!session) {
       router.push('/login');
-    } else {
-      fetchFamilyMembers();
+      return;
     }
-  }, [session, status, router, fetchFamilyMembers]);
+
+    const manageUserAndFamilies = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const familiesResponse = await fetch('/api/families');
+        if (!familiesResponse.ok) {
+          if (familiesResponse.status === 401) {
+            router.push('/login');
+            return;
+          }
+          const errorData = await familiesResponse.json();
+          throw new Error(errorData.message || 'Failed to fetch user families');
+        }
+        const familiesData: Family[] = await familiesResponse.json();
+
+        if (familiesData.length === 0) {
+          router.push('/create-family');
+        } else {
+          setUserFamilies(familiesData);
+          setSelectedFamilyId(familiesData[0].id);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Error initializing page');
+        setIsLoading(false);
+      }
+    };
+
+    manageUserAndFamilies();
+  }, [session, status, router]);
+
+  useEffect(() => {
+    if (selectedFamilyId) {
+      fetchFamilyMembers(selectedFamilyId);
+    } else if (session && userFamilies.length > 0) {
+      setSelectedFamilyId(userFamilies[0].id);
+    }
+  }, [selectedFamilyId, userFamilies, session, fetchFamilyMembers]);
 
   const handleNodeClick = (member: FamilyMember) => {
     setSelectedMember(member);
 
-    // member.picture is Uint8Array | null from Prisma Bytes type
     const currentPictureDataUrl = member.picture ? ensureDataUrl(member.picture as Uint8Array) : null;
-    console.log("Member object:", member.id, member.picture);
     const memberDataForForm: PageFormData = {
-      id: member.id.toString(), // Convert number to string
+      id: member.id.toString(),
       fullName: member.fullName,
       gender: member.gender,
       birthDate: member.birthDate ? new Date(member.birthDate).toISOString().split('T')[0] : '',
       deathDate: member.deathDate ? new Date(member.deathDate).toISOString().split('T')[0] : '',
       birthPlace: member.birthPlace,
-      pictureUrl: currentPictureDataUrl, // Use the converted data URL
-      parentId1: member.parentId1?.toString() || null, // Convert number to string or null
-      parentId2: member.parentId2?.toString() || null, // Convert number to string or null
+      pictureUrl: currentPictureDataUrl,
+      parentId1: member.parentId1?.toString() || null,
+      parentId2: member.parentId2?.toString() || null,
     };
     setFormData(memberDataForForm);
-    setPicturePreview(currentPictureDataUrl || null); // Use the converted data URL
-    setPictureFile(null); // Reset file input when selecting a member
+    setPicturePreview(currentPictureDataUrl || null);
+    setPictureFile(null);
     setModalMode('edit');
     setIsModalOpen(true);
   };
 
   const handleAddMemberClick = () => {
     setSelectedMember(null);
-    setFormData({ // This now correctly matches PageFormData
+    setFormData({
       fullName: '',
-      gender: 'Male', // Default gender
+      gender: 'Male',
       birthDate: '',
       deathDate: '',
       birthPlace: '',
       parentId1: '',
       parentId2: '',
-      pictureUrl: null, // Explicitly set
-      removePicture: false, // Explicitly set
+      pictureUrl: null,
+      removePicture: false,
     });
     setPicturePreview(null);
     setPictureFile(null);
@@ -140,7 +209,7 @@ export default function HomePage() {
     setFormData({});
     setPicturePreview(null);
     setPictureFile(null);
-    setError(null); // Clear error on modal close
+    setError(null);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -154,12 +223,11 @@ export default function HomePage() {
       setPictureFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPicturePreview(reader.result as string); // FileReader result is already a data URL string
+        setPicturePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     } else {
       if (modalMode === 'edit' && selectedMember) {
-        // Use selectedMember.picture (Uint8Array) converted to data URL
         const existingPictureDataUrl = selectedMember.picture ? ensureDataUrl(selectedMember.picture as Uint8Array) : null;
         setPicturePreview(existingPictureDataUrl || '/default-avatar.jpg');
       } else {
@@ -170,8 +238,8 @@ export default function HomePage() {
   };
 
   const handleRemovePicture = () => {
-    setPicturePreview('/default-avatar.jpg'); // Show default avatar
-    setPictureFile(null); // Clear the file input state
+    setPicturePreview('/default-avatar.jpg');
+    setPictureFile(null);
     if (modalMode === 'edit') {
       setFormData(prev => ({ ...prev, pictureUrl: null, removePicture: true }));
     }
@@ -180,15 +248,21 @@ export default function HomePage() {
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true);
 
     const memberFormData = new FormData();
 
+    if (!selectedFamilyId && modalMode === 'add') {
+      setError('No family selected. Cannot add member.');
+      setIsLoading(false);
+      return;
+    }
+    if (modalMode === 'add' && selectedFamilyId) {
+      memberFormData.append('familyId', selectedFamilyId.toString());
+    }
+
     Object.entries(formData).forEach(([key, value]) => {
-      // Skip internal state flags like removePicture
       if (key === 'removePicture') return;
 
-      // Handle potential null/undefined values before appending
       if (value !== null && value !== undefined) {
         if (typeof value === 'string') {
           memberFormData.append(key, value);
@@ -204,6 +278,7 @@ export default function HomePage() {
 
     const url = modalMode === 'edit' && selectedMember ? `/api/family-members/${selectedMember.id}` : '/api/family-members';
     const method = modalMode === 'edit' ? 'PATCH' : 'POST';
+    setIsLoading(true);
 
     try {
       const response = await fetch(url, {
@@ -212,20 +287,15 @@ export default function HomePage() {
       });
 
       if (!response.ok) {
-        let errorData: ApiError | null = null;
-        try {
-          errorData = await response.json() as ApiError;
-        } catch (jsonParseError) {
-          console.error("Failed to parse error response:", jsonParseError);
-        }
-        const errorMessage = errorData?.message || `HTTP error! status: ${response.status}`;
-        throw new Error(errorMessage);
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Failed to ${modalMode === 'edit' ? 'update' : 'add'} member`);
       }
 
       handleCloseModal();
-      fetchFamilyMembers();
+      if (selectedFamilyId) {
+        fetchFamilyMembers(selectedFamilyId);
+      }
     } catch (err: unknown) {
-      console.error(`Failed to ${modalMode === 'edit' ? 'update' : 'add'} member:`, err);
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
       setIsLoading(false);
@@ -246,28 +316,152 @@ export default function HomePage() {
       });
 
       if (!response.ok) {
-        let errorData: ApiError | null = null;
-        try {
-          errorData = await response.json() as ApiError;
-        } catch (jsonParseError) {
-          console.error("Failed to parse error response:", jsonParseError);
-        }
-        const errorMessage = errorData?.message || `HTTP error! status: ${response.status}`;
-        throw new Error(errorMessage);
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete member');
       }
 
       handleCloseModal();
-      fetchFamilyMembers();
+      if (selectedFamilyId) {
+        fetchFamilyMembers(selectedFamilyId);
+      }
     } catch (err: unknown) {
-      console.error(`Failed to delete member ${memberId}:`, err);
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (status === 'loading' || isLoading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  // New handlers for "Add User to Family" modal
+  const openAddUserModal = () => {
+    setIsAddUserModalOpen(true);
+    setAddUserEmail('');
+    setAddUserFeedback(null);
+    setError(null); // Clear any general page error
+  };
+
+  const closeAddUserModal = () => {
+    setIsAddUserModalOpen(false);
+  };
+
+  const handleAddUserSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedFamilyId) {
+      setAddUserFeedback({ type: 'error', message: 'No family selected. Cannot add user.' });
+      return;
+    }
+    if (!addUserEmail.trim()) {
+      setAddUserFeedback({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setIsAddingUser(true);
+    setAddUserFeedback(null);
+
+    try {
+      const response = await fetch(`/api/families/${selectedFamilyId}/members`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: addUserEmail }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || `Error ${response.status}: Failed to add user to family.`);
+      }
+
+      setAddUserFeedback({ type: 'success', message: result.message || 'User successfully added to the family!' });
+      setAddUserEmail(''); // Clear input on success
+    } catch (error: any) {
+      setAddUserFeedback({ type: 'error', message: error.message || 'An unexpected error occurred. Please try again.' });
+    } finally {
+      setIsAddingUser(false);
+    }
+  };
+
+  // New handlers for "Remove User from Family" modal
+  const fetchUsersInFamily = async (familyId: number) => {
+    setIsLoadingUsersForRemoval(true);
+    setRemoveUserFeedback(null);
+    try {
+      const response = await fetch(`/api/families/${familyId}/users`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch users in family');
+      }
+      const data: FamilyUser[] = await response.json();
+      setUsersInFamilyForRemoval(data);
+      if (data.length > 0) {
+        setSelectedUserToRemoveId(data[0].id.toString()); // Pre-select first user
+      } else {
+        setSelectedUserToRemoveId(null); // No users to select
+      }
+    } catch (err: any) {
+      setRemoveUserFeedback({ type: 'error', message: err.message || 'Could not load users for removal.' });
+      setUsersInFamilyForRemoval([]);
+    } finally {
+      setIsLoadingUsersForRemoval(false);
+    }
+  };
+
+  const openRemoveUserModal = () => {
+    if (selectedFamilyId) {
+      fetchUsersInFamily(selectedFamilyId);
+    }
+    setIsRemoveUserModalOpen(true);
+    setRemoveUserFeedback(null);
+    setError(null); // Clear any general page error
+  };
+
+  const closeRemoveUserModal = () => {
+    setIsRemoveUserModalOpen(false);
+    setUsersInFamilyForRemoval([]);
+    setSelectedUserToRemoveId(null);
+    setRemoveUserFeedback(null);
+  };
+
+  const handleRemoveUserSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedFamilyId || !selectedUserToRemoveId) {
+      setRemoveUserFeedback({ type: 'error', message: 'No family or user selected.' });
+      return;
+    }
+
+    // Confirmation dialog
+    if (!window.confirm(`Are you sure you want to remove this user from the family?`)) {
+      return;
+    }
+
+    setIsRemovingUser(true);
+    setRemoveUserFeedback(null);
+
+    try {
+      const response = await fetch(`/api/families/${selectedFamilyId}/members/${selectedUserToRemoveId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || `Error ${response.status}: Failed to remove user.`);
+      }
+
+      setRemoveUserFeedback({ type: 'success', message: result.message || 'User successfully removed from the family!' });
+      setSelectedUserToRemoveId(null); // Reset selection
+      if (selectedFamilyId) {
+        fetchUsersInFamily(selectedFamilyId);
+      }
+    } catch (error: any) {
+      setRemoveUserFeedback({ type: 'error', message: error.message || 'An unexpected error occurred. Please try again.' });
+    } finally {
+      setIsRemovingUser(false);
+    }
+  };
+
+  if (status === 'loading' || (isLoading && familyMembers.length === 0 && !error && !selectedFamilyId)) {
+    return <div className="flex justify-center items-center h-screen">Loading page data...</div>;
   }
 
   if (!session) {
@@ -275,51 +469,105 @@ export default function HomePage() {
   }
 
   const renderFamilyTree = () => {
-    if (familyMembers.length === 0 && !isLoading) {
-      return <p className="text-center text-gray-500">No family members yet. Add one to get started!</p>;
+    if (isLoading && familyMembers.length === 0 && selectedFamilyId) {
+      return <div className="flex justify-center items-center"><p>Loading family members...</p></div>;
     }
-    if (isLoading) {
-      return <p className="text-center text-gray-500">Loading family tree...</p>;
+    if (!selectedFamilyId && userFamilies.length > 0 && !isLoading) {
+      return <div className="flex justify-center items-center"><p>Selecting family...</p></div>;
+    }
+    if (familyMembers.length === 0 && !isLoading) {
+      return (
+        <div className="text-center p-8">
+          <p className="text-xl text-gray-700 mb-4">
+            This family doesn't have any members yet.
+          </p>
+          {selectedFamilyId && (
+            <button
+              onClick={handleAddMemberClick}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Add First Family Member
+            </button>
+          )}
+        </div>
+      );
     }
     return (
       <FamilyTreeGraph
         familyMembers={familyMembers}
         onNodeClick={handleNodeClick}
-        selectedMemberId={selectedMember?.id?.toString() || null} // Convert number to string or null
+        selectedMemberId={selectedMember?.id?.toString() || null}
       />
     );
   };
 
   return (
     <div className="container mx-auto p-4">
-      <header className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Family Tree</h1>
-        <div>
-          <span className="mr-4">Welcome, {session.user?.email}</span>
-          <button
-            onClick={() => signOut({ callbackUrl: '/login' })}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Sign Out
-          </button>
+      <header className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
+        <div className="w-full sm:w-auto">
+          {userFamilies.length > 0 && selectedFamilyId && (
+            <>
+              {userFamilies.length > 1 ? (
+                <select
+                  value={selectedFamilyId}
+                  onChange={(e) => setSelectedFamilyId(Number(e.target.value))}
+                  className="w-full p-2 border rounded bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  {userFamilies.map(family => (
+                    <option key={family.id} value={family.id}>
+                      {family.name || `Family ${family.id}`}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center sm:text-left">
+                  {userFamilies.find(f => f.id === selectedFamilyId)?.name || `Family ${selectedFamilyId}`}
+                </h1>
+              )}
+            </>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+          {selectedFamilyId && (
+            <>
+              <button
+                onClick={handleAddMemberClick}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
+              >
+                Add Family Member
+              </button>
+              <button
+                onClick={openAddUserModal}
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
+              >
+                Add User to Family
+              </button>
+              <button
+                onClick={openRemoveUserModal}
+                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
+              >
+                Remove User from Family
+              </button>
+            </>
+          )}
+          {session && (
+            <button
+              onClick={() => signOut()} // Call signOut from next-auth/react
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
+            >
+              Sign Out
+            </button>
+          )}
         </div>
       </header>
 
       {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">{error}</div>}
 
-      <div className="mb-6">
-        <button
-          onClick={handleAddMemberClick}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Add Family Member
-        </button>
-      </div>
-
-      <div className="bg-gray-100 p-4 rounded-lg shadow">
+      <div className="bg-gray-50 p-4 rounded-lg shadow min-h-[400px] flex justify-center items-center">
         {renderFamilyTree()}
       </div>
 
+      {/* Existing modal for adding/editing family members */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center z-50">
           <div className="relative bg-white p-8 rounded-lg shadow-xl w-full max-w-lg mx-4">
@@ -493,6 +741,132 @@ export default function HomePage() {
                   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
                 >
                   {isLoading ? 'Saving...' : (modalMode === 'edit' ? 'Save Changes' : 'Add Member')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* New Modal for Adding User to Family */}
+      {isAddUserModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center z-50">
+          <div className="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Add User to Family</h2>
+              <button onClick={closeAddUserModal} className="text-gray-400 hover:text-gray-600">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+            <form onSubmit={handleAddUserSubmit}>
+              <div className="mb-4">
+                <label htmlFor="addUserEmail" className="block text-sm font-medium text-gray-700 mb-1">
+                  User's Email Address
+                </label>
+                <input
+                  type="email"
+                  id="addUserEmail"
+                  name="addUserEmail"
+                  value={addUserEmail}
+                  onChange={(e) => setAddUserEmail(e.target.value)}
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="user@example.com"
+                />
+              </div>
+
+              {addUserFeedback && (
+                <div
+                  className={`mb-4 p-3 rounded-md text-sm ${
+                    addUserFeedback.type === 'success' ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-700 border border-red-300'
+                  }`}
+                >
+                  {addUserFeedback.message}
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={closeAddUserModal}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md border border-gray-300 shadow-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isAddingUser || !selectedFamilyId}
+                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-sm disabled:bg-indigo-400 disabled:cursor-not-allowed"
+                >
+                  {isAddingUser ? 'Adding...' : 'Add User'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* New Modal for Removing User from Family */}
+      {isRemoveUserModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center z-50">
+          <div className="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Remove User from Family</h2>
+              <button onClick={closeRemoveUserModal} className="text-gray-400 hover:text-gray-600">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+            <form onSubmit={handleRemoveUserSubmit}>
+              {isLoadingUsersForRemoval && <p className="text-sm text-gray-600 mb-2">Loading users...</p>}
+              {!isLoadingUsersForRemoval && usersInFamilyForRemoval.length === 0 && (
+                <p className="text-sm text-gray-600 mb-4">No other users in this family to remove.</p>
+              )}
+              {!isLoadingUsersForRemoval && usersInFamilyForRemoval.length > 0 && (
+                <div className="mb-4">
+                  <label htmlFor="removeUserSelect" className="block text-sm font-medium text-gray-700 mb-1">
+                    Select User to Remove
+                  </label>
+                  <select
+                    id="removeUserSelect"
+                    name="removeUserSelect"
+                    value={selectedUserToRemoveId || ''}
+                    onChange={(e) => setSelectedUserToRemoveId(e.target.value)}
+                    required
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    {usersInFamilyForRemoval.map(user => (
+                      <option key={user.id} value={user.id.toString()}>
+                        {user.email} (ID: {user.id})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {removeUserFeedback && (
+                <div
+                  className={`mb-4 p-3 rounded-md text-sm ${
+                    removeUserFeedback.type === 'success' ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-700 border border-red-300'
+                  }`}
+                >
+                  {removeUserFeedback.message}
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={closeRemoveUserModal}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md border border-gray-300 shadow-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isRemovingUser || isLoadingUsersForRemoval || usersInFamilyForRemoval.length === 0 || !selectedUserToRemoveId}
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm disabled:bg-red-400 disabled:cursor-not-allowed"
+                >
+                  {isRemovingUser ? 'Removing...' : 'Remove User'}
                 </button>
               </div>
             </form>

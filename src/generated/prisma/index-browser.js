@@ -125,6 +125,20 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FamilyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserFamilyScalarFieldEnum = {
+  userId: 'userId',
+  familyId: 'familyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.FamilyMemberScalarFieldEnum = {
   id: 'id',
   fullName: 'fullName',
@@ -137,7 +151,7 @@ exports.Prisma.FamilyMemberScalarFieldEnum = {
   parentId2: 'parentId2',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  familyId: 'familyId'
 };
 
 exports.Prisma.SortOrder = {
@@ -153,6 +167,8 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Family: 'Family',
+  UserFamily: 'UserFamily',
   FamilyMember: 'FamilyMember'
 };
 

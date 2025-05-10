@@ -127,9 +127,12 @@ export default function RegisterPage() {
             Log in
           </Link>
         </p>
-        <div className="mt-4">
-          <Image src="/default-avatar.jpg" alt="Default Avatar" fill />
-        </div>
+        {/* Conditionally render the avatar if there is no error and no success message */}
+        {!error && !success && (
+          <div className="mt-4 relative w-24 h-24 mx-auto"> 
+            <Image src="/default-avatar.jpg" alt="Default Avatar" fill className="rounded-full object-cover" />
+          </div>
+        )}
       </form>
     </div>
   );

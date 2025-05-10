@@ -10,6 +10,9 @@ export async function POST(request: Request) {
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
+    if (password.length < 6) {
+      return NextResponse.json({ error: 'Password must be at least 6 characters long' }, { status: 400 });
+    }
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -24,7 +27,7 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-      // Use Prisma transaction to create user and default family member
+      // Use Prisma transaction to create user.
       const newUser = await prisma.$transaction(async (tx) => {
         const user = await tx.user.create({
           data: {
@@ -33,17 +36,7 @@ export async function POST(request: Request) {
           },
         });
 
-        // Create a default family member for the user
-        await tx.familyMember.create({
-          data: {
-            userId: user.id,
-            fullName: `User ${user.id}`, // Default name, user can change later
-            gender: 'Unknown', // Default gender
-            // Add other default fields as necessary, or leave them null/undefined
-          },
-        });
-
-        return user;
+        return user; // Return only the user
       });
 
       // Exclude password from the returned user object
@@ -52,19 +45,20 @@ export async function POST(request: Request) {
 
       return NextResponse.json(userWithoutPassword, { status: 201 });
     } catch (error: unknown) {
-      console.error('Registration error:', error);
+      console.error('Registration transaction error:', error);
       // In production, consider more specific error handling or logging
       if (error instanceof Error && error.message.includes('Unique constraint failed')) {
-        return NextResponse.json({ error: 'User already exists' }, { status: 409 });
+        // This might be redundant if the initial email check is thorough, but good for safety
+        return NextResponse.json({ error: 'User already exists or a related unique constraint failed.' }, { status: 409 });
       }
-      return NextResponse.json({ error: 'An unexpected error occurred during registration' }, { status: 500 });
+      return NextResponse.json({ error: 'An unexpected error occurred during registration processing.' }, { status: 500 });
     }
   } catch (error) {
-    console.error('Registration error:', error);
-    // In production, consider more specific error handling or logging
-    if (error instanceof Error && error.message.includes('Unique constraint failed')) {
-        return NextResponse.json({ error: 'User already exists' }, { status: 409 });
+    // Catch errors from request.json() or initial validation
+    console.error('Outer registration error:', error);
+    if (error instanceof SyntaxError) {
+        return NextResponse.json({ error: 'Invalid JSON payload' }, { status: 400 });
     }
-    return NextResponse.json({ error: 'An unexpected error occurred during registration' }, { status: 500 });
+    return NextResponse.json({ error: 'An unexpected error occurred.' }, { status: 500 });
   }
 }
