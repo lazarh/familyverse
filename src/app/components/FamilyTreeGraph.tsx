@@ -18,6 +18,7 @@ import 'reactflow/dist/style.css'; // Base styles for React Flow
 import { FamilyMember } from '@/generated/prisma';
 import FamilyNode from './FamilyNode'; // Your custom node
 import dagre from 'dagre';
+import DownloadButton from './DownloadButton'; // Import the DownloadButton
 
 interface FamilyTreeGraphProps {
   familyMembers: FamilyMember[];
@@ -199,9 +200,11 @@ const FamilyTreeGraph: React.FC<FamilyTreeGraphProps> = ({ familyMembers, onNode
         attributionPosition="bottom-left"
         nodesDraggable={true} // Allow dragging for manual adjustments
         nodesConnectable={false} // Disable creating new connections via UI
+        className="react-flow-image-download" // Added className for image download
       >
         <Controls />
         <Background gap={16} color="#e5e7eb" />
+        <DownloadButton /> {/* Add the DownloadButton here */}
       </ReactFlow>
     </div>
   );
