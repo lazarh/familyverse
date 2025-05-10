@@ -12,24 +12,32 @@ async function getUserIdFromSession(): Promise<number | null> {
   return isNaN(userId) ? null : userId;
 }
 
+// Define the expected structure of your resolved params
+interface DeleteMemberParams {
+  familyId: string;
+  memberUserId: string;
+}
+
 // DELETE /api/families/[familyId]/members/[memberUserId] - Remove a user from a family
 export async function DELETE(
   request: Request,
-  { params }: { params: { familyId: string; memberUserId: string } }
+  context: { params: Promise<DeleteMemberParams> } 
 ) {
-  const { familyId: familyIdString, memberUserId: memberUserIdString } = params; // Removed await
+  const params = await context.params;
+  const { familyId, memberUserId } = params;
+
   const currentUserId = await getUserIdFromSession();
 
   if (!currentUserId) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const familyId = parseInt(familyIdString, 10);
-  if (isNaN(familyId)) {
+  const familyIdInt = parseInt(familyId, 10);
+  if (isNaN(familyIdInt)) {
     return NextResponse.json({ message: 'Invalid family ID format' }, { status: 400 });
   }
 
-  const memberUserIdToRemove = parseInt(memberUserIdString, 10);
+  const memberUserIdToRemove = parseInt(memberUserId, 10);
   if (isNaN(memberUserIdToRemove)) {
     return NextResponse.json({ message: 'Invalid member user ID format' }, { status: 400 });
   }
@@ -44,7 +52,7 @@ export async function DELETE(
       where: {
         userId_familyId: {
           userId: currentUserId,
-          familyId: familyId,
+          familyId: familyIdInt,
         },
       },
     });
@@ -59,7 +67,7 @@ export async function DELETE(
       where: {
         userId_familyId: {
           userId: memberUserIdToRemove,
-          familyId: familyId,
+          familyId: familyIdInt,
         },
       },
     });
@@ -73,7 +81,7 @@ export async function DELETE(
       where: {
         userId_familyId: {
           userId: memberUserIdToRemove,
-          familyId: familyId,
+          familyId: familyIdInt,
         },
       },
     });

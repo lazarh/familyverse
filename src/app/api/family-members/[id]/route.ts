@@ -33,14 +33,19 @@ async function isUserAuthorizedForFamilyMember(memberId: number, userId: number)
   }
 }
 
+interface FamilyMemberParams {
+  id: string;
+}
+
 // GET /api/family-members/[id] - Fetch a single family member by ID
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<FamilyMemberParams> }) {
+  const resolvedParams = await params;
   const sessionUserId = await getUserIdFromSession();
   if (sessionUserId === null) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const { id: idString } = params;
+  const { id: idString } = resolvedParams;
   if (!idString) {
     return NextResponse.json({ message: 'Family member ID is required' }, { status: 400 });
   }
@@ -83,13 +88,18 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
+interface UpdateFamilyMemberParams {
+  id: string;
+}
+
 // PATCH /api/family-members/[id] - Update a family member by ID
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<UpdateFamilyMemberParams> }) {
+  const resolvedParams = await params;
   const sessionUserId = await getUserIdFromSession();
   if (sessionUserId === null) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
-  const { id: idString } = params;
+  const { id: idString } = resolvedParams;
   if (!idString) {
     return NextResponse.json({ message: 'Family member ID is required' }, { status: 400 });
   }
@@ -187,13 +197,20 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 }
 
+
+interface DeleteFamilyMemberParams {
+  id: string;
+}
+
 // DELETE /api/family-members/[id] - Delete a family member by ID
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<DeleteFamilyMemberParams> }) {
+  const resolvedParams = await params;
+
   const sessionUserId = await getUserIdFromSession();
   if (sessionUserId === null) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
-  const { id: idString } = params;
+  const { id: idString } = resolvedParams;
   if (!idString) {
     return NextResponse.json({ message: 'Family member ID is required' }, { status: 400 });
   }

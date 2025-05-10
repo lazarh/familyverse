@@ -7,11 +7,6 @@ import FamilyTreeGraph from './components/FamilyTreeGraph'; // Import the new gr
 import { FamilyMember } from '@/generated/prisma'; // Corrected import path
 import Image from 'next/image'; // Import next/image
 
-// Define a type for the API error response
-interface ApiError {
-  message: string;
-}
-
 // Define a type for Family (matching /api/families response)
 interface Family {
   id: number; // Prisma Int maps to number
@@ -479,7 +474,7 @@ export default function HomePage() {
       return (
         <div className="text-center p-8">
           <p className="text-xl text-gray-700 mb-4">
-            This family doesn't have any members yet.
+            This family doesn&apos;t have any members yet.
           </p>
           {selectedFamilyId && (
             <button
@@ -761,7 +756,7 @@ export default function HomePage() {
             <form onSubmit={handleAddUserSubmit}>
               <div className="mb-4">
                 <label htmlFor="addUserEmail" className="block text-sm font-medium text-gray-700 mb-1">
-                  User's Email Address
+                  User&apos;s Email Address
                 </label>
                 <input
                   type="email"

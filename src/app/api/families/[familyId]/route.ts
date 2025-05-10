@@ -12,14 +12,26 @@ async function getUserIdFromSession(): Promise<number | null> {
   return isNaN(userId) ? null : userId;
 }
 
+
+// Define the expected structure of your resolved params
+interface GetFamiliesParams {
+  familyIdString: string;
+}
+
 // GET /api/families/[familyId] - Fetch details of a specific family
-export async function GET(request: Request, { params }: { params: { familyId: string } }) {
+export async function GET(
+  request: Request, 
+  { params }: { params: Promise<GetFamiliesParams> }
+) {
+  const resolvedParams = await params;
+  const { familyIdString } = resolvedParams;
+
   const userId = await getUserIdFromSession();
   if (!userId) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const familyId = parseInt(params.familyId, 10);
+  const familyId = parseInt(familyIdString, 10);
   if (isNaN(familyId)) {
     return NextResponse.json({ message: 'Invalid family ID format' }, { status: 400 });
   }

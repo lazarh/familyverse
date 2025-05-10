@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 }
 
 // GET /api/families - Fetch all families for the logged-in user
-export async function GET(request: Request) {
+export async function GET() {
   const userId = await getUserIdFromSession();
   if (!userId) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

@@ -12,9 +12,19 @@ async function getUserIdFromSession(): Promise<number | null> {
   return isNaN(userId) ? null : userId;
 }
 
+// Define the expected structure of your resolved params
+interface AddMemberParams {
+  familyId: string;
+}
+
 // POST /api/families/[familyId]/members - Add a user to a family
-export async function POST(request: Request, { params }: { params: { familyId: string } }) {
-  const { familyId: familyIdString } = params; // Corrected: Removed await from params
+export async function POST(
+  request: Request, 
+  { params }: { params: Promise<AddMemberParams> }
+) {
+  const resolvedParams = await params;
+  const { familyId: familyIdString } = resolvedParams;
+
   const currentUserId = await getUserIdFromSession(); 
   if (!currentUserId) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (user && credentials?.password && await bcrypt.compare(credentials.password, user.password)) {
-            return { id: user.id, email: user.email };
+            return { id: String(user.id), email: user.email };
           } else {
             return null;
           }

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'; // Import Link for navigation
-import Image from 'next/image'; // Ensure Image is imported from 'next/image'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -11,6 +10,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [honeypot, setHoneypot] = useState(''); // Add state for honeypot
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,7 +33,7 @@ export default function RegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, website_url: honeypot }), // Send honeypot
       });
 
       const data = await response.json();
@@ -46,6 +46,7 @@ export default function RegisterPage() {
         setEmail('');
         setPassword('');
         setConfirmPassword('');
+        setHoneypot(''); // Clear honeypot field
         setTimeout(() => {
           router.push('/login'); // Redirect to login page after a short delay
         }, 2000); // 2 seconds delay
@@ -114,6 +115,17 @@ export default function RegisterPage() {
             placeholder="********"
           />
         </div>
+        {/* Honeypot field */}
+        <div style={{ position: 'absolute', left: '-5000px' }} aria-hidden="true">
+          <input 
+            type="text" 
+            name="website_url" 
+            tabIndex={-1} 
+            autoComplete="off" 
+            value={honeypot} // Bind value
+            onChange={(e) => setHoneypot(e.target.value)} // Update state
+          />
+        </div>
         <button
           type="submit"
           className="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
@@ -127,12 +139,6 @@ export default function RegisterPage() {
             Log in
           </Link>
         </p>
-        {/* Conditionally render the avatar if there is no error and no success message */}
-        {!error && !success && (
-          <div className="mt-4 relative w-24 h-24 mx-auto"> 
-            <Image src="/default-avatar.jpg" alt="Default Avatar" fill className="rounded-full object-cover" />
-          </div>
-        )}
       </form>
     </div>
   );

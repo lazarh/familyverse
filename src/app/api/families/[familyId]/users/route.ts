@@ -12,9 +12,21 @@ async function getUserIdFromSession(): Promise<number | null> {
   return isNaN(userId) ? null : userId;
 }
 
+// Define the expected structure of your resolved params
+interface AddMemberParams {
+  familyId: string;
+}
+
 // GET /api/families/[familyId]/users - Fetch all users for a specific family
-export async function GET(request: Request, { params }: { params: { familyId: string } }) {
-  const { familyId: familyIdString } = await params; // Corrected: Removed await
+export async function GET(
+  request: Request, 
+  { params }: { params: Promise<AddMemberParams> } // Corrected: Changed to Promise<AddMemberParams>
+) {
+  // Await the params to resolve them
+  const resolvedParams = await params; // Corrected: Await the params here
+  // Extract familyId from the resolved params
+  const { familyId: familyIdString } = resolvedParams; // Corrected: Use resolvedParams
+
   const currentUserId = await getUserIdFromSession();
 
   if (!currentUserId) {

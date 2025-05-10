@@ -4,7 +4,15 @@ import bcrypt from 'bcrypt';
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { email, password, website_url } = await request.json(); // Add website_url for honeypot
+
+    // Honeypot check
+    if (website_url) {
+      // If honeypot field is filled, it's likely a bot
+      console.log('Honeypot triggered for email:', email);
+      // Return a generic error to avoid revealing the honeypot mechanism
+      return NextResponse.json({ error: 'Registration failed.' }, { status: 400 }); 
+    }
 
     // Basic validation
     if (!email || !password) {
