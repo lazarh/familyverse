@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 export async function POST(request: Request) {
   try {
-    const { email, password, website_url } = await request.json(); // Add website_url for honeypot
+    const { email, password, website_url, inviteCode } = await request.json(); // Add website_url for honeypot and inviteCode
 
     // Honeypot check
     if (website_url) {
@@ -20,6 +20,15 @@ export async function POST(request: Request) {
     }
     if (password.length < 6) {
       return NextResponse.json({ error: 'Password must be at least 6 characters long' }, { status: 400 });
+    }
+
+    // Invite code check
+    const validInviteCode = process.env.INVITE_CODE;
+    if (!inviteCode) {
+      return NextResponse.json({ error: 'Invite code is required' }, { status: 400 });
+    }
+    if (inviteCode !== validInviteCode) {
+      return NextResponse.json({ error: 'Invalid invite code' }, { status: 403 }); // 403 Forbidden
     }
 
     // Check if user already exists
