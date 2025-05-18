@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    env_file:
-      - .env.local
+    #env_file:
+    #  - .env.local
     volumes:
       - ./prisma:/app/prisma # Persists the SQLite database and migrations
     # The CMD ["npm", "start"] from your Dockerfile will be used to run the application.
