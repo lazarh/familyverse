@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link'; // Import Link for navigation
 
 export default function RegisterPage() {
@@ -11,7 +10,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [honeypot, setHoneypot] = useState(''); // Add state for honeypot
-  const router = useRouter();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
