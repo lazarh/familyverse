@@ -26,6 +26,11 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (user && credentials?.password && await bcrypt.compare(credentials.password, user.password)) {
+            // Require email confirmation
+            if (!user.isConfirmed) {
+              console.warn('Attempted login for unconfirmed email:', user.email);
+              return null;
+            }
             return { id: String(user.id), email: user.email };
           } else {
             return null;

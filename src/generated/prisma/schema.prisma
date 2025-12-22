@@ -16,11 +16,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String // Will store the hashed password
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                      Int       @id @default(autoincrement())
+  email                   String    @unique
+  password                String // Will store the hashed password
+  isConfirmed             Boolean   @default(false)
+  confirmationToken       String?
+  confirmationTokenExpiry DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   userFamilies UserFamily[] // Relation to the UserFamily join table
 }

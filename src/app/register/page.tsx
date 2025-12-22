@@ -8,7 +8,6 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [inviteCode, setInviteCode] = useState(''); // Add state for invite code
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [honeypot, setHoneypot] = useState(''); // Add state for honeypot
@@ -34,7 +33,7 @@ export default function RegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, website_url: honeypot, inviteCode }), // Send honeypot and inviteCode
+        body: JSON.stringify({ email, password, website_url: honeypot }), // Send honeypot
       });
 
       const data = await response.json();
@@ -42,16 +41,13 @@ export default function RegisterPage() {
       if (!response.ok) {
         setError(data.error || 'Registration failed');
       } else {
-        setSuccess('Registration successful! Redirecting to login...');
+        setSuccess('Registration successful! Check your email for a confirmation link.');
         // Optionally clear form or redirect
         setEmail('');
         setPassword('');
         setConfirmPassword('');
         setHoneypot(''); // Clear honeypot field
-        setInviteCode(''); // Clear invite code field
-        setTimeout(() => {
-          router.push('/login'); // Redirect to login page after a short delay
-        }, 2000); // 2 seconds delay
+        // Do not redirect automatically; wait for email confirmation
       }
     } catch (err) {
       console.error('Registration fetch error:', err);
@@ -82,23 +78,7 @@ export default function RegisterPage() {
             placeholder="you@example.com"
           />
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="inviteCode"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Invite Code
-          </label>
-          <input
-            type="text"
-            id="inviteCode"
-            value={inviteCode}
-            onChange={(e) => setInviteCode(e.target.value)}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-500 text-black"
-            placeholder="Enter your invite code"
-          />
-        </div>
+        
         <div className="mb-4">
           <label
             htmlFor="password"
