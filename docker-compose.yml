@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/lazarh/familyverse-app
     ports:
       - "3001:3000"
     environment:
