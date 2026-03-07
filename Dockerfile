@@ -16,13 +16,13 @@ RUN npm ci
 # Copy prisma schema
 COPY prisma ./prisma/
 
-# Generate Prisma client
-# This ensures the client is generated with the correct platform for the build environment
-RUN npx prisma generate
-
 # Copy the rest of the application code
 # Ensure .dockerignore is set up to exclude node_modules, .git, .next, prisma/dev.db etc.
 COPY . .
+
+# Generate Prisma client
+# This ensures the client is generated with the correct platform for the build environment
+RUN npx prisma generate
 
 # Build the Next.js application
 RUN npm run build
@@ -33,8 +33,8 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Set environment variables
-ENV NODE_ENV production
-ENV PORT 3000
+ENV NODE_ENV=production
+ENV PORT=3000
 
 # Create a non-root user for security
 RUN addgroup --system --gid 1001 nodejs
