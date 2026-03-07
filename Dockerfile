@@ -1,5 +1,5 @@
 # Stage 1: Install dependencies and build the application
-FROM node:20 AS builder
+FROM node:16-bookworm AS builder
 
 WORKDIR /app
 
@@ -12,11 +12,6 @@ COPY package-lock.json* ./
 
 # Install dependencies
 RUN npm ci
-
-# If prebuilt Prisma engines are provided in the build context, copy them into node_modules so prisma generate will use them
-# (The CI workflow places compiled engines into ./prisma-engines before building)
-COPY prisma-engines ./prisma-engines
-RUN if [ -d ./prisma-engines ]; then mkdir -p node_modules/.prisma/client/runtime && cp prisma-engines/* node_modules/.prisma/client/runtime/ || true; fi
 
 # Copy prisma schema
 COPY prisma ./prisma/
@@ -33,7 +28,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Stage 2: Production image
-FROM node:20-alpine AS runner
+FROM node:16-bookworm-slim AS runner
 
 WORKDIR /app
 
