@@ -1,5 +1,5 @@
 # Stage 1: Install dependencies and build the application
-FROM node:16-bookworm AS builder
+FROM node:22-bookworm AS builder
 
 WORKDIR /app
 
@@ -28,7 +28,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Stage 2: Production image
-FROM node:16-bookworm-slim AS runner
+FROM node:22-bookworm-slim AS runner
 
 WORKDIR /app
 
