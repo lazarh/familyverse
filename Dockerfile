@@ -13,6 +13,11 @@ COPY package-lock.json* ./
 # Install dependencies
 RUN npm ci
 
+# If prebuilt Prisma engines are provided in the build context, copy them into node_modules so prisma generate will use them
+# (The CI workflow places compiled engines into ./prisma-engines before building)
+COPY prisma-engines ./prisma-engines
+RUN if [ -d ./prisma-engines ]; then mkdir -p node_modules/.prisma/client/runtime && cp prisma-engines/* node_modules/.prisma/client/runtime/ || true; fi
+
 # Copy prisma schema
 COPY prisma ./prisma/
 
