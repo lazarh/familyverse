@@ -22,6 +22,8 @@ COPY . .
 
 # Generate Prisma client
 # This ensures the client is generated with the correct platform for the build environment
+# Prisma doesn't support armv7 officially, so we need to bypass checksums
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 RUN npx prisma generate
 
 # Build the Next.js application
