@@ -1,0 +1,35 @@
+version: '3.8'
+
+# Portainer-ready compose file for armv7 (Cubieboard4 and other 32-bit ARM devices).
+# Image is built and pushed by the "Build and push ARM v7 image" GitHub Actions workflow.
+#
+# Usage in Portainer:
+#   1. Go to Stacks → Add Stack → select "Repository" or paste this file.
+#   2. Set the environment variables below (or use a Portainer env file).
+#   3. IMPORTANT: mount a host volume for /app/prisma so that your SQLite database
+#      survives container restarts (see the volumes section).
+
+services:
+  app:
+    image: ghcr.io/lazarh/familyverse:armv7-latest
+    platform: linux/arm/v7
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: production
+
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_FROM: ${SMTP_FROM}
+
+      # SQLite database path inside the container.
+      # If you mount a host volume below, update this path to match.
+      DATABASE_URL: ${DATABASE_URL:-file:/app/prisma/prod.db}
+
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+    volumes:
+      # Persist the SQLite database across container restarts.
+      # On the host, create this directory first: mkdir -p /opt/familyverse/prisma
+      - /opt/familyverse/prisma:/app/prisma
+    restart: unless-stopped

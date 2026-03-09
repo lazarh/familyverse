@@ -1,0 +1,88 @@
+# ─── Stage 1: Build ──────────────────────────────────────────────────────────
+# Uses arm32v7/node so that native modules (e.g. bcrypt) compile for armv7.
+# Build with: docker buildx build --platform linux/arm/v7 -f Dockerfile.armv7 ...
+FROM arm32v7/node:22-bookworm AS builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download pre-built Prisma engines for armv7 from lazarh/prisma-engine.
+# The archive is a flat tar.gz (all binaries at root level).
+ARG PRISMA_ENGINES_VERSION=6.7.0
+RUN mkdir -p /engines && \
+    curl -fSL "https://github.com/lazarh/prisma-engine/releases/download/v${PRISMA_ENGINES_VERSION}/prisma-engines-${PRISMA_ENGINES_VERSION}-armv7.tar.gz" \
+    | tar -xz -C /engines && \
+    chmod +x /engines/query-engine /engines/migration-engine /engines/prisma-fmt
+
+# Point Prisma at our pre-built engines BEFORE npm install so that postinstall
+# scripts don't try to download unsupported armv7 engine binaries from the internet.
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+ENV PRISMA_QUERY_ENGINE_LIBRARY=/engines/libquery_engine_napi.so.node
+ENV PRISMA_QUERY_ENGINE_BINARY=/engines/query-engine
+# Prisma v5+ renamed the migration engine env var; set both for compatibility.
+ENV PRISMA_SCHEMA_ENGINE_BINARY=/engines/migration-engine
+ENV PRISMA_MIGRATION_ENGINE_BINARY=/engines/migration-engine
+ENV PRISMA_FMT_BINARY=/engines/prisma-fmt
+
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+COPY prisma ./prisma/
+COPY . .
+
+# Remove the linux-musl binaryTarget — no official Prisma musl binary exists for
+# armv7, so leaving it in causes `prisma generate` to fail trying to download it.
+# The engines are supplied via PRISMA_QUERY_ENGINE_LIBRARY / PRISMA_SCHEMA_ENGINE_BINARY
+# above, so only "native" is needed here.
+RUN sed -i 's/binaryTargets = \["native", "linux-musl-openssl-3.0.x"\]/binaryTargets = ["native"]/' prisma/schema.prisma
+
+RUN npx prisma generate
+RUN npm run build
+
+
+# ─── Stage 2: Production runner ──────────────────────────────────────────────
+FROM arm32v7/node:22-bookworm-slim AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+# Carry engine env vars into the runtime image so that prisma generate and
+# prisma migrate deploy (run below) can locate the custom binaries.
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+ENV PRISMA_QUERY_ENGINE_LIBRARY=/engines/libquery_engine_napi.so.node
+ENV PRISMA_QUERY_ENGINE_BINARY=/engines/query-engine
+ENV PRISMA_SCHEMA_ENGINE_BINARY=/engines/migration-engine
+ENV PRISMA_MIGRATION_ENGINE_BINARY=/engines/migration-engine
+ENV PRISMA_FMT_BINARY=/engines/prisma-fmt
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Bring pre-built engines from builder
+COPY --from=builder /engines /engines
+
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/package-lock.json* ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/prisma ./prisma/
+RUN rm -f /app/prisma/dev.db*
+
+RUN npx prisma generate
+RUN mkdir -p /app/src/generated/prisma && chown -R nextjs:nodejs /app/src/generated/prisma
+
+RUN npx prisma migrate deploy
+RUN chown -R nextjs:nodejs /app/prisma
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder /app/next.config.ts ./next.config.ts
+
+USER nextjs
+
+EXPOSE 3000
+CMD ["npm", "start"]
