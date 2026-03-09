@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Download pre-built Prisma engines for armv7 from lazarh/prisma-engine.
 # The archive is a flat tar.gz (all binaries at root level).
+# NOTE: libquery_engine_napi.so.node (NAPI/library mode) is NOT included in the
+# release because it requires a working `prisma generate` on armv7 to produce.
+# We force binary engine mode (engineType patched below) which only needs the
+# standalone query-engine binary.
 ARG PRISMA_ENGINES_VERSION=6.7.0
 RUN mkdir -p /engines && \
     curl -fSL "https://github.com/lazarh/prisma-engine/releases/download/v${PRISMA_ENGINES_VERSION}/prisma-engines-${PRISMA_ENGINES_VERSION}-armv7.tar.gz" \
@@ -20,7 +24,6 @@ RUN mkdir -p /engines && \
 # Point Prisma at our pre-built engines BEFORE npm install so that postinstall
 # scripts don't try to download unsupported armv7 engine binaries from the internet.
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
-ENV PRISMA_QUERY_ENGINE_LIBRARY=/engines/libquery_engine_napi.so.node
 ENV PRISMA_QUERY_ENGINE_BINARY=/engines/query-engine
 # Prisma v5+ renamed the migration engine env var; set both for compatibility.
 ENV PRISMA_SCHEMA_ENGINE_BINARY=/engines/migration-engine
@@ -33,11 +36,14 @@ RUN npm ci
 COPY prisma ./prisma/
 COPY . .
 
-# Remove the linux-musl binaryTarget — no official Prisma musl binary exists for
-# armv7, so leaving it in causes `prisma generate` to fail trying to download it.
-# The engines are supplied via PRISMA_QUERY_ENGINE_LIBRARY / PRISMA_SCHEMA_ENGINE_BINARY
-# above, so only "native" is needed here.
-RUN sed -i 's/binaryTargets = \["native", "linux-musl-openssl-3.0.x"\]/binaryTargets = ["native"]/' prisma/schema.prisma
+# Patch schema.prisma for armv7:
+#  1. Remove linux-musl binaryTarget — no Prisma musl binary exists for armv7.
+#  2. Add engineType = "binary" — avoids needing libquery_engine_napi.so.node
+#     (NAPI library mode), using the standalone query-engine binary instead.
+RUN sed -i \
+      -e 's/binaryTargets = \["native", "linux-musl-openssl-3.0.x"\]/binaryTargets = ["native"]/' \
+      -e '/provider\s*=\s*"prisma-client-js"/a\  engineType    = "binary"' \
+      prisma/schema.prisma
 
 RUN npx prisma generate
 RUN npm run build
@@ -53,7 +59,6 @@ ENV PORT=3000
 # Carry engine env vars into the runtime image so that prisma generate and
 # prisma migrate deploy (run below) can locate the custom binaries.
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
-ENV PRISMA_QUERY_ENGINE_LIBRARY=/engines/libquery_engine_napi.so.node
 ENV PRISMA_QUERY_ENGINE_BINARY=/engines/query-engine
 ENV PRISMA_SCHEMA_ENGINE_BINARY=/engines/migration-engine
 ENV PRISMA_MIGRATION_ENGINE_BINARY=/engines/migration-engine
