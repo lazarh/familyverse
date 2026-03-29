@@ -1,31 +1,25 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/authOptions';
+import db from '@/lib/db';
+import { userFamilies, users } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { auth } from '@/lib/auth';
 
-// Helper function to get user ID from session
 async function getUserIdFromSession(): Promise<number | null> {
-  const session = await getServerSession(authOptions);
-  const userIdString = (session?.user as { id?: string })?.id;
-  if (!userIdString) return null;
-  const userId = parseInt(userIdString, 10);
-  return isNaN(userId) ? null : userId;
+  const session = await auth.api.getSession();
+  if (!session?.user?.id) return null;
+  return parseInt(session.user.id, 10) || null;
 }
 
-// Define the expected structure of your resolved params
 interface AddMemberParams {
   familyId: string;
 }
 
-// GET /api/families/[familyId]/users - Fetch all users for a specific family
 export async function GET(
   request: Request, 
-  { params }: { params: Promise<AddMemberParams> } // Corrected: Changed to Promise<AddMemberParams>
+  { params }: { params: Promise<AddMemberParams> }
 ) {
-  // Await the params to resolve them
-  const resolvedParams = await params; // Corrected: Await the params here
-  // Extract familyId from the resolved params
-  const { familyId: familyIdString } = resolvedParams; // Corrected: Use resolvedParams
+  const resolvedParams = await params;
+  const { familyId: familyIdString } = resolvedParams;
 
   const currentUserId = await getUserIdFromSession();
 
@@ -39,38 +33,28 @@ export async function GET(
   }
 
   try {
-    // 1. Verify the current user is a member of the family they are trying to fetch users from
-    const currentUserFamilyLink = await prisma.userFamily.findUnique({
-      where: {
-        userId_familyId: {
-          userId: currentUserId,
-          familyId: familyId,
-        },
-      },
-    });
+    const currentUserFamilyLink = await db.select()
+      .from(userFamilies)
+      .where(and(
+        eq(userFamilies.userId, currentUserId),
+        eq(userFamilies.familyId, familyId)
+      ))
+      .limit(1);
 
-    if (!currentUserFamilyLink) {
+    if (!currentUserFamilyLink.length) {
       return NextResponse.json({ message: 'Forbidden: You are not a member of this family.' }, { status: 403 });
     }
 
-    // 2. Fetch all UserFamily records for the given familyId, including the related User details
-    const userFamilies = await prisma.userFamily.findMany({
-      where: { familyId: familyId },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            // Add any other user fields you want to return, e.g., name
-          },
-        },
-      },
-    });
+    const userFamiliesData = await db.select({
+      id: users.id,
+      email: users.email,
+    })
+    .from(userFamilies)
+    .innerJoin(users, eq(userFamilies.userId, users.id))
+    .where(eq(userFamilies.familyId, familyId));
 
-    // Extract the user objects from the UserFamily records
-    const usersInFamily = userFamilies
-      .map(uf => uf.user)
-      .filter(user => user.id !== currentUserId); // Ensure current user is not in the list
+    const usersInFamily = userFamiliesData
+      .filter(user => user.id !== currentUserId);
 
     return NextResponse.json(usersInFamily);
 

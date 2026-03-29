@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import defaultAvatar from '@/../public/default-avatar.jpg'; // Ensure correct path
 import { NodeProps, Handle, Position } from 'reactflow'; // Import NodeProps, Handle, and Position
-import { FamilyMember } from '@/generated/prisma'; // Added import
+import type { FamilyMember } from '@/db/schema';
 
 // Props for the custom node, extending React Flow's NodeProps
 interface CustomFamilyNodeProps extends NodeProps {

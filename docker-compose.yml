@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      platforms:
+        - linux/arm/v7
     ports:
       - "3001:3000"
     environment:
@@ -14,9 +16,7 @@ services:
       SMTP_PORT: ${SMTP_PORT}
       SMTP_FROM: ${SMTP_FROM}
 
-      DATABASE_URL: ${DATABASE_URL} # Path to SQLite DB inside the container
-      NEXTAUTH_URL: ${NEXTAUTH_URL} # URL of your app
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET} 
-    #volumes:
-    #  - ./prisma:/app/prisma # Persists the SQLite database and migrations
-    # The CMD ["npm", "start"] from your Dockerfile will be used to run the application.
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+    volumes:
+      - ./prisma:/app/prisma

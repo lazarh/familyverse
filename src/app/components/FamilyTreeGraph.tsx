@@ -15,14 +15,14 @@ import ReactFlow, {
   ReactFlowProvider,
 } from 'reactflow';
 import 'reactflow/dist/style.css'; // Base styles for React Flow
-import { FamilyMember } from '@/generated/prisma';
+import type { FamilyMember as FamilyMemberType } from '@/db/schema';
 import FamilyNode from './FamilyNode'; // Your custom node
 import dagre from 'dagre';
 import DownloadButton from './DownloadButton'; // Import the DownloadButton
 
 interface FamilyTreeGraphProps {
-  familyMembers: FamilyMember[];
-  onNodeClick: (member: FamilyMember) => void;
+  familyMembers: FamilyMemberType[];
+  onNodeClick: (member: FamilyMemberType) => void;
   selectedMemberId?: string | null;
 }
 

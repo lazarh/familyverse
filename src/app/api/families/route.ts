@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { getUserIdFromSession } from '@/lib/sessionUtils'; // Import the shared function
+import db from '@/lib/db';
+import { families, userFamilies } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { getUserIdFromSession } from '@/lib/sessionUtils';
 
 // POST /api/families - Create a new family
 export async function POST(request: Request) {
@@ -16,22 +18,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Family name is required and must be a non-empty string' }, { status: 400 });
     }
 
-    // Use a transaction to create the family and link the user
-    const newFamily = await prisma.$transaction(async (tx) => {
-      const family = await tx.family.create({
-        data: {
-          name: name.trim(),
-        },
-      });
+    const newFamily = await db.transaction(async (tx) => {
+      const family = await tx.insert(families).values({
+        name: name.trim(),
+      }).returning();
 
-      await tx.userFamily.create({
-        data: {
-          userId: userId,
-          familyId: family.id,
-          // role: 'admin', // Optionally assign a role
-        },
+      await tx.insert(userFamilies).values({
+        userId: userId,
+        familyId: family[0].id,
       });
-      return family;
+      return family[0];
     });
 
     return NextResponse.json(newFamily, { status: 201 });
@@ -52,15 +48,16 @@ export async function GET() {
   }
 
   try {
-    const userFamilies = await prisma.userFamily.findMany({
-      where: { userId: userId },
-      include: {
-        family: true, // Include the family details
-      },
-    });
+    const userFamiliesData = await db.select({
+      id: userFamilies.userId,
+      familyId: userFamilies.familyId,
+      family: families,
+    })
+    .from(userFamilies)
+    .innerJoin(families, eq(userFamilies.familyId, families.id))
+    .where(eq(userFamilies.userId, userId));
 
-    const families = userFamilies.map(uf => uf.family);
-    return NextResponse.json(families);
+    return NextResponse.json(userFamiliesData.map(uf => uf.family));
   } catch (error) {
     console.error('Failed to fetch families:', error);
     return NextResponse.json({ message: 'Failed to fetch families' }, { status: 500 });

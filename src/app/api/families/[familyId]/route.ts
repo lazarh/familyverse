@@ -1,24 +1,19 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/authOptions';
+import db from '@/lib/db';
+import { families, userFamilies, users, familyMembers } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { auth } from '@/lib/auth';
 
-// Helper function to get user ID from session
 async function getUserIdFromSession(): Promise<number | null> {
-  const session = await getServerSession(authOptions);
-  const userIdString = (session?.user as { id?: string })?.id;
-  if (!userIdString) return null;
-  const userId = parseInt(userIdString, 10);
-  return isNaN(userId) ? null : userId;
+  const session = await auth.api.getSession();
+  if (!session?.user?.id) return null;
+  return parseInt(session.user.id, 10) || null;
 }
 
-
-// Define the expected structure of your resolved params
 interface GetFamiliesParams {
   familyIdString: string;
 }
 
-// GET /api/families/[familyId] - Fetch details of a specific family
 export async function GET(
   request: Request, 
   { params }: { params: Promise<GetFamiliesParams> }
@@ -37,44 +32,50 @@ export async function GET(
   }
 
   try {
-    // First, check if the user is a member of this family
-    const userFamilyLink = await prisma.userFamily.findUnique({
-      where: {
-        userId_familyId: {
-          userId: userId,
-          familyId: familyId,
-        },
-      },
-    });
+    const userFamilyLink = await db.select()
+      .from(userFamilies)
+      .where(and(
+        eq(userFamilies.userId, userId),
+        eq(userFamilies.familyId, familyId)
+      ))
+      .limit(1);
 
-    if (!userFamilyLink) {
+    if (!userFamilyLink.length) {
       return NextResponse.json({ message: 'Forbidden: You are not a member of this family' }, { status: 403 });
     }
 
-    // Fetch the family details, including its members (users) and family members (tree nodes)
-    const familyDetails = await prisma.family.findUnique({
-      where: { id: familyId },
-      include: {
-        userFamilies: {
-          include: {
-            user: {
-              select: { id: true, email: true }, // Select only necessary user fields
-            },
-          },
-        },
-        familyMembers: { // Include the actual family tree members
-          orderBy: {
-            birthDate: 'asc',
-          }
-        }
-      },
-    });
+    const familyDetails = await db.select()
+      .from(families)
+      .where(eq(families.id, familyId))
+      .limit(1);
 
-    if (!familyDetails) {
+    if (!familyDetails.length) {
       return NextResponse.json({ message: 'Family not found' }, { status: 404 });
     }
 
-    return NextResponse.json(familyDetails);
+    const userFamiliesData = await db.select({
+      userId: userFamilies.userId,
+      familyId: userFamilies.familyId,
+      createdAt: userFamilies.createdAt,
+      updatedAt: userFamilies.updatedAt,
+      user: {
+        id: users.id,
+        email: users.email,
+      },
+    })
+    .from(userFamilies)
+    .innerJoin(users, eq(userFamilies.userId, users.id))
+    .where(eq(userFamilies.familyId, familyId));
+
+    const membersData = await db.select()
+      .from(familyMembers)
+      .where(eq(familyMembers.familyId, familyId));
+
+    return NextResponse.json({
+      ...familyDetails[0],
+      userFamilies: userFamiliesData,
+      familyMembers: membersData,
+    });
   } catch (error) {
     console.error(`Failed to fetch family ${familyId}:`, error);
     return NextResponse.json({ message: 'Failed to fetch family details' }, { status: 500 });

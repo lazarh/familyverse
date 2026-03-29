@@ -1,24 +1,20 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/authOptions';
+import db from '@/lib/db';
+import { userFamilies } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { auth } from '@/lib/auth';
 
-// Helper function to get user ID from session (similar to other route files)
 async function getUserIdFromSession(): Promise<number | null> {
-  const session = await getServerSession(authOptions);
-  const userIdString = (session?.user as { id?: string })?.id;
-  if (!userIdString) return null;
-  const userId = parseInt(userIdString, 10);
-  return isNaN(userId) ? null : userId;
+  const session = await auth.api.getSession();
+  if (!session?.user?.id) return null;
+  return parseInt(session.user.id, 10) || null;
 }
 
-// Define the expected structure of your resolved params
 interface DeleteMemberParams {
   familyId: string;
   memberUserId: string;
 }
 
-// DELETE /api/families/[familyId]/members/[memberUserId] - Remove a user from a family
 export async function DELETE(
   request: Request,
   context: { params: Promise<DeleteMemberParams> } 
@@ -47,50 +43,40 @@ export async function DELETE(
   }
 
   try {
-    // 1. Verify the current user is a member of the family (authorization)
-    const currentUserFamilyLink = await prisma.userFamily.findUnique({
-      where: {
-        userId_familyId: {
-          userId: currentUserId,
-          familyId: familyIdInt,
-        },
-      },
-    });
+    const currentUserFamilyLink = await db.select()
+      .from(userFamilies)
+      .where(and(
+        eq(userFamilies.userId, currentUserId),
+        eq(userFamilies.familyId, familyIdInt)
+      ))
+      .limit(1);
 
-    if (!currentUserFamilyLink) {
+    if (!currentUserFamilyLink.length) {
       return NextResponse.json({ message: 'Forbidden: You are not a member of this family or do not have permission to remove users.' }, { status: 403 });
-      // Future: Add role-based access control if needed (e.g., only admins can remove)
     }
 
-    // 2. Check if the user to be removed is actually part of this family
-    const targetUserFamilyLink = await prisma.userFamily.findUnique({
-      where: {
-        userId_familyId: {
-          userId: memberUserIdToRemove,
-          familyId: familyIdInt,
-        },
-      },
-    });
+    const targetUserFamilyLink = await db.select()
+      .from(userFamilies)
+      .where(and(
+        eq(userFamilies.userId, memberUserIdToRemove),
+        eq(userFamilies.familyId, familyIdInt)
+      ))
+      .limit(1);
 
-    if (!targetUserFamilyLink) {
+    if (!targetUserFamilyLink.length) {
       return NextResponse.json({ message: 'User to remove is not a member of this family.' }, { status: 404 });
     }
 
-    // 3. Remove the user from the family
-    await prisma.userFamily.delete({
-      where: {
-        userId_familyId: {
-          userId: memberUserIdToRemove,
-          familyId: familyIdInt,
-        },
-      },
-    });
+    await db.delete(userFamilies)
+      .where(and(
+        eq(userFamilies.userId, memberUserIdToRemove),
+        eq(userFamilies.familyId, familyIdInt)
+      ));
 
     return NextResponse.json({ message: 'User removed from family successfully' }, { status: 200 });
 
   } catch (error) {
     console.error(`Failed to remove user ${memberUserIdToRemove} from family ${familyId}:`, error);
-    // Check for specific Prisma errors if needed, e.g., record not found during delete
     return NextResponse.json({ message: 'Failed to remove user from family' }, { status: 500 });
   }
 }

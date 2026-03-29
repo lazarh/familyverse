@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, ChangeEvent, FormEvent } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { authClient } from '@/lib/client';
 import { useRouter } from 'next/navigation';
-import FamilyTreeGraph from './components/FamilyTreeGraph'; // Import the new graph component
-import { FamilyMember } from '@/generated/prisma'; // Corrected import path
-import Image from 'next/image'; // Import next/image
+import FamilyTreeGraph from './components/FamilyTreeGraph';
+import type { FamilyMember as FamilyMemberType } from '@/db/schema';
+import Image from 'next/image';
 
 // Define a type for Family (matching /api/families response)
 interface Family {
@@ -60,10 +60,10 @@ function ensureDataUrl(picture: Uint8Array | string | null, mimeType: string = '
 }
 
 export default function HomePage() {
-  const { data: session, status } = useSession();
+  const { data: session, isPending: status } = authClient.useSession();
   const router = useRouter();
-  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
-  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
+  const [familyMembers, setFamilyMembers] = useState<FamilyMemberType[]>([]);
+  const [selectedMember, setSelectedMember] = useState<FamilyMemberType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [formData, setFormData] = useState<PageFormData>({});
@@ -102,7 +102,7 @@ export default function HomePage() {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to fetch family members');
       }
-      const data: FamilyMember[] = await response.json();
+      const data: FamilyMemberType[] = await response.json();
       setFamilyMembers(data);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred while fetching members');
@@ -113,7 +113,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (status === 'loading') return;
+    if (status) return;
     if (!session) {
       router.push('/login');
       return;
@@ -157,7 +157,7 @@ export default function HomePage() {
     }
   }, [selectedFamilyId, userFamilies, session, fetchFamilyMembers]);
 
-  const handleNodeClick = (member: FamilyMember) => {
+  const handleNodeClick = (member: FamilyMemberType) => {
     setSelectedMember(member);
 
     const currentPictureDataUrl = member.picture ? ensureDataUrl(member.picture as Uint8Array) : null;
@@ -327,13 +327,6 @@ export default function HomePage() {
   };
 
   // New handlers for "Add User to Family" modal
-  const openAddUserModal = () => {
-    setIsAddUserModalOpen(true);
-    setAddUserEmail('');
-    setAddUserFeedback(null);
-    setError(null); // Clear any general page error
-  };
-
   const closeAddUserModal = () => {
     setIsAddUserModalOpen(false);
   };
@@ -401,15 +394,6 @@ export default function HomePage() {
     }
   };
 
-  const openRemoveUserModal = () => {
-    if (selectedFamilyId) {
-      fetchUsersInFamily(selectedFamilyId);
-    }
-    setIsRemoveUserModalOpen(true);
-    setRemoveUserFeedback(null);
-    setError(null); // Clear any general page error
-  };
-
   const closeRemoveUserModal = () => {
     setIsRemoveUserModalOpen(false);
     setUsersInFamilyForRemoval([]);
@@ -455,7 +439,7 @@ export default function HomePage() {
     }
   };
 
-  if (status === 'loading' || (isLoading && familyMembers.length === 0 && !error && !selectedFamilyId)) {
+  if (status || (isLoading && familyMembers.length === 0 && !error && !selectedFamilyId)) {
     return <div className="flex justify-center items-center h-screen">Loading page data...</div>;
   }
 
@@ -526,32 +510,12 @@ export default function HomePage() {
           {selectedFamilyId && (
             <>
               <button
-                onClick={handleAddMemberClick}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
-              >
-                Add Family Member
-              </button>
-              <button
-                onClick={openAddUserModal}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
-              >
-                Add User to Family
-              </button>
-              <button
-                onClick={openRemoveUserModal}
-                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
-              >
-                Remove User from Family
-              </button>
-            </>
-          )}
-          {session && (
-            <button
-              onClick={() => signOut()} // Call signOut from next-auth/react
+                onClick={() => authClient.signOut()}
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-md transition duration-150 ease-in-out w-full sm:w-auto"
             >
               Sign Out
             </button>
+            </>
           )}
         </div>
       </header>
