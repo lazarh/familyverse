@@ -60,16 +60,11 @@ RUN npm ci --omit=dev
 
 # Ensure Prisma Client is generated for the runner environment
 COPY --from=builder /app/prisma ./prisma/
-RUN rm -f /app/prisma/dev.db* # Ensure a clean slate for migrations, including WAL/SHM files
 RUN npx prisma generate
 # Ensure the 'nextjs' user has necessary permissions for the generated Prisma client.
 # prisma generate creates ../src/generated/prisma relative to the schema path.
 # WORKDIR is /app, schema is in /app/prisma, so client is in /app/src/generated/prisma.
 RUN mkdir -p /app/src && chown -R nextjs:nodejs /app/src/generated/prisma
-
-# Apply database migrations
-RUN npx prisma migrate deploy
-# Ensure the 'nextjs' user owns the database file and its directory.
 RUN chown -R nextjs:nodejs /app/prisma
 
 # Copy the built application from the builder stage
@@ -78,10 +73,15 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder /app/next.config.ts ./next.config.ts
 # The Prisma client and schema/migrations are now sourced from the runner's earlier steps.
 
+# Seed script and entrypoint: migrations + idempotent seed run at container
+# START (not at image build) so they target the runtime DATABASE_URL.
+COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
+
 USER nextjs
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Command to run the application
-CMD ["npm", "start"]
+# migrate deploy -> seed -> exec npm start
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

@@ -5,6 +5,7 @@ node_modules
 .next
 
 # Local environment variables
+.env
 .env*.local
 
 # Prisma development database

@@ -87,6 +87,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -135,6 +138,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -158,7 +166,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/def/Documents/git/familyverse/src/generated/prisma",
+      "value": "/home/def/Documents/git/fv-t2-devstack/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -176,7 +184,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/def/Documents/git/familyverse/prisma/schema.prisma",
+    "sourceFilePath": "/home/def/Documents/git/fv-t2-devstack/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -188,17 +196,18 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": null,
-        "value": "file:./dev.db"
+        "fromEnvVar": "DATABASE_URL",
+        "value": null
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"sqlite\" // Changed from postgresql\n  url      = \"file:./dev.db\" // Changed from env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                      Int       @id @default(autoincrement())\n  email                   String    @unique\n  password                String // Will store the hashed password\n  isConfirmed             Boolean   @default(false)\n  confirmationToken       String?\n  confirmationTokenExpiry DateTime?\n  createdAt               DateTime  @default(now())\n  updatedAt               DateTime  @updatedAt\n\n  userFamilies UserFamily[] // Relation to the UserFamily join table\n}\n\nmodel Family {\n  id        Int      @id @default(autoincrement())\n  name      String? // Optional name for the family, e.g., \"The Simpsons Family\"\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  familyMembers FamilyMember[] // Relation to FamilyMember\n  userFamilies  UserFamily[] // Relation to the UserFamily join table\n}\n\n// Join table for User and Family (many-to-many)\nmodel UserFamily {\n  userId    Int\n  familyId  Int\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)\n  // role   String?  // Optional: e.g., \"admin\", \"member\" for role-based access within a family\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@id([userId, familyId])\n}\n\nmodel FamilyMember {\n  id         Int       @id @default(autoincrement())\n  fullName   String\n  gender     String // Consider using an Enum if your DB supports it\n  birthDate  DateTime? // Removed @db.Date\n  deathDate  DateTime? // Removed @db.Date\n  birthPlace String?\n  picture    Bytes? // Changed from pictureUrl String?\n\n  // Self-referencing relations for parents\n  parentId1 Int?\n  parentId2 Int?\n\n  // Define the relation to self for children\n  children1 FamilyMember[] @relation(\"Parent1Children\")\n  children2 FamilyMember[] @relation(\"Parent2Children\")\n\n  // Define the relation fields for parents (optional, improves clarity)\n  parent1 FamilyMember? @relation(\"Parent1Children\", fields: [parentId1], references: [id], onDelete: SetNull, onUpdate: Cascade)\n  parent2 FamilyMember? @relation(\"Parent2Children\", fields: [parentId2], references: [id], onDelete: SetNull, onUpdate: Cascade)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Add relation to User\n  // Relation to Family\n  familyId Int\n  family   Family @relation(fields: [familyId], references: [id], onDelete: Cascade)\n\n  @@index([familyId]) // Add index for querying by family\n}\n",
-  "inlineSchemaHash": "687ef8ac0dce46ffa93ce26bf8912d23fde18e9a5ab982d1f3bfdc9eda2d2d28",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                      Int       @id @default(autoincrement())\n  email                   String    @unique\n  password                String // Will store the hashed password\n  isConfirmed             Boolean   @default(false)\n  confirmationToken       String?\n  confirmationTokenExpiry DateTime?\n  createdAt               DateTime  @default(now())\n  updatedAt               DateTime  @updatedAt\n\n  userFamilies UserFamily[] // Relation to the UserFamily join table\n}\n\nmodel Family {\n  id        Int      @id @default(autoincrement())\n  name      String? // Optional name for the family, e.g., \"The Simpsons Family\"\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  familyMembers FamilyMember[] // Relation to FamilyMember\n  userFamilies  UserFamily[] // Relation to the UserFamily join table\n}\n\n// Join table for User and Family (many-to-many)\nmodel UserFamily {\n  userId    Int\n  familyId  Int\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)\n  // role   String?  // Optional: e.g., \"admin\", \"member\" for role-based access within a family\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@id([userId, familyId])\n}\n\nmodel FamilyMember {\n  id         Int       @id @default(autoincrement())\n  fullName   String\n  gender     String // Consider using an Enum if your DB supports it\n  birthDate  DateTime? // Removed @db.Date\n  deathDate  DateTime? // Removed @db.Date\n  birthPlace String?\n  picture    Bytes? // Changed from pictureUrl String?\n\n  // Self-referencing relations for parents\n  parentId1 Int?\n  parentId2 Int?\n\n  // Define the relation to self for children\n  children1 FamilyMember[] @relation(\"Parent1Children\")\n  children2 FamilyMember[] @relation(\"Parent2Children\")\n\n  // Define the relation fields for parents (optional, improves clarity)\n  parent1 FamilyMember? @relation(\"Parent1Children\", fields: [parentId1], references: [id], onDelete: SetNull, onUpdate: Cascade)\n  parent2 FamilyMember? @relation(\"Parent2Children\", fields: [parentId2], references: [id], onDelete: SetNull, onUpdate: Cascade)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Add relation to User\n  // Relation to Family\n  familyId Int\n  family   Family @relation(fields: [familyId], references: [id], onDelete: Cascade)\n\n  @@index([familyId]) // Add index for querying by family\n}\n",
+  "inlineSchemaHash": "2198506342b66feeccc91f420a5c64cd73f02398d80a2ad538d0d19ab94c6b3d",
   "copyEngine": true
 }
 
