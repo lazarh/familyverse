@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — Familyverse</title>
+<style>
+  /* ---------- tokens (see DIRECTION.md) ---------- */
+  :root{
+    --ink:#241C15; --ink-soft:#4B4139; --muted:#7D7164;
+    --paper:#FBF7F0; --canvas:#F1E9DC; --card:#FFFEFB;
+    --line:#E5DACA; --line-strong:#CEC0AB;
+    --clay:#9C4A2E; --clay-dark:#7F3A22; --sage:#4F6B55; --brick:#A03636;
+    --t-display:34px; --t-h1:26px; --t-h2:20px; --t-h3:17px;
+    --t-body:15px; --t-sm:13.5px; --t-xs:12px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px;
+    --shadow:0 1px 2px rgba(60,42,24,.06), 0 8px 24px -12px rgba(60,42,24,.22);
+    --shadow-lift:0 6px 12px rgba(60,42,24,.08), 0 28px 60px -24px rgba(60,42,21,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;min-height:100%}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size:var(--t-body); line-height:1.5; -webkit-font-smoothing:antialiased;
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:48px 20px; position:relative; overflow-x:hidden;
+  }
+  /* soft warm arch behind the card — no images, no CDN */
+  body::before{
+    content:"";position:absolute;inset:auto;left:50%;top:-30vh;transform:translateX(-50%);
+    width:min(1200px,150vw);height:min(1200px,150vw);border-radius:50%;z-index:0;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(156,74,46,.10) 0%, rgba(156,74,46,.05) 38%, rgba(156,74,46,0) 62%),
+      repeating-radial-gradient(circle at 50% 50%, rgba(140,120,95,.16) 0 1px, transparent 1px 46px);
+  }
+  a{color:inherit;text-decoration:none}
+  h1,h2{margin:0;font-weight:650;letter-spacing:-.015em}
+  p{margin:0}
+  button{font-family:inherit}
+  :focus-visible{outline:2px solid var(--clay);outline-offset:2px;border-radius:4px}
+
+  .brand{
+    position:relative;z-index:1;display:flex;align-items:center;gap:10px;
+    font-size:19px;font-weight:700;letter-spacing:-.02em;margin-bottom:34px;
+  }
+  .brand svg{color:var(--clay)}
+
+  .shell{position:relative;z-index:1;width:100%;max-width:416px}
+  .lede{text-align:center;margin-bottom:22px}
+  .lede h1{font-size:var(--t-h1);letter-spacing:-.02em}
+  .lede p{color:var(--muted);font-size:var(--t-sm);margin-top:6px}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    box-shadow:var(--shadow-lift);padding:10px 26px 26px;
+  }
+
+  /* CSS-only tabs (radios are siblings of .card) */
+  .tab-radio{position:absolute;opacity:0;pointer-events:none}
+  .tabbar{display:flex;gap:4px;background:#F4EDE3;border:1px solid var(--line);
+    border-radius:10px;padding:4px;margin:16px 0 22px}
+  .tabbar label{
+    flex:1;text-align:center;padding:8px 6px;border-radius:7px;cursor:pointer;
+    font-size:14px;font-weight:650;color:var(--muted);
+  }
+  .tabbar label:hover{color:var(--ink)}
+  .pane{display:none}
+  #tab-signin:checked ~ .shell .pane-signin{display:block}
+  #tab-register:checked ~ .shell .pane-register{display:block}
+  #tab-signin:checked ~ .shell .tabbar label[for="tab-signin"],
+  #tab-register:checked ~ .shell .tabbar label[for="tab-register"]{
+    background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(60,42,24,.16);
+  }
+
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:var(--t-sm);font-weight:650;color:var(--ink-soft);margin-bottom:6px}
+  .input{
+    width:100%;height:42px;padding:0 13px;border-radius:var(--r-sm);
+    border:1px solid var(--line-strong);background:#FFFEFB;color:var(--ink);
+    font-family:inherit;font-size:var(--t-body);
+  }
+  .input::placeholder{color:#A99B8B}
+  .input:focus{outline:2px solid var(--clay);outline-offset:1px;border-color:transparent}
+
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:7px;width:100%;height:42px;
+    border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;
+    font-size:15px;font-weight:650;letter-spacing:-.005em;
+  }
+  .btn-primary{background:var(--clay);color:#fff;box-shadow:0 1px 2px rgba(60,30,15,.28)}
+  .btn-primary:hover{background:var(--clay-dark)}
+
+  .fine{font-size:var(--t-xs);color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+
+  .card-foot{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    margin-top:18px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:var(--t-sm);color:var(--muted);
+  }
+  .card-foot a{color:var(--clay);font-weight:650}
+  .card-foot a:hover{text-decoration:underline}
+
+  .trust{
+    display:flex;flex-direction:column;gap:7px;align-items:center;
+    margin-top:24px;font-size:var(--t-xs);color:var(--muted);text-align:center;
+  }
+  .trust span{display:flex;align-items:center;gap:6px}
+  .trust .tick{color:var(--sage);font-weight:700}
+
+  .proto-note{
+    position:fixed;left:20px;bottom:20px;z-index:60;max-width:430px;
+    background:#33261C;color:#F5EDE3;border-radius:var(--r-md);padding:12px 15px;
+    font-size:var(--t-xs);line-height:1.55;box-shadow:var(--shadow-lift);
+  }
+  .proto-note b{color:#E8B393}
+</style>
+</head>
+<body>
+
+<a class="brand" href="index.html">
+  <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+    <circle cx="12" cy="4.8" r="2.6"/><circle cx="5.6" cy="18.6" r="2.6"/><circle cx="18.4" cy="18.6" r="2.6"/>
+    <path d="M12 7.4v4.2M12 11.6 6.4 16.4M12 11.6l5.6 4.8"/>
+  </svg>
+  Familyverse
+</a>
+
+<input class="tab-radio" type="radio" name="authtab" id="tab-signin" checked>
+<input class="tab-radio" type="radio" name="authtab" id="tab-register">
+
+<div class="shell">
+  <div class="lede">
+    <h1>Welcome home</h1>
+    <p>One household, one tree — hosted on your own machine.</p>
+  </div>
+
+  <div class="card">
+    <div class="tabbar">
+      <label for="tab-signin">Sign in</label>
+      <label for="tab-register">Create account</label>
+    </div>
+
+    <form class="pane pane-signin" onsubmit="return false">
+      <div class="field">
+        <label for="si-email">Email</label>
+        <input class="input" id="si-email" type="email" placeholder="you@family.example" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="si-pass">Password</label>
+        <input class="input" id="si-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" type="submit">Sign in</button>
+      <p class="fine">Signing in gets you back to <b>The Kessler Family</b>.</p>
+    </form>
+
+    <form class="pane pane-register" onsubmit="return false">
+      <div class="field">
+        <label for="rg-email">Email</label>
+        <input class="input" id="rg-email" type="email" placeholder="you@family.example" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="rg-pass">Password</label>
+        <input class="input" id="rg-pass" type="password" placeholder="At least 10 characters" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="rg-pass2">Repeat password</label>
+        <input class="input" id="rg-pass2" type="password" placeholder="••••••••" autocomplete="new-password">
+      </div>
+      <button class="btn btn-primary" type="submit">Create account</button>
+      <p class="fine">Next step: name your family — e.g. <b>The Kessler Family</b> — then start adding people.</p>
+    </form>
+
+    <div class="card-foot">
+      <span class="foot-signin">New here?</span>
+      <label for="tab-register" class="foot-signin" style="color:var(--clay);font-weight:650;cursor:pointer">Create an account</label>
+      <span class="foot-register" style="display:none">Already have an account?</span>
+      <label for="tab-signin" class="foot-register" style="display:none;color:var(--clay);font-weight:650;cursor:pointer">Sign in instead</label>
+    </div>
+  </div>
+
+  <div class="trust">
+    <span><span class="tick">✓</span> Self-hosted — your data stays home</span>
+    <span><span class="tick">✓</span> Invite only the people you choose</span>
+  </div>
+</div>
+
+<style>
+  /* swap the card footer with the tabs */
+  #tab-signin:checked ~ .shell .foot-register{display:none !important}
+  #tab-register:checked ~ .shell .foot-signin{display:none !important}
+  #tab-register:checked ~ .shell .foot-register{display:inline !important}
+</style>
+
+<div class="proto-note">
+  <b>Prototype note.</b> Login and register share one card as tabs (click them — no JavaScript), on a
+  warm paper background instead of the grey box. Field set matches what the app supports today;
+  no invented "forgot password" until we build it.
+</div>
+
+</body>
+</html>

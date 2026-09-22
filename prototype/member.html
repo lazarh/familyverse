@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maya Kessler — Familyverse</title>
+<style>
+  /* ---------- tokens (see DIRECTION.md) ---------- */
+  :root{
+    --ink:#241C15; --ink-soft:#4B4139; --muted:#7D7164;
+    --paper:#FBF7F0; --canvas:#F1E9DC; --card:#FFFEFB;
+    --line:#E5DACA; --line-strong:#CEC0AB;
+    --clay:#9C4A2E; --clay-dark:#7F3A22; --sage:#4F6B55; --brick:#A03636;
+    --t-display:34px; --t-h1:26px; --t-h2:20px; --t-h3:17px;
+    --t-body:15px; --t-sm:13.5px; --t-xs:12px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px;
+    --shadow:0 1px 2px rgba(60,42,24,.06), 0 8px 24px -12px rgba(60,42,24,.22);
+    --shadow-lift:0 2px 4px rgba(60,42,24,.08), 0 14px 32px -12px rgba(60,42,24,.28);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size:var(--t-body); line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3{margin:0;font-weight:650;letter-spacing:-.015em}
+  p{margin:0}
+  button{font-family:inherit}
+  :focus-visible{outline:2px solid var(--clay);outline-offset:2px;border-radius:4px}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;
+    border-radius:9px;border:1px solid transparent;cursor:pointer;
+    font-size:14px;font-weight:600;letter-spacing:-.005em;white-space:nowrap;
+  }
+  .btn-primary{background:var(--clay);color:#fff;box-shadow:0 1px 2px rgba(60,30,15,.28)}
+  .btn-primary:hover{background:var(--clay-dark)}
+  .btn-secondary{background:var(--card);border-color:var(--line-strong);color:var(--ink)}
+  .btn-secondary:hover{background:#F7F1E7}
+  .btn-ghost{color:var(--ink-soft);background:transparent}
+  .btn-ghost:hover{background:rgba(36,28,21,.06)}
+  .btn-danger{background:var(--card);border-color:#E4C4BE;color:var(--brick)}
+  .btn-danger:hover{background:#F8ECEA}
+
+  /* ---------- nav (identical to index) ---------- */
+  .nav{
+    position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    gap:16px;height:60px;padding:0 24px;
+    background:rgba(251,247,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  }
+  .nav-left,.nav-right{display:flex;align-items:center;gap:14px}
+  .brand{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:700;letter-spacing:-.02em}
+  .brand svg{color:var(--clay)}
+  .nav-divider{width:1px;height:22px;background:var(--line-strong)}
+  .menu{position:relative}
+  .menu summary{list-style:none;cursor:pointer}
+  .menu summary::-webkit-details-marker{display:none}
+  .family-pill{
+    display:flex;align-items:center;gap:9px;height:36px;padding:0 12px;
+    background:var(--card);border:1px solid var(--line-strong);border-radius:999px;
+    font-size:14px;font-weight:600;color:var(--ink);
+  }
+  .family-pill:hover{background:#F7F1E7}
+  .family-pill .dot{width:9px;height:9px;border-radius:50%;background:var(--clay)}
+  .family-pill .chev{transition:transform .15s;color:var(--muted)}
+  details[open] .family-pill .chev{transform:rotate(180deg)}
+  .menu-panel{
+    position:absolute;top:calc(100% + 8px);left:0;min-width:264px;z-index:50;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);
+    box-shadow:var(--shadow-lift);padding:6px;
+  }
+  .menu-panel.right{left:auto;right:0}
+  .menu-head{padding:9px 11px 7px;font-size:var(--t-xs);font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .menu-head .sub{display:block;text-transform:none;letter-spacing:0;font-weight:500;font-size:var(--t-sm);color:var(--ink-soft);margin-top:2px}
+  .menu-item{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:8px 11px;border-radius:var(--r-sm);font-size:14px;color:var(--ink);cursor:pointer;
+  }
+  .menu-item:hover{background:#F4EDE3}
+  .menu-item .hint{font-size:var(--t-xs);color:var(--muted)}
+  .menu-item.active{font-weight:650}
+  .menu-item.active .tick{color:var(--clay);font-weight:700}
+  .menu-item.danger{color:var(--brick)}
+  .menu-item.danger:hover{background:#F8ECEA}
+  .menu-sep{border:0;border-top:1px solid var(--line);margin:6px 4px}
+  .avatar-btn{
+    display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
+    background:#55708E;color:#fff;font-size:13px;font-weight:700;
+    box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--line-strong);cursor:pointer;
+  }
+
+  /* ---------- page ---------- */
+  .page{padding:24px 24px 48px;max-width:1080px;margin:0 auto}
+  .crumbs{display:flex;align-items:center;gap:8px;font-size:var(--t-sm);color:var(--muted);margin-bottom:18px}
+  .crumbs a:hover{color:var(--clay);text-decoration:underline}
+  .crumbs .sep{opacity:.5}
+
+  .profile{
+    display:flex;gap:24px;align-items:center;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--r-lg);padding:26px 28px;box-shadow:var(--shadow);margin-bottom:22px;
+    position:relative;overflow:hidden;
+  }
+  .profile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--clay)}
+  .photo{
+    flex:none;width:104px;height:104px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--clay);color:#fff;font-size:34px;font-weight:700;letter-spacing:.01em;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.25), 0 0 0 5px #F6EFE5;
+  }
+  .profile .who{flex:1;min-width:0}
+  .profile h1{font-size:var(--t-display);letter-spacing:-.02em}
+  .profile .vital{color:var(--ink-soft);font-size:var(--t-body);margin-top:6px}
+  .profile .origin{color:var(--muted);font-size:var(--t-sm);margin-top:3px}
+  .chips{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:999px;
+    font-size:var(--t-xs);font-weight:650;letter-spacing:.01em;
+  }
+  .chip-living{background:#E9F0EA;color:var(--sage);box-shadow:inset 0 0 0 1px #CFDFD3}
+  .chip-plain{background:#F4EDE3;color:var(--ink-soft);box-shadow:inset 0 0 0 1px var(--line)}
+  .chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .profile .acts{display:flex;gap:10px;align-self:flex-start}
+
+  /* bio / about (human amendment to the direction — see DIRECTION.md) */
+  .prose{padding:16px 22px 20px;font-size:var(--t-body);line-height:1.65;color:var(--ink-soft)}
+  .prose p+p,.prose ul{margin-top:10px}
+  .prose strong{color:var(--ink);font-weight:650}
+  .prose a{color:var(--clay);text-decoration:underline;text-underline-offset:2px}
+  .prose ul{margin-bottom:0;padding-left:20px}
+  .grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:start}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    box-shadow:var(--shadow);overflow:hidden}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;
+    padding:16px 22px 13px;border-bottom:1px solid var(--line)}
+  .panel-head h2{font-size:var(--t-h3)}
+  .panel-head .count{font-size:var(--t-xs);color:var(--muted);font-weight:600}
+
+  .rel-group{padding:6px 10px 10px}
+  .rel-group + .rel-group{border-top:1px solid var(--line)}
+  .rel-label{font-size:var(--t-xs);font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--muted);padding:10px 12px 4px}
+  .rel{
+    display:flex;align-items:center;gap:13px;padding:9px 12px;border-radius:10px;cursor:pointer;
+  }
+  .rel:hover{background:#F4EDE3}
+  .rel .mono{
+    flex:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:12.5px;font-weight:700;
+  }
+  .m-walter{background:#8A6B3B} .m-ruth{background:#7A5B7E}
+  .m-daniel{background:#55708E} .m-anita{background:#4F6B55}
+  .m-maya{background:#9C4A2E} .m-sam{background:#4E7A72} .m-theo{background:#6E5F8E}
+  .rel .txt{flex:1;min-width:0}
+  .rel .rname{font-size:14.5px;font-weight:650;letter-spacing:-.01em}
+  .rel .rmeta{font-size:var(--t-xs);color:var(--muted)}
+  .rel .tag{font-size:var(--t-xs);color:var(--ink-soft);background:#F4EDE3;border:1px solid var(--line);
+    border-radius:999px;padding:2px 9px;font-weight:600}
+  .rel .go{color:var(--line-strong)}
+  .rel:hover .go{color:var(--clay)}
+
+  .details-list{padding:8px 22px 18px}
+  .dl-row{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .dl-row:last-child{border-bottom:0}
+  .dl-row dt{font-size:var(--t-sm);color:var(--muted)}
+  .dl-row dd{margin:0;font-size:var(--t-sm);font-weight:600;text-align:right}
+  .dl-row dd.na{color:var(--muted);font-weight:500}
+
+  .mini{padding:18px 22px 22px;background:
+    linear-gradient(180deg, #FFFEFB 0%, #FAF4EA 100%);}
+  .mini .gen{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .mini .gen + .gen{margin-top:14px;position:relative}
+  .mini .gen + .gen::before{content:"";position:absolute;top:-11px;left:50%;width:1px;height:8px;background:var(--line-strong)}
+  .pill{
+    display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;
+    background:var(--card);border:1px solid var(--line-strong);font-size:var(--t-xs);font-weight:650;
+  }
+  .pill:hover{border-color:var(--clay);color:var(--clay)}
+  .pill.here{background:#F6E9E2;border-color:var(--clay);color:var(--clay-dark);cursor:default}
+  .pill.here:hover{color:var(--clay-dark)}
+
+  .proto-note{
+    position:fixed;left:20px;bottom:20px;z-index:60;max-width:430px;
+    background:#33261C;color:#F5EDE3;border-radius:var(--r-md);padding:12px 15px;
+    font-size:var(--t-xs);line-height:1.55;box-shadow:var(--shadow-lift);
+  }
+  .proto-note b{color:#E8B393}
+  @media (max-width:880px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-left">
+    <a class="brand" href="index.html">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="4.8" r="2.6"/><circle cx="5.6" cy="18.6" r="2.6"/><circle cx="18.4" cy="18.6" r="2.6"/>
+        <path d="M12 7.4v4.2M12 11.6 6.4 16.4M12 11.6l5.6 4.8"/>
+      </svg>
+      Familyverse
+    </a>
+    <span class="nav-divider"></span>
+    <div class="menu">
+      <details>
+        <summary class="family-pill">
+          <span class="dot"></span> The Kessler Family
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="menu-panel">
+          <div class="menu-head">Switch family</div>
+          <a class="menu-item active" href="#"><span><span class="tick">✓ </span>The Kessler Family</span><span class="hint">7 people</span></a>
+          <a class="menu-item" href="#"><span>Lindqvist side</span><span class="hint">3 people</span></a>
+          <a class="menu-item" href="#"><span>Create a new family</span></a>
+          <hr class="menu-sep">
+          <div class="menu-head">This family</div>
+          <a class="menu-item" href="#"><span>Share &amp; manage family</span><span class="hint">2 members</span></a>
+          <a class="menu-item" href="#"><span>Export tree</span><span class="hint">GEDCOM · CSV</span></a>
+          <a class="menu-item" href="#"><span>Rename family</span></a>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="menu">
+      <details>
+        <summary class="avatar-btn" title="Maya Kessler">MK</summary>
+        <div class="menu-panel right">
+          <div class="menu-head">Signed in<span class="sub">Maya Kessler · maya@kessler.family</span></div>
+          <a class="menu-item" href="member.html"><span>My profile</span></a>
+          <a class="menu-item" href="#"><span>Account settings</span></a>
+          <hr class="menu-sep">
+          <a class="menu-item danger" href="auth.html"><span>Sign out</span></a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <nav class="crumbs">
+    <a href="index.html">The Kessler Family</a>
+    <span class="sep">/</span>
+    <span>Maya Kessler</span>
+  </nav>
+
+  <section class="profile">
+    <div class="photo">MK</div>
+    <div class="who">
+      <h1>Maya Kessler</h1>
+      <p class="vital">b. 14 March 1994</p>
+      <p class="origin">Bristol, England · Female</p>
+      <div class="chips">
+        <span class="chip chip-living"><span class="chip-dot"></span>Living</span>
+        <span class="chip chip-plain">Daughter of Daniel &amp; Anita</span>
+        <span class="chip chip-plain">Generation 3</span>
+      </div>
+    </div>
+    <div class="acts">
+      <a class="btn btn-primary" href="form.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        Edit profile
+      </a>
+      <a class="btn btn-danger" href="#">Remove</a>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-bottom:22px">
+    <div class="panel-head"><h2>About Maya</h2></div>
+    <div class="prose">
+      <p>Third-generation Bristolian, <strong>heads the history department</strong> at the grammar school,
+      and insists the family sourdough starter is older than the house. Everyone calls her <em>“Maz”</em> —
+      see <a href="#">the naming note</a> before you assume which Kessler is which.</p>
+      <ul>
+        <li>Kept every letter Grandma Ruth sent from Malmö, 1961–1978.</li>
+        <li>The one who remembers everyone’s birthday. Use her as the date check.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Relationships</h2>
+        <span class="count">6 people</span>
+      </div>
+
+      <div class="rel-group">
+        <div class="rel-label">Parents</div>
+        <a class="rel" href="member.html">
+          <span class="mono m-daniel">DK</span>
+          <span class="txt"><span class="rname">Daniel Kessler</span><br><span class="rmeta">b. 1965 · Bristol</span></span>
+          <span class="tag">father</span>
+          <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+        <a class="rel" href="member.html">
+          <span class="mono m-anita">AO</span>
+          <span class="txt"><span class="rname">Anita Kessler</span><br><span class="rmeta">b. 1968 · Accra</span></span>
+          <span class="tag">mother</span>
+          <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <div class="rel-group">
+        <div class="rel-label">Partner</div>
+        <a class="rel" href="member.html">
+          <span class="mono m-sam">SO</span>
+          <span class="txt"><span class="rname">Sam Ortega</span><br><span class="rmeta">b. 1992 · Porto</span></span>
+          <span class="tag">partner</span>
+          <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <div class="rel-group">
+        <div class="rel-label">Sibling</div>
+        <a class="rel" href="member.html">
+          <span class="mono m-theo">TK</span>
+          <span class="txt"><span class="rname">Theo Kessler</span><br><span class="rmeta">b. 1997 · Bristol</span></span>
+          <span class="tag">brother</span>
+          <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <div class="rel-group">
+        <div class="rel-label">Grandparents</div>
+        <a class="rel" href="member.html">
+          <span class="mono m-walter">WK</span>
+          <span class="txt"><span class="rname">Walter Kessler</span><br><span class="rmeta">1941 – 2016 · Kraków</span></span>
+          <span class="tag">paternal</span>
+          <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+        <a class="rel" href="member.html">
+          <span class="mono m-ruth">RL</span>
+          <span class="txt"><span class="rname">Ruth Kessler</span><br><span class="rmeta">1940 – 2021 · Malmö</span></span>
+          <span class="tag">paternal</span>
+          <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <section class="panel">
+        <div class="panel-head"><h2>Details</h2></div>
+        <dl class="details-list">
+          <div class="dl-row"><dt>Full name</dt><dd>Maya Kessler</dd></div>
+          <div class="dl-row"><dt>Gender</dt><dd>Female</dd></div>
+          <div class="dl-row"><dt>Born</dt><dd>14 March 1994</dd></div>
+          <div class="dl-row"><dt>Birth place</dt><dd>Bristol, England</dd></div>
+          <div class="dl-row"><dt>Died</dt><dd class="na">Living</dd></div>
+          <div class="dl-row"><dt>Photo</dt><dd>1 uploaded</dd></div>
+        </dl>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>In the tree</h2><a class="count" href="index.html" style="color:var(--clay)">Center on Maya →</a></div>
+        <div class="mini">
+          <div class="gen">
+            <a class="pill" href="member.html">Walter &amp; Ruth</a>
+          </div>
+          <div class="gen">
+            <a class="pill" href="member.html">Daniel &amp; Anita</a>
+          </div>
+          <div class="gen">
+            <span class="pill here">Maya</span>
+            <a class="pill" href="member.html">Theo</a>
+            <a class="pill" href="member.html">Sam</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="proto-note">
+  <b>Prototype note.</b> This screen doesn't exist yet — today clicking a card opens the edit modal.
+  Proposal: a card opens a profile (this page), and editing becomes an explicit action on the profile.
+  Relationship rows navigate, so you can walk the family without returning to the tree.
+</div>
+
+</body>
+</html>
