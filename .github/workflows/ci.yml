@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node 22 matches the Dockerfile's base image (node:22-bookworm);
+      # the dev box runs Node 24, but CI should track what we ship.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # src/generated/prisma is only partially tracked; the client must be
+      # generated before typecheck and build.
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      # Empirically verified: next build succeeds without a .env and without
+      # dummy env vars (worktrees have no .env since it is gitignored), so no
+      # secrets are needed here.
+      - name: Build
+        run: npm run build
