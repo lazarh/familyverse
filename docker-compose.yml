@@ -1,20 +1,56 @@
-version: '3.8'
+# DEV stack: app + Postgres + MailHog, built from source.
+# One command from a clean machine: docker compose up
+# Every variable below has a default, so this works with NO .env at all.
+# Copy .env.example to .env to override anything.
 
 services:
   app:
-    image: ghcr.io/lazarh/familyverse-app
+    build: .
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       NODE_ENV: production
 
-      SMTP_HOST: ${SMTP_HOST}
-      SMTP_PORT: ${SMTP_PORT}
-      SMTP_FROM: ${SMTP_FROM}
+      SMTP_HOST: ${SMTP_HOST:-mailhog}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_FROM: ${SMTP_FROM:-no-reply@familyverse.local}
 
-      DATABASE_URL: ${DATABASE_URL} # Path to SQLite DB inside the container
-      NEXTAUTH_URL: ${NEXTAUTH_URL} # URL of your app
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET} 
-    #volumes:
-    #  - ./prisma:/app/prisma # Persists the SQLite database and migrations
-    # The CMD ["npm", "start"] from your Dockerfile will be used to run the application.
+      DATABASE_URL: ${DATABASE_URL:-postgresql://familyverse:familyverse@postgres:5432/familyverse?schema=public}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-dev-only-nextauth-secret-change-me}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+
+      # Seed script (scripts/seed.mjs) — demo user created on container start
+      SEED_DEMO_EMAIL: ${SEED_DEMO_EMAIL:-demo@familyverse.local}
+      SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-demo123}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+
+  postgres:
+    image: postgres:17-alpine
+    ports:
+      # Published so a bare `npm run dev` on the host can reach the DB too
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-familyverse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-familyverse}
+      POSTGRES_DB: ${POSTGRES_DB:-familyverse}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-familyverse} -d ${POSTGRES_DB:-familyverse}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI / API
+
+volumes:
+  postgres_data:
