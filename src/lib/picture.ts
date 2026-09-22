@@ -14,8 +14,12 @@
 /** Data URL prefix for byte payloads. Matches both original call sites' default. */
 const DEFAULT_MIME_TYPE = 'image/jpeg';
 
+function dataUrlFromBase64(base64: string, mimeType: string): string {
+  return `data:${mimeType};base64,${base64}`;
+}
+
 function bytesToDataUrl(bytes: Uint8Array | number[], mimeType: string): string {
-  return `data:${mimeType};base64,${Buffer.from(bytes).toString('base64')}`;
+  return dataUrlFromBase64(Buffer.from(bytes).toString('base64'), mimeType);
 }
 
 /**
@@ -79,7 +83,7 @@ export function pictureToDataUrl(picture: unknown, mimeType: string = DEFAULT_MI
       return picture;
     }
     // Raw base64 string without a prefix.
-    return `data:${mimeType};base64,${picture}`;
+    return dataUrlFromBase64(picture, mimeType);
   }
 
   console.warn('Unsupported or unexpected picture format in FamilyNode after all checks:', picture);

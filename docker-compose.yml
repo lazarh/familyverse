@@ -11,11 +11,14 @@ services:
     environment:
       NODE_ENV: production
 
-      SMTP_HOST: ${SMTP_HOST:-mailhog}
+      # Container-internal endpoints are fixed so a copied or stale .env
+      # (whose SMTP_HOST/DATABASE_URL describe the HOST view) cannot break
+      # the stack. Host-side values live in .env.example.
+      SMTP_HOST: mailhog
       SMTP_PORT: ${SMTP_PORT:-1025}
       SMTP_FROM: ${SMTP_FROM:-no-reply@familyverse.local}
 
-      DATABASE_URL: ${DATABASE_URL:-postgresql://familyverse:familyverse@postgres:5432/familyverse?schema=public}
+      DATABASE_URL: postgresql://familyverse:familyverse@postgres:5432/familyverse?schema=public
       NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-dev-only-nextauth-secret-change-me}
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
@@ -35,6 +38,8 @@ services:
       # Published so a bare `npm run dev` on the host can reach the DB too
       - "5432:5432"
     environment:
+      # Overriding these also requires updating the app's DATABASE_URL above
+      # (fixed in this file) and .env.example's host-side DATABASE_URL.
       POSTGRES_USER: ${POSTGRES_USER:-familyverse}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-familyverse}
       POSTGRES_DB: ${POSTGRES_DB:-familyverse}
