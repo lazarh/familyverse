@@ -4,6 +4,7 @@ import defaultAvatar from '@/../public/default-avatar.jpg'; // Ensure correct pa
 import { NodeProps, Handle, Position } from 'reactflow'; // Import NodeProps, Handle, and Position
 import { FamilyMember } from '@/generated/prisma'; // Added import
 import { pictureToDataUrl } from '@/lib/picture';
+import { calculateLifeDates } from '@/lib/dates';
 
 // Props for the custom node, extending React Flow's NodeProps
 interface CustomFamilyNodeProps extends NodeProps {
@@ -20,23 +21,7 @@ const FamilyNode: React.FC<CustomFamilyNodeProps> = ({ data }) => {
   // the default avatar when the picture is missing or unrecognised.
   const pictureSrc = pictureToDataUrl(member.picture) ?? defaultAvatar.src; // Use .src for Next.js Image component with static import
 
-  let birthYear: number | null = null;
-  let deathYear: number | null = null;
-  let age: number | null = null;
-
-  if (member.birthDate) {
-    const birthDateObj = new Date(member.birthDate);
-    birthYear = birthDateObj.getFullYear();
-
-    if (member.deathDate) {
-      const deathDateObj = new Date(member.deathDate);
-      age = deathDateObj.getFullYear() - birthYear;
-      deathYear = deathDateObj.getFullYear();
-    } else {
-      const currentYear = new Date().getFullYear(); // Use current year
-      age = currentYear - birthYear;
-    }
-  }
+  const { birthYear, deathYear, age } = calculateLifeDates(member.birthDate, member.deathDate);
 
   return (
     <div
