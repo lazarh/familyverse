@@ -165,7 +165,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/def/Documents/git/fv-t2-devstack/src/generated/prisma",
+      "value": "/home/def/Documents/git/familyverse/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -183,11 +183,12 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/def/Documents/git/fv-t2-devstack/prisma/schema.prisma",
+    "sourceFilePath": "/home/def/Documents/git/familyverse/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.7.0",
