@@ -160,6 +160,18 @@
   .hint{font-size:var(--t-xs);color:var(--muted);margin-top:5px}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
+  /* bio editor (human amendment to the direction — see DIRECTION.md) */
+  .editor{border:1px solid var(--line-strong);border-radius:var(--r-sm);background:#FFFEFB;overflow:hidden}
+  .editor:focus-within{outline:2px solid var(--clay);outline-offset:1px;border-color:transparent}
+  .editor-bar{display:flex;gap:2px;align-items:center;padding:5px 6px;border-bottom:1px solid var(--line);background:#FAF5EC}
+  .eb{min-width:26px;height:26px;padding:0 6px;border:0;background:transparent;border-radius:5px;cursor:pointer;
+    color:var(--ink-soft);font-size:13px;font-family:inherit;line-height:1}
+  .eb:hover{background:#F1E7D9;color:var(--ink)}
+  .eb-sep{width:1px;height:16px;background:var(--line);margin:0 5px}
+  textarea.input.bio{height:auto;min-height:132px;padding:11px 12px;line-height:1.6;resize:vertical;
+    border:0;border-radius:0;font-size:var(--t-body)}
+  textarea.input.bio:focus{outline:none}
+
   .seg{display:flex;background:#F4EDE3;border:1px solid var(--line);border-radius:var(--r-sm);padding:3px;gap:3px}
   .seg button{
     flex:1;height:32px;border:0;background:transparent;border-radius:6px;cursor:pointer;
@@ -342,6 +354,22 @@
       <label for="bplace">Birth place <span class="opt">Optional</span></label>
       <input class="input" id="bplace" value="Bristol, England">
       <p class="hint">Free text today — structured places may come later.</p>
+    </div>
+
+    <div class="field">
+      <label for="bio">Bio <span class="opt">Optional</span></label>
+      <div class="editor">
+        <div class="editor-bar" role="toolbar" aria-label="Formatting">
+          <button type="button" class="eb" title="Bold" aria-label="Bold"><b>B</b></button>
+          <button type="button" class="eb" title="Italic" aria-label="Italic"><i>I</i></button>
+          <button type="button" class="eb" title="Bulleted list" aria-label="Bulleted list">•≡</button>
+          <button type="button" class="eb" title="Quote" aria-label="Quote">❝</button>
+          <span class="eb-sep"></span>
+          <button type="button" class="eb" title="Link" aria-label="Link">Link</button>
+        </div>
+        <textarea class="input bio" id="bio" rows="5" placeholder="Stories, nicknames, what they were known for…">Third-generation Bristolian, teaches history at the grammar school, and insists the family sourdough starter is older than the house.</textarea>
+      </div>
+      <p class="hint">Bold, italics, lists, quotes, links. How this is stored is decided with the data model.</p>
     </div>
 
     <div class="section-title">Parents &amp; partners</div>

@@ -123,6 +123,12 @@
   .chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
   .profile .acts{display:flex;gap:10px;align-self:flex-start}
 
+  /* bio / about (human amendment to the direction — see DIRECTION.md) */
+  .prose{padding:16px 22px 20px;font-size:var(--t-body);line-height:1.65;color:var(--ink-soft)}
+  .prose p+p,.prose ul{margin-top:10px}
+  .prose strong{color:var(--ink);font-weight:650}
+  .prose a{color:var(--clay);text-decoration:underline;text-underline-offset:2px}
+  .prose ul{margin-bottom:0;padding-left:20px}
   .grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:start}
   .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
     box-shadow:var(--shadow);overflow:hidden}
@@ -256,6 +262,19 @@
         Edit profile
       </a>
       <a class="btn btn-danger" href="#">Remove</a>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-bottom:22px">
+    <div class="panel-head"><h2>About Maya</h2></div>
+    <div class="prose">
+      <p>Third-generation Bristolian, <strong>heads the history department</strong> at the grammar school,
+      and insists the family sourdough starter is older than the house. Everyone calls her <em>“Maz”</em> —
+      see <a href="#">the naming note</a> before you assume which Kessler is which.</p>
+      <ul>
+        <li>Kept every letter Grandma Ruth sent from Malmö, 1961–1978.</li>
+        <li>The one who remembers everyone’s birthday. Use her as the date check.</li>
+      </ul>
     </div>
   </section>
 

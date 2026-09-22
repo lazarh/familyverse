@@ -12,6 +12,12 @@ A reaction artifact, not a spec. Four static files, openable by double-click, no
 Sample data (the Kessler family: Walter & Ruth → Daniel & Anita → Maya, Sam, Theo) is invented for the
 prototype — it is there so the type, dates and relationship lists read as a real family.
 
+**Human reaction (recorded on ticket #6):** direction **approved**, with one amendment — members get a
+**bio** field: a textarea with formatting (bold, italics, lists, quotes, links). Added to `form.html`
+(editor with toolbar) and `member.html` (full-width *About* panel). The **storage format** (markdown vs
+sanitized rich-text HTML) is *not* a visual decision — it is routed to the domain-model ticket (#5),
+which owns the member shape.
+
 ---
 
 ## 1. Colour tokens
@@ -81,6 +87,8 @@ Spacing scale (px): **4 · 8 · 12 · 16 · 24 · 32 · 48** — paddings snap t
 - **Switch** — the "Living" toggle; sage when on.
 - **Person picker** — selected person shown as monogram + name + role, with *Change*;
   empty state is a dashed "+ Link …" slot.
+- **Bio editor** — textarea in a bordered box with a formatting toolbar row (B · I · list · quote · Link),
+  hint below; profile renders it as prose in an *About* panel. Storage format: domain-model ticket (#5).
 - **Drawer** — 486px right panel, sticky header + footer, scrolling body.
 - **Profile card / relationship row / details list** — the profile page's three panels.
 - **Chip** — pill: `living` (sage), plain (warm neutral).
@@ -127,7 +135,8 @@ no arrowheads (the current child→parent arrows fight the reading direction of 
 
 **Add/edit flow** — right-side **drawer**, not a centred modal, not a full page:
 the tree stays visible behind you (you're picking *people* out of it), same field set as today,
-plus a **Living** switch that disables the death-date field by default, and an optional **partner** picker.
+plus a **Living** switch that disables the death-date field by default, an optional **partner** picker,
+and the **bio** editor (human amendment — formatted textarea).
 Saving places the card automatically — parents determine position, no drag-and-drop.
 
 **Auth** — sign-in and register as two tabs in one centred card, warm paper with a faint concentric
