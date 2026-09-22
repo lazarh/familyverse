@@ -86,9 +86,10 @@ describe('pictureToDataUrl', () => {
     it('includes non-index keys when all values are valid bytes', () => {
       // Characterises the original loose check: every own value must be a number
       // in 0..255 and the filtered count must equal the key count — extra keys
-      // are happily encoded, in Object.values order (index keys first).
+      // are happily encoded too, in Object.values order (index keys first).
+      // 102,111,111,111 = "foob" → base64 "Zm9vbw==".
       const byteObject = { '0': 102, '1': 111, '2': 111, meta: 111 };
-      expect(pictureToDataUrl(byteObject)).toBe('data:image/jpeg;base64,Zm9v');
+      expect(pictureToDataUrl(byteObject)).toBe('data:image/jpeg;base64,Zm9vbw==');
     });
 
     it('returns null and warns when a value is out of byte range', () => {
