@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add family member — Familyverse</title>
+<style>
+  /* ---------- tokens (see DIRECTION.md) ---------- */
+  :root{
+    --ink:#241C15; --ink-soft:#4B4139; --muted:#7D7164;
+    --paper:#FBF7F0; --canvas:#F1E9DC; --card:#FFFEFB;
+    --line:#E5DACA; --line-strong:#CEC0AB;
+    --clay:#9C4A2E; --clay-dark:#7F3A22; --sage:#4F6B55; --brick:#A03636;
+    --t-display:34px; --t-h1:26px; --t-h2:20px; --t-h3:17px;
+    --t-body:15px; --t-sm:13.5px; --t-xs:12px;
+    --r-sm:8px; --r-md:12px; --r-lg:16px;
+    --shadow:0 1px 2px rgba(60,42,24,.06), 0 8px 24px -12px rgba(60,42,24,.22);
+    --shadow-lift:0 2px 4px rgba(60,42,24,.08), 0 14px 32px -12px rgba(60,42,24,.28);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size:var(--t-body); line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3{margin:0;font-weight:650;letter-spacing:-.015em}
+  p{margin:0}
+  button{font-family:inherit}
+  :focus-visible{outline:2px solid var(--clay);outline-offset:2px;border-radius:4px}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 16px;
+    border-radius:9px;border:1px solid transparent;cursor:pointer;
+    font-size:14px;font-weight:600;letter-spacing:-.005em;white-space:nowrap;
+  }
+  .btn-primary{background:var(--clay);color:#fff;box-shadow:0 1px 2px rgba(60,30,15,.28)}
+  .btn-primary:hover{background:var(--clay-dark)}
+  .btn-secondary{background:var(--card);border-color:var(--line-strong);color:var(--ink)}
+  .btn-secondary:hover{background:#F7F1E7}
+  .btn-ghost{color:var(--ink-soft);background:transparent}
+  .btn-ghost:hover{background:rgba(36,28,21,.06)}
+  .btn-danger{color:var(--brick);background:transparent;border-color:transparent;padding:0 6px}
+  .btn-danger:hover{background:#F8ECEA}
+
+  /* ---------- nav (identical to index) ---------- */
+  .nav{
+    position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    gap:16px;height:60px;padding:0 24px;
+    background:rgba(251,247,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  }
+  .nav-left,.nav-right{display:flex;align-items:center;gap:14px}
+  .brand{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:700;letter-spacing:-.02em}
+  .brand svg{color:var(--clay)}
+  .nav-divider{width:1px;height:22px;background:var(--line-strong)}
+  .menu{position:relative}
+  .menu summary{list-style:none;cursor:pointer}
+  .menu summary::-webkit-details-marker{display:none}
+  .family-pill{
+    display:flex;align-items:center;gap:9px;height:36px;padding:0 12px;
+    background:var(--card);border:1px solid var(--line-strong);border-radius:999px;
+    font-size:14px;font-weight:600;color:var(--ink);
+  }
+  .family-pill .dot{width:9px;height:9px;border-radius:50%;background:var(--clay)}
+  .family-pill .chev{transition:transform .15s;color:var(--muted)}
+  details[open] .family-pill .chev{transform:rotate(180deg)}
+  .menu-panel{
+    position:absolute;top:calc(100% + 8px);left:0;min-width:264px;z-index:50;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);
+    box-shadow:var(--shadow-lift);padding:6px;
+  }
+  .menu-panel.right{left:auto;right:0}
+  .menu-head{padding:9px 11px 7px;font-size:var(--t-xs);font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .menu-head .sub{display:block;text-transform:none;letter-spacing:0;font-weight:500;font-size:var(--t-sm);color:var(--ink-soft);margin-top:2px}
+  .menu-item{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:8px 11px;border-radius:var(--r-sm);font-size:14px;color:var(--ink);cursor:pointer}
+  .menu-item:hover{background:#F4EDE3}
+  .menu-item .hint{font-size:var(--t-xs);color:var(--muted)}
+  .menu-item.active{font-weight:650}
+  .menu-item.active .tick{color:var(--clay);font-weight:700}
+  .menu-item.danger{color:var(--brick)}
+  .menu-sep{border:0;border-top:1px solid var(--line);margin:6px 4px}
+  .avatar-btn{
+    display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
+    background:#55708E;color:#fff;font-size:13px;font-weight:700;
+    box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--line-strong);cursor:pointer;
+  }
+
+  /* ---------- background page (the tree, dimmed) ---------- */
+  .page{padding:28px 24px 40px;max-width:1440px;margin:0 auto}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:20px}
+  .page-head h1{font-size:var(--t-h1)}
+  .page-head .sub{color:var(--muted);font-size:var(--t-sm);margin-top:4px}
+  .canvas-wrap{position:relative;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--canvas);overflow:hidden}
+  .canvas{min-height:560px;
+    background-image:radial-gradient(circle, rgba(140,120,95,.28) 1px, transparent 1px);
+    background-size:26px 26px;position:relative;width:900px;height:560px}
+  .canvas svg.links{position:absolute;inset:0}
+  .links path{stroke:#C0AE93;stroke-width:2;fill:none;stroke-linecap:round}
+  .links circle.union{fill:var(--canvas);stroke:#C0AE93;stroke-width:2}
+  .person{position:absolute;width:220px;height:96px;display:flex;gap:13px;align-items:center;
+    padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--shadow)}
+  .mono{flex:none;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:15px;font-weight:700}
+  .m-walter{background:#8A6B3B} .m-ruth{background:#7A5B7E}
+  .m-daniel{background:#55708E} .m-anita{background:#4F6B55}
+  .m-maya{background:#9C4A2E} .m-theo{background:#6E5F8E}
+  .person > span:last-child{min-width:0}
+  .person .name{display:block;font-size:15.5px;font-weight:650;letter-spacing:-.01em}
+  .person .dates{display:block;font-size:var(--t-sm);color:var(--ink-soft);margin-top:2px}
+  .person .place{display:block;font-size:var(--t-xs);color:var(--muted);margin-top:1px}
+
+  /* ---------- scrim + drawer ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(36,28,21,.42);z-index:80}
+  .drawer{
+    position:fixed;top:0;right:0;height:100vh;width:486px;max-width:94vw;z-index:90;
+    background:var(--card);border-left:1px solid var(--line);
+    box-shadow:-28px 0 56px -28px rgba(36,28,21,.4);
+    display:flex;flex-direction:column;
+  }
+  .drawer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+    padding:20px 26px 16px;border-bottom:1px solid var(--line)}
+  .drawer-head h2{font-size:var(--t-h2)}
+  .drawer-head .sub{font-size:var(--t-sm);color:var(--muted);margin-top:3px}
+  .icon-btn{width:32px;height:32px;border-radius:var(--r-sm);border:1px solid var(--line);
+    background:var(--card);color:var(--ink-soft);cursor:pointer;font-size:16px;line-height:1;flex:none}
+  .icon-btn:hover{background:#F4EDE3}
+  .drawer-body{flex:1;overflow-y:auto;padding:22px 26px 8px}
+  .drawer-foot{display:flex;align-items:center;gap:10px;padding:16px 26px;
+    border-top:1px solid var(--line);background:var(--card)}
+  .drawer-foot .spacer{flex:1}
+
+  /* ---------- form ---------- */
+  .photo-row{display:flex;gap:18px;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .drop{
+    width:84px;height:84px;border-radius:50%;border:1.5px dashed var(--line-strong);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    color:var(--muted);font-size:10.5px;font-weight:650;text-align:center;background:#FAF5EC;flex:none;cursor:pointer;
+  }
+  .drop:hover{border-color:var(--clay);color:var(--clay)}
+  .photo-help{font-size:var(--t-sm);color:var(--muted)}
+  .photo-help b{display:block;color:var(--ink);font-size:var(--t-body);font-weight:650;margin-bottom:3px}
+
+  .field{margin-bottom:18px}
+  .field > label,.field .lab{
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:var(--t-sm);font-weight:650;color:var(--ink-soft);margin-bottom:6px;
+  }
+  .req{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--clay)}
+  .opt{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .input{
+    width:100%;height:40px;padding:0 12px;border-radius:var(--r-sm);
+    border:1px solid var(--line-strong);background:#FFFEFB;color:var(--ink);
+    font-family:inherit;font-size:var(--t-body);
+  }
+  .input::placeholder{color:#A99B8B}
+  .input:focus{outline:2px solid var(--clay);outline-offset:1px;border-color:transparent}
+  .input:disabled{background:#F4EFE6;color:#A99B8B;cursor:not-allowed}
+  .hint{font-size:var(--t-xs);color:var(--muted);margin-top:5px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+  .seg{display:flex;background:#F4EDE3;border:1px solid var(--line);border-radius:var(--r-sm);padding:3px;gap:3px}
+  .seg button{
+    flex:1;height:32px;border:0;background:transparent;border-radius:6px;cursor:pointer;
+    font-size:13px;font-weight:600;color:var(--ink-soft);
+  }
+  .seg button:hover{color:var(--ink)}
+  .seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(60,42,24,.14)}
+
+  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    background:#FAF5EC;border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;margin-bottom:18px}
+  .switch-row .t{font-size:14px;font-weight:650}
+  .switch-row .h{font-size:var(--t-xs);color:var(--muted);margin-top:2px}
+  .switch{width:44px;height:26px;border-radius:999px;background:var(--sage);position:relative;flex:none;
+    border:0;cursor:pointer;box-shadow:inset 0 1px 2px rgba(0,0,0,.18)}
+  .switch::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 2px rgba(0,0,0,.3)}
+
+  .pick{
+    display:flex;align-items:center;gap:12px;padding:10px 12px;
+    border:1px solid var(--line-strong);border-radius:var(--r-sm);background:#FFFEFB;
+  }
+  .pick .mono{width:34px;height:34px;font-size:12.5px}
+  .pick .who{flex:1;min-width:0}
+  .pick .n{font-size:14px;font-weight:650}
+  .pick .m{font-size:var(--t-xs);color:var(--muted)}
+  .pick .swap{font-size:var(--t-xs);font-weight:650;color:var(--clay);background:none;border:0;cursor:pointer;padding:4px 6px;border-radius:6px}
+  .pick .swap:hover{background:#F6E9E2}
+  .pick.empty{
+    border-style:dashed;background:#FAF5EC;color:var(--muted);justify-content:center;
+    font-size:14px;font-weight:600;cursor:pointer;
+  }
+  .pick.empty:hover{border-color:var(--clay);color:var(--clay)}
+
+  .section-title{font-size:var(--t-xs);font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--muted);margin:24px 0 12px;padding-top:18px;border-top:1px solid var(--line)}
+  .section-title:first-child{margin-top:0;padding-top:0;border-top:0}
+
+  .proto-note{
+    position:fixed;left:20px;bottom:20px;z-index:95;max-width:410px;
+    background:#33261C;color:#F5EDE3;border-radius:var(--r-md);padding:12px 15px;
+    font-size:var(--t-xs);line-height:1.55;box-shadow:var(--shadow-lift);
+  }
+  .proto-note b{color:#E8B393}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-left">
+    <a class="brand" href="index.html">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="4.8" r="2.6"/><circle cx="5.6" cy="18.6" r="2.6"/><circle cx="18.4" cy="18.6" r="2.6"/>
+        <path d="M12 7.4v4.2M12 11.6 6.4 16.4M12 11.6l5.6 4.8"/>
+      </svg>
+      Familyverse
+    </a>
+    <span class="nav-divider"></span>
+    <div class="menu">
+      <details>
+        <summary class="family-pill">
+          <span class="dot"></span> The Kessler Family
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="menu-panel">
+          <div class="menu-head">Switch family</div>
+          <a class="menu-item active" href="#"><span><span class="tick">✓ </span>The Kessler Family</span><span class="hint">7 people</span></a>
+          <a class="menu-item" href="#"><span>Lindqvist side</span><span class="hint">3 people</span></a>
+          <a class="menu-item" href="#"><span>Create a new family</span></a>
+          <hr class="menu-sep">
+          <div class="menu-head">This family</div>
+          <a class="menu-item" href="#"><span>Share &amp; manage family</span><span class="hint">2 members</span></a>
+          <a class="menu-item" href="#"><span>Export tree</span><span class="hint">GEDCOM · CSV</span></a>
+          <a class="menu-item" href="#"><span>Rename family</span></a>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="menu">
+      <details>
+        <summary class="avatar-btn" title="Maya Kessler">MK</summary>
+        <div class="menu-panel right">
+          <div class="menu-head">Signed in<span class="sub">Maya Kessler · maya@kessler.family</span></div>
+          <a class="menu-item" href="member.html"><span>My profile</span></a>
+          <a class="menu-item" href="#"><span>Account settings</span></a>
+          <hr class="menu-sep">
+          <a class="menu-item danger" href="auth.html"><span>Sign out</span></a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<!-- the tree, left visible behind the drawer -->
+<main class="page">
+  <div class="page-head">
+    <div>
+      <h1>The Kessler Family</h1>
+      <p class="sub">7 people · 3 generations</p>
+    </div>
+  </div>
+  <div class="canvas-wrap">
+    <div class="canvas">
+      <svg class="links" width="900" height="560" viewBox="0 0 900 560" aria-hidden="true">
+        <path d="M260 88 H340"/><circle class="union" cx="300" cy="88" r="4.5"/>
+        <path d="M300 136 V200 H160 V258"/>
+        <path d="M260 308 H340"/><circle class="union" cx="300" cy="308" r="4.5"/>
+        <path d="M300 356 V420"/>
+        <path d="M60 420 H540"/>
+        <path d="M60 420 V478"/><path d="M540 420 V478"/>
+      </svg>
+      <div class="person" style="left:60px; top:40px"><span class="mono m-walter">WK</span><span><span class="name">Walter Kessler</span><span class="dates">1941 – 2016</span><span class="place">Kraków, Poland</span></span></div>
+      <div class="person" style="left:360px; top:40px"><span class="mono m-ruth">RL</span><span><span class="name">Ruth Kessler</span><span class="dates">1940 – 2021</span><span class="place">Malmö, Sweden</span></span></div>
+      <div class="person" style="left:60px; top:260px"><span class="mono m-daniel">DK</span><span><span class="name">Daniel Kessler</span><span class="dates">b. 12 Feb 1965</span><span class="place">Bristol, England</span></span></div>
+      <div class="person" style="left:360px; top:260px"><span class="mono m-anita">AO</span><span><span class="name">Anita Kessler</span><span class="dates">b. 3 Jul 1968</span><span class="place">Accra, Ghana</span></span></div>
+      <div class="person" style="left:60px; top:480px"><span class="mono m-maya">MK</span><span><span class="name">Maya Kessler</span><span class="dates">b. 14 Mar 1994</span><span class="place">Bristol, England</span></span></div>
+      <div class="person" style="left:440px; top:480px"><span class="mono m-theo">TK</span><span><span class="name">Theo Kessler</span><span class="dates">b. 27 Sep 1997</span><span class="place">Bristol, England</span></span></div>
+    </div>
+  </div>
+</main>
+
+<div class="scrim"></div>
+
+<aside class="drawer" role="dialog" aria-label="Add family member">
+  <div class="drawer-head">
+    <div>
+      <h2>Add family member</h2>
+      <p class="sub">The Kessler Family · you can fill in the rest later</p>
+    </div>
+    <button class="icon-btn" type="button" aria-label="Close">✕</button>
+  </div>
+
+  <div class="drawer-body">
+    <div class="photo-row">
+      <div class="drop">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>
+        Add photo
+      </div>
+      <div class="photo-help">
+        <b>A face makes the tree readable</b>
+        Optional — initials are used until a photo is uploaded. JPG or PNG, up to 5&nbsp;MB.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="fullname">Full name <span class="req">Required</span></label>
+      <input class="input" id="fullname" value="Theo Kessler" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <div class="lab">Gender <span class="opt">Required</span></div>
+      <div class="seg">
+        <button type="button" class="on">Female</button>
+        <button type="button">Male</button>
+        <button type="button">Non-binary</button>
+        <button type="button">Not said</button>
+      </div>
+    </div>
+
+    <div class="switch-row">
+      <div>
+        <div class="t">Living</div>
+        <div class="h">On by default — the tree hides ages for living people.</div>
+      </div>
+      <button class="switch" type="button" aria-label="Living"></button>
+    </div>
+
+    <div class="two">
+      <div class="field">
+        <label for="bdate">Born</label>
+        <input class="input" id="bdate" type="date" value="1997-09-27">
+      </div>
+      <div class="field">
+        <label for="ddate">Died</label>
+        <input class="input" id="ddate" type="date" disabled>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="bplace">Birth place <span class="opt">Optional</span></label>
+      <input class="input" id="bplace" value="Bristol, England">
+      <p class="hint">Free text today — structured places may come later.</p>
+    </div>
+
+    <div class="section-title">Parents &amp; partners</div>
+
+    <div class="field">
+      <div class="lab">Parent 1 <span class="opt">Optional</span></div>
+      <div class="pick">
+        <span class="mono m-daniel">DK</span>
+        <span class="who"><span class="n">Daniel Kessler</span><br><span class="m">b. 1965 · father</span></span>
+        <button class="swap" type="button">Change</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="lab">Parent 2 <span class="opt">Optional</span></div>
+      <div class="pick">
+        <span class="mono m-anita">AO</span>
+        <span class="who"><span class="n">Anita Kessler</span><br><span class="m">b. 1968 · mother</span></span>
+        <button class="swap" type="button">Change</button>
+      </div>
+      <p class="hint">Picking parents places the card in the tree automatically — no drag-and-drop needed.</p>
+    </div>
+
+    <div class="field">
+      <div class="lab">Partner <span class="opt">Optional · new in this direction</span></div>
+      <div class="pick empty">+ Link an existing person as partner</div>
+    </div>
+  </div>
+
+  <div class="drawer-foot">
+    <button class="btn btn-danger" type="button">Remove from family</button>
+    <span class="spacer"></span>
+    <button class="btn btn-ghost" type="button">Cancel</button>
+    <button class="btn btn-primary" type="button">Save member</button>
+  </div>
+</aside>
+
+<div class="proto-note">
+  <b>Prototype note.</b> Add/edit is a <em>drawer</em>, not a centred modal and not a separate page:
+  the tree stays visible behind you, which matters when you're choosing parents, and Esc / ✕ puts you
+  back exactly where you were. Same field set as today, plus a Living toggle (no more empty death-date
+  anxiety) and an optional partner link.
+</div>
+
+</body>
+</html>
