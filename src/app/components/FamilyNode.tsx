@@ -3,6 +3,8 @@ import Image from 'next/image';
 import defaultAvatar from '@/../public/default-avatar.jpg'; // Ensure correct path
 import { NodeProps, Handle, Position } from 'reactflow'; // Import NodeProps, Handle, and Position
 import { FamilyMember } from '@/generated/prisma'; // Added import
+import { pictureToDataUrl } from '@/lib/picture';
+import { calculateLifeDates } from '@/lib/dates';
 
 // Props for the custom node, extending React Flow's NodeProps
 interface CustomFamilyNodeProps extends NodeProps {
@@ -15,80 +17,11 @@ interface CustomFamilyNodeProps extends NodeProps {
 
 const FamilyNode: React.FC<CustomFamilyNodeProps> = ({ data }) => {
   const { member, onClick, isSelected } = data;
-  let pictureSrc = defaultAvatar.src; // Use .src for Next.js Image component with static import
+  // Map member.picture (various serialised shapes) to a data URL; falls back to
+  // the default avatar when the picture is missing or unrecognised.
+  const pictureSrc = pictureToDataUrl(member.picture) ?? defaultAvatar.src; // Use .src for Next.js Image component with static import
 
-  // Use 'unknown' to handle various shapes of member.picture after JSON serialization
-  const picToProcess: unknown = member.picture;
-
-  if (picToProcess) { // Check if not null/undefined
-    if (picToProcess instanceof Uint8Array) {
-      // Handles true Uint8Array instances (includes Buffer instances if they are passed directly)
-      const buffer = Buffer.from(picToProcess); // picToProcess is narrowed to Uint8Array
-      pictureSrc = `data:image/jpeg;base64,${buffer.toString('base64')}`;
-    } else if (
-      typeof picToProcess === 'object' &&
-      picToProcess !== null &&
-      'type' in picToProcess && (picToProcess as any).type === 'Buffer' && // type guard for {type: 'Buffer', data: [...]}
-      'data' in picToProcess && Array.isArray((picToProcess as any).data)
-    ) {
-      // Handles objects like { type: 'Buffer', data: [0, 1, 2,...] }
-      const buffer = Buffer.from((picToProcess as any).data); // picToProcess is object here
-      pictureSrc = `data:image/jpeg;base64,${buffer.toString('base64')}`;
-    } else if (
-      typeof picToProcess === 'object' &&
-      picToProcess !== null &&
-      !Array.isArray(picToProcess) && // Not a plain array
-      Object.prototype.hasOwnProperty.call(picToProcess, '0') && // Has numeric-like string keys e.g. '0'
-      typeof (picToProcess as Record<string, any>)['0'] === 'number' // Values are numbers
-    ) {
-      // Handles objects like { '0': 82, '1': 73, ... } which was causing the error
-      try {
-        const byteObject = picToProcess as Record<string, any>;
-        const byteValues = Object.values(byteObject)
-          .filter(value => typeof value === 'number' && value >= 0 && value <= 255) as number[];
-
-        // Ensure that we actually got byte values and that they plausibly represent the whole object
-        if (byteValues.length > 0 && byteValues.length === Object.keys(byteObject).length) {
-          const uint8Array = new Uint8Array(byteValues);
-          const buffer = Buffer.from(uint8Array);
-          pictureSrc = `data:image/jpeg;base64,${buffer.toString('base64')}`;
-        } else {
-          console.warn("FamilyNode: Object looked like byte data, but contained invalid, non-numeric, or insufficient byte values.", picToProcess);
-        }
-      } catch (e) {
-        console.warn("FamilyNode: Error processing object-as-byte-data.", e, picToProcess);
-      }
-    } else if (typeof picToProcess === 'string') {
-      // Handles base64 strings or data URLs
-      if (picToProcess.startsWith('data:image')) { // picToProcess is narrowed to string
-        pictureSrc = picToProcess;
-      } else {
-        // Assuming it's a raw base64 string without the prefix
-        pictureSrc = `data:image/jpeg;base64,${picToProcess}`;
-      }
-    } else {
-      // Fallback for any other unexpected format
-      console.warn("Unsupported or unexpected picture format in FamilyNode after all checks:", picToProcess);
-    }
-  }
-
-  let birthYear: number | null = null;
-  let deathYear: number | null = null;
-  let age: number | null = null;
-
-  if (member.birthDate) {
-    const birthDateObj = new Date(member.birthDate);
-    birthYear = birthDateObj.getFullYear();
-
-    if (member.deathDate) {
-      const deathDateObj = new Date(member.deathDate);
-      age = deathDateObj.getFullYear() - birthYear;
-      deathYear = deathDateObj.getFullYear();
-    } else {
-      const currentYear = new Date().getFullYear(); // Use current year
-      age = currentYear - birthYear;
-    }
-  }
+  const { birthYear, deathYear, age } = calculateLifeDates(member.birthDate, member.deathDate);
 
   return (
     <div

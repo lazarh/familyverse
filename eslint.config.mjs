@@ -12,7 +12,14 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: ["src/generated/**"],
+    ignores: [
+      "src/generated/**",
+      // Build artifacts (all gitignored) — not source, must not gate the lint.
+      ".next/**",
+      "out/**",
+      "build/**",
+      "coverage/**",
+    ],
   },
   {
     rules: {
