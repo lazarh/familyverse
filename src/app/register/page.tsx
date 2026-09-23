@@ -22,8 +22,10 @@ export default function RegisterPage() {
       setError('Passwords do not match');
       return;
     }
-    if (password.length < 6) {
-        setError('Password must be at least 6 characters long');
+    // #20 D7: minimum is 8 (matches the API check — a 6-char password is
+    // rejected server-side too)
+    if (password.length < 8) {
+        setError('Password must be at least 8 characters long');
         return;
     }
 
@@ -41,7 +43,9 @@ export default function RegisterPage() {
       if (!response.ok) {
         setError(data.error || 'Registration failed');
       } else {
-        setSuccess('Registration successful! Check your email for a confirmation link.');
+        // Prefer the server message: it also covers the #20 D2 resend case
+        // (re-registering an unconfirmed email answers 200 + resent text).
+        setSuccess(data.message || 'Registration successful! Check your email for a confirmation link.');
         // Optionally clear form or redirect
         setEmail('');
         setPassword('');
@@ -70,14 +74,14 @@ export default function RegisterPage() {
           />
         </Field>
 
-        <Field label="Password (min. 6 characters)" htmlFor="password">
+        <Field label="Password (min. 8 characters)" htmlFor="password">
           <Input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            minLength={6} // Enforce minimum password length in HTML
+            minLength={8} // #20 D7: enforce the 8-char minimum in HTML too
             placeholder="••••••••"
             autoComplete="new-password"
           />
