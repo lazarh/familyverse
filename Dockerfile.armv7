@@ -56,8 +56,10 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3000
-# Carry engine env vars into the runtime image so that prisma generate and
-# prisma migrate deploy (run below) can locate the custom binaries.
+# Carry engine env vars into the runtime image so that prisma generate (below)
+# and prisma migrate deploy (run at container START by the shared entrypoint)
+# can locate the custom binaries — armv7 has no official Prisma engines, so
+# the CLI must be pointed at the pre-baked /engines binaries at runtime too.
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 ENV PRISMA_QUERY_ENGINE_BINARY=/engines/query-engine
 ENV PRISMA_SCHEMA_ENGINE_BINARY=/engines/migration-engine
@@ -75,19 +77,33 @@ COPY --from=builder /app/package-lock.json* ./
 RUN npm ci --omit=dev
 
 COPY --from=builder /app/prisma ./prisma/
-RUN rm -f /app/prisma/dev.db*
 
 RUN npx prisma generate
 RUN mkdir -p /app/src/generated/prisma && chown -R nextjs:nodejs /app/src/generated/prisma
 
-RUN npx prisma migrate deploy
 RUN chown -R nextjs:nodejs /app/prisma
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder /app/next.config.ts ./next.config.ts
 
+# Seed script and entrypoint (#11 decision): migrations + idempotent seed run
+# at container START (not at image build), so they target the runtime
+# DATABASE_URL. The image declares no DATABASE_URL default (and no file: DB
+# fallback) — an unset/invalid DSN fails the container before the app starts.
+# Shared with the main Dockerfile: same docker-entrypoint.sh, not an armv7 fork.
+# Copied/owned by nextjs so the non-root user can run them.
+COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
+COPY --from=builder --chown=nextjs:nodejs /app/docker-entrypoint.sh ./docker-entrypoint.sh
+
+# Picture storage (#15/#16): compose mounts a volume at /app/data/pictures;
+# pre-create it owned by the non-root app user so uploads and seed pictures
+# can be written (a named volume inherits this ownership on first mount).
+RUN mkdir -p /app/data/pictures && chown -R nextjs:nodejs /app/data/pictures
+
 USER nextjs
 
 EXPOSE 3000
-CMD ["npm", "start"]
+
+# migrate deploy -> seed -> exec npm start
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
