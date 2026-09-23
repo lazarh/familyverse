@@ -2,6 +2,8 @@
 # HTTP-level E2E for the familyverse rebuild (#16): session guard, feed
 # contract, validation error codes, membership-vs-person delete semantics,
 # register -> MailHog -> confirm, invite restriction, cross-family isolation.
+# Plus #20 auth hardening: min-8 password, confirmation resend (re-register
+# and POST /api/register/resend), expired/invalid token handling.
 # Prereqs: dev stack running and seeded (docker compose up).
 # Usage:   ./scripts/e2e.sh   (override target with E2E_BASE=http://host:port)
 set -u
@@ -33,6 +35,11 @@ confirm_email() { # email -> prints token (via psql; MailHog delivery asserted s
   docker compose -f "$REPO/docker-compose.yml" exec -T postgres \
     psql -U familyverse -d familyverse -tAc \
     "SELECT \"confirmationToken\" FROM \"User\" WHERE email='$1'" | tr -d '[:space:]'
+}
+
+mailhog_total() { # -> MailHog's message total (HTTP API on :8025, #20 resend checks)
+  curl -s http://localhost:8025/api/v2/messages \
+    | python3 -c 'import json,sys;print(json.load(sys.stdin)["total"])'
 }
 
 echo "--- 1. auth & session guard"
@@ -167,11 +174,48 @@ expect "honeypot rejected" \
   "$(curl -s -X POST $BASE/api/register -H 'Content-Type: application/json' \
       -d '{"email":"bot@familyverse.local","password":"secret123","website_url":"http://spam"}' -o /dev/null -w '%{http_code}')" "400"
 expect "MailHog received >=1 message" \
-  "$(curl -s http://localhost:8025/api/v2/messages | python3 -c 'import json,sys;print(1 if json.load(sys.stdin)["total"]>=1 else 0)')" "1"
+  "$( [ "$(mailhog_total)" -ge 1 ] && echo yes )" "yes"
+# #20 D7: the minimum is 8 — a 6-char password must be refused pre-insert.
+expect "6-char password rejected 400" \
+  "$(curl -s -X POST $BASE/api/register -H 'Content-Type: application/json' \
+      -d '{"email":"short-pw@familyverse.local","password":"secret1","website_url":""}' -o /dev/null -w '%{http_code}')" "400"
+expect "6-char attempt created no account" \
+  "$(curl -s -X POST $BASE/api/register/resend -H 'Content-Type: application/json' \
+      -d '{"email":"short-pw@familyverse.local"}' -o /dev/null -w '%{http_code}')" "404"
+# #20 D2: re-registering an UNCONFIRMED email resends (fresh token) instead of
+# 409ing — assert the MailHog total actually grows.
+MSGS=$(mailhog_total)
+expect "re-register unconfirmed email 200 (resends)" \
+  "$(curl -s -X POST $BASE/api/register -H 'Content-Type: application/json' \
+      -d '{"email":"e2e-one@familyverse.local","password":"secret123","website_url":""}' -o /dev/null -w '%{http_code}')" "200"
+expect "re-register delivered a second message" \
+  "$( [ "$(mailhog_total)" -gt "$MSGS" ] && echo yes )" "yes"
+# #20 D2: the /confirm page's resend affordance posts to this endpoint.
+MSGS=$(mailhog_total)
+expect "resend endpoint 200 for pending email" \
+  "$(curl -s -X POST $BASE/api/register/resend -H 'Content-Type: application/json' \
+      -d '{"email":"e2e-one@familyverse.local"}' -o /dev/null -w '%{http_code}')" "200"
+expect "resend endpoint delivered a message" \
+  "$( [ "$(mailhog_total)" -gt "$MSGS" ] && echo yes )" "yes"
+expect "resend endpoint 404 for unknown email" \
+  "$(curl -s -X POST $BASE/api/register/resend -H 'Content-Type: application/json' \
+      -d '{"email":"nobody-at-all@familyverse.local"}' -o /dev/null -w '%{http_code}')" "404"
 TOKEN=$(confirm_email e2e-one@familyverse.local)
 expect "confirmation token stored" "$( [ -n "$TOKEN" ] && echo yes )" "yes"
 expect "confirm 200" \
   "$(curl -s -X POST $BASE/api/register/confirm -H 'Content-Type: application/json' -d "{\"token\":\"$TOKEN\"}" -o /dev/null -w '%{http_code}')" "200"
+# #20 D2: the invalid-token reply the /confirm UI turns into its human message
+# + resend form (the form itself is client-rendered — only the API half is
+# assertable over HTTP here; eyeball the affordance in a browser).
+expect "confirm invalid token 400" \
+  "$(curl -s -X POST $BASE/api/register/confirm -H 'Content-Type: application/json' \
+      -d '{"token":"not-a-real-token"}' -o /dev/null -w '%{http_code}')" "400"
+expect "re-register confirmed email still 409" \
+  "$(curl -s -X POST $BASE/api/register -H 'Content-Type: application/json' \
+      -d '{"email":"e2e-one@familyverse.local","password":"secret123","website_url":""}' -o /dev/null -w '%{http_code}')" "409"
+expect "resend endpoint 409 once confirmed" \
+  "$(curl -s -X POST $BASE/api/register/resend -H 'Content-Type: application/json' \
+      -d '{"email":"e2e-one@familyverse.local"}' -o /dev/null -w '%{http_code}')" "409"
 
 login $J2 e2e-one@familyverse.local secret123
 expect "e2e-one login (no families yet)" \
@@ -195,7 +239,19 @@ expect "register e2e-two 201" \
   "$(curl -s -X POST $BASE/api/register -H 'Content-Type: application/json' \
       -d '{"email":"e2e-two@familyverse.local","password":"secret123","website_url":""}' -o /dev/null -w '%{http_code}')" "201"
 TOK2=$(confirm_email e2e-two@familyverse.local)
-curl -s -X POST $BASE/api/register/confirm -H 'Content-Type: application/json' -d "{\"token\":\"$TOK2\"}" >/dev/null
+# #20 D2: expire the token, show the dead end (410), then climb out via the
+# resend endpoint — the rotated token must confirm.
+docker compose -f "$REPO/docker-compose.yml" exec -T postgres \
+  psql -U familyverse -d familyverse -c \
+  "UPDATE \"User\" SET \"confirmationTokenExpiry\" = now() - interval '1 hour' WHERE email='e2e-two@familyverse.local'" >/dev/null
+expect "expired token 410" \
+  "$(curl -s -X POST $BASE/api/register/confirm -H 'Content-Type: application/json' -d "{\"token\":\"$TOK2\"}" -o /dev/null -w '%{http_code}')" "410"
+expect "resend endpoint re-issues 200" \
+  "$(curl -s -X POST $BASE/api/register/resend -H 'Content-Type: application/json' \
+      -d '{"email":"e2e-two@familyverse.local"}' -o /dev/null -w '%{http_code}')" "200"
+TOK2=$(confirm_email e2e-two@familyverse.local)
+expect "rotated token confirms 200" \
+  "$(curl -s -X POST $BASE/api/register/confirm -H 'Content-Type: application/json' -d "{\"token\":\"$TOK2\"}" -o /dev/null -w '%{http_code}')" "200"
 expect "invite family-less user 201" \
   "$(curl -s -b $J1 -X POST $BASE/api/families/$FAM_ID/members -H 'Content-Type: application/json' \
       -d '{"email":"e2e-two@familyverse.local"}' -o /dev/null -w '%{http_code}')" "201"
