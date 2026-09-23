@@ -1,12 +1,12 @@
 import { NextAuthOptions, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '@/generated/prisma';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 
+// #20 D1: no adapter — the strategy is JWT (credentials-only) and the schema
+// has no Account/Session tables, so the next-auth Prisma adapter wiring was
+// dead weight.
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma as PrismaClient),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -26,7 +26,9 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (user && credentials?.password && await bcrypt.compare(credentials.password, user.password)) {
-            // Require email confirmation
+            // Require email confirmation. #20 D7: an unconfirmed account fails
+            // with the SAME generic outcome as bad credentials (below) — the
+            // message stays "Invalid email or password", no enumeration hint.
             if (!user.isConfirmed) {
               console.warn('Attempted login for unconfirmed email:', user.email);
               return null;
@@ -44,6 +46,10 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    // #20 (D7): session lifetime written EXPLICITLY — 30 days. next-auth's
+    // default happens to be 30 days too, but the decision record wants the
+    // value on the page instead of implicit.
+    maxAge: 60 * 60 * 24 * 30,
   },
   callbacks: {
     async session({ session, token }) {
