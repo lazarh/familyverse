@@ -29,6 +29,10 @@ ENV PRISMA_QUERY_ENGINE_BINARY=/engines/query-engine
 ENV PRISMA_SCHEMA_ENGINE_BINARY=/engines/migration-engine
 ENV PRISMA_MIGRATION_ENGINE_BINARY=/engines/migration-engine
 ENV PRISMA_FMT_BINARY=/engines/prisma-fmt
+# The Prisma CLI defaults to the *library* query engine; no armv7
+# libquery_engine.so.node exists (binaries.prisma.sh 404s), so force the CLI
+# into binary mode where PRISMA_QUERY_ENGINE_BINARY applies.
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE=binary
 
 COPY package.json package-lock.json* ./
 RUN npm ci
@@ -65,6 +69,9 @@ ENV PRISMA_QUERY_ENGINE_BINARY=/engines/query-engine
 ENV PRISMA_SCHEMA_ENGINE_BINARY=/engines/migration-engine
 ENV PRISMA_MIGRATION_ENGINE_BINARY=/engines/migration-engine
 ENV PRISMA_FMT_BINARY=/engines/prisma-fmt
+# See builder stage: CLI forced to binary engine mode — there is no armv7
+# library query engine, and migrate deploy at container start runs via the CLI.
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE=binary
 
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
@@ -74,7 +81,15 @@ COPY --from=builder /engines /engines
 
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/package-lock.json* ./
-RUN npm ci --omit=dev
+# bcrypt ships no prebuilt binary for linux-arm, so npm compiles it here;
+# the slim base has no Python/make/g++. Install build deps for this step only
+# and purge them in the same layer (bcrypt's compiled binding stays in
+# node_modules), keeping the runner slim.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ \
+    && npm ci --omit=dev \
+    && apt-get purge -y --auto-remove python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/prisma ./prisma/
 
