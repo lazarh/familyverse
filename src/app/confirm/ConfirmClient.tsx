@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { BrandMark } from '@/app/components/auth/AuthCard';
 
 export default function ConfirmClient() {
   const searchParams = useSearchParams();
@@ -44,12 +45,21 @@ export default function ConfirmClient() {
     confirm();
   }, [searchParams, router]);
 
+  // Presentation only — the status machine, fetch, message strings and the
+  // 2-second success redirect above are untouched.
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="p-8 bg-white rounded shadow-md w-full max-w-md text-center">
-        {status === 'loading' && <p className="text-gray-600">Confirming...</p>}
-        {status === 'error' && <p className="text-red-500">{message}</p>}
-        {status === 'success' && <p className="text-green-600">{message}</p>}
+    <div className="flex min-h-screen flex-col items-center justify-center px-5 py-12">
+      <BrandMark className="mb-[34px]" />
+      <div className="w-full max-w-[416px] rounded-[16px] border border-[var(--line)] bg-[var(--card)] p-[26px] text-center shadow-[var(--shadow-lift)]">
+        {status === 'loading' && (
+          <p className="text-[13.5px] text-[var(--muted)]">Confirming...</p>
+        )}
+        {status === 'error' && (
+          <p role="alert" className="text-[13.5px] text-[var(--brick)]">{message}</p>
+        )}
+        {status === 'success' && (
+          <p role="status" className="text-[13.5px] text-[var(--sage)]">{message}</p>
+        )}
       </div>
     </div>
   );

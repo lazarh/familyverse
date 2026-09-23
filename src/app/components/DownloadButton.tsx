@@ -39,19 +39,10 @@ const DownloadButton: React.FC = () => {
 
   return (
     <button
+      type="button"
       onClick={onClick}
-      style={{
-        position: 'absolute',
-        right: '10px',
-        top: '10px',
-        zIndex: 4, // Ensure it's above other React Flow elements
-        padding: '8px 12px',
-        backgroundColor: '#007bff',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-      }}
+      aria-label="Download tree as image"
+      className="absolute right-2.5 top-2.5 z-[4] cursor-pointer border border-[var(--line-strong)] bg-[var(--card)] px-3 py-2 text-[13.5px] font-semibold text-[var(--ink-soft)] shadow-[var(--shadow)] transition-colors hover:border-[var(--clay)] hover:text-[var(--clay)]"
     >
       Download Image
     </button>

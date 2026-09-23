@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Picture storage root for host-side dev (PICTURES_DIR default)
+data/

@@ -1,211 +1,177 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* React Flow base styles */
-@import 'reactflow/dist/style.css';
-
 @import "tailwindcss";
 
+/* React Flow styles for the tree canvas (carried over from the previous base
+   layer). Every selector is scoped to .react-flow* so it cannot leak into the
+   token layer below; drop this line only if the tree screen stops using
+   reactflow entirely. */
+@import "reactflow/dist/style.css";
+
+/* ==========================================================================
+   Familyverse token layer — prototype/DIRECTION.md §1–3, verbatim.
+   Warm paper and clay: a family album on a shelf, not a SaaS dashboard.
+   Every surface, border, shadow and type step is a token — swapping --clay
+   re-themes the whole app.
+   ========================================================================== */
 :root {
-  /* Base */
-  --background: #ffffff; /* Light mode body background */
-  --foreground: #171717; /* Light mode body text */
-  --app-bg: #f3f4f6; /* gray-100 */
-  --border-color: #d1d5db; /* gray-300 - Default border */
-  --border-color-light: #e5e7eb; /* gray-200 */
-  --border-color-medium: #9ca3af; /* gray-400 */
-  --border-color-dark: #6b7280; /* gray-500 */
+  /* --- Colour (DIRECTION §1) --- */
+  --ink: #241c15; /* primary text, warm near-black */
+  --ink-soft: #4b4139; /* secondary text, vital dates */
+  --muted: #7d7164; /* tertiary text, labels, hints */
+  --paper: #fbf7f0; /* app background */
+  --canvas: #f1e9dc; /* tree canvas, with a faint 26px dot grid */
+  --card: #FFFEFB; /* cards, panels, drawers, menus */
+  --line: #e5daca; /* hairline borders, dividers */
+  --line-strong: #cec0ab; /* input borders, connector strokes */
+  --line-canvas: #c0ae93; /* connector strokes when drawn on --canvas */
+  --clay: #9c4a2e; /* THE primary accent: primary button, focus, brand, links */
+  --clay-dark: #7f3a22; /* hover/pressed */
+  --sage: #4f6b55; /* "living" chip, switch-on, success */
+  --brick: #a03636; /* destructive only */
 
-  /* Header */
-  --header-bg: #1f2937; /* gray-800 */
-  --header-text: #ffffff; /* white */
+  /* Prototype-derived extras (form.html, verbatim values) */
+  --placeholder: #a99b8b; /* warm input placeholder */
+  --scrim: rgba(36, 28, 21, 0.42); /* modal / drawer scrim */
 
-  /* Text */
-  --text-primary: #171717; /* foreground */
-  --text-secondary: #374151; /* gray-700 */
-  --text-muted: #6b7280; /* gray-600 */
-  --text-subtle: #9ca3af; /* gray-500 */
-  --text-inverted: #ffffff; /* white */
-  --text-link: #3b82f6; /* blue-500 - Assuming for links */
+  /* --- Type scale (DIRECTION §2) --- */
+  --t-display: 34px;
+  --t-h1: 26px;
+  --t-h2: 20px;
+  --t-h3: 17px;
+  --t-body: 15px;
+  --t-sm: 13.5px;
+  --t-xs: 12px;
 
-  /* Buttons - Primary (e.g., Add) */
-  --btn-primary-bg: #6366f1; /* indigo-500 */
-  --btn-primary-bg-hover: #4f46e5; /* indigo-700 */
-  --btn-primary-text: #ffffff; /* white */
+  /* --- Radii (DIRECTION §3): small inputs/buttons · medium cards · large panels --- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
 
-  /* Buttons - Secondary (e.g., Login) */
-  --btn-secondary-bg: #3b82f6; /* blue-500 */
-  --btn-secondary-bg-hover: #1d4ed8; /* blue-700 */
-  --btn-secondary-text: #ffffff; /* white */
-
-  /* Buttons - Success (e.g., Update, Register) */
-  --btn-success-bg: #22c55e; /* green-500 */
-  --btn-success-bg-hover: #15803d; /* green-700 */
-  --btn-success-text: #ffffff; /* white */
-
-  /* Buttons - Danger (e.g., Logout, Remove Checkbox) */
-  --btn-danger-bg: #ef4444; /* red-500 */
-  --btn-danger-bg-hover: #b91c1c; /* red-700 */
-  --btn-danger-text: #ffffff; /* white */
-  --btn-danger-ring: #dc2626; /* red-600 */
-
-  /* Buttons - Warning (e.g., Upgrade Trial) */
-  --btn-warning-bg: #eab308; /* yellow-500 */
-  --btn-warning-bg-hover: #ca8a04; /* yellow-600 */
-  --btn-warning-text: #ffffff; /* white */
-
-  /* Buttons - Neutral/Subtle (e.g., Export, Cancel) */
-  --btn-neutral-bg: #d1d5db; /* gray-300 */
-  --btn-neutral-bg-hover: #9ca3af; /* gray-400 */
-  --btn-neutral-text: #1f2937; /* gray-800 */
-  --btn-cancel-bg: #9ca3af; /* gray-400 */
-  --btn-cancel-bg-hover: #6b7280; /* gray-500 */
-  --btn-cancel-text: #ffffff; /* white */
-
-  /* Sections */
-  --section-bg: #ffffff; /* white */
-  --section-bg-alt: #f9fafb; /* gray-50 */
-  --section-bg-subtle: #f3f4f6; /* gray-100 */
-  --section-border: var(--border-color);
-
-  /* Forms */
-  --form-input-bg: #ffffff; /* white */
-  --form-input-border: var(--border-color);
-  --form-label-text: var(--text-secondary);
-  --form-file-btn-bg: #eef2ff; /* indigo-50 */
-  --form-file-btn-text: #4338ca; /* indigo-700 */
-  --form-file-btn-bg-hover: #e0e7ff; /* indigo-100 */
-  --form-checkbox-accent: var(--btn-danger-ring); /* red-600 */
-
-  /* Alerts/Status */
-  --alert-info-bg: #eff6ff; /* blue-50 */
-  --alert-info-border: #bfdbfe; /* blue-200 */
-  --alert-info-text: #1e40af; /* blue-800 */
-  --alert-success-bg: #f0fdf4; /* green-50 */
-  --alert-success-border: #bbf7d0; /* green-200 */
-  --alert-success-text: #166534; /* green-800 */
-  --alert-warning-bg: #fefce8; /* yellow-50 */
-  --alert-warning-border: #fde68a; /* yellow-300 */
-  --alert-warning-text: #854d0e; /* yellow-800 */
-  --alert-error-bg: #fef2f2; /* red-100 */
-  --alert-error-border: #fecaca; /* red-300 */
-  --alert-error-text: #b91c1c; /* red-700 */
-
-  /* ReactFlow Nodes/Edges */
-  --node-border: #777777;
-  --node-bg: #ffffff;
-  --edge-stroke: #555555;
-
-  /* Footer */
-  --footer-bg: #e5e7eb; /* gray-200 */
-  --footer-text: var(--text-muted); /* gray-600 */
+  /* --- Warm-tinted shadows, two levels (DIRECTION §3) --- */
+  --shadow: 0 1px 2px rgba(60, 42, 24, 0.06), 0 8px 24px -12px rgba(60, 42, 24, 0.22);
+  --shadow-lift: 0 2px 4px rgba(60, 42, 24, 0.08), 0 14px 32px -12px rgba(60, 42, 24, 0.28);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Redefine variables for dark mode */
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --app-bg: #171717; /* near black */
-    --border-color: #404040; /* gray-700 */
-    --border-color-light: #262626; /* gray-800 */
-    --border-color-medium: #525252; /* gray-600 */
-    --border-color-dark: #737373; /* gray-500 */
+/* ==========================================================================
+   Base layer — paper at the bottom of everything; the old grey/blue
+   create-next-app defaults are gone.
+   ========================================================================== */
+@layer base {
+  html {
+    background-color: var(--paper);
+  }
 
-    /* Header */
-    --header-bg: #1f2937; /* gray-800 - Keep same or make darker? */
-    --header-text: #ffffff; /* white */
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    /* DIRECTION §2: Geist if installed, system stack otherwise — nothing fetched */
+    font-family: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      sans-serif;
+    font-size: var(--t-body);
+    line-height: 1.5;
+    /* warm antialiasing */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-    /* Text */
-    --text-primary: #ededed; /* foreground */
-    --text-secondary: #a3a3a3; /* gray-400 */
-    --text-muted: #737373; /* gray-500 */
-    --text-subtle: #525252; /* gray-600 */
-    --text-inverted: #171717; /* near black */
-    --text-link: #60a5fa; /* blue-400 */
+  /* Two weights do all the work (400 and 650) — headings are structural (§2) */
+  h1,
+  h2,
+  h3 {
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
 
-    /* Buttons - Adapt hover states */
-    --btn-primary-bg: #4f46e5; /* indigo-600 */
-    --btn-primary-bg-hover: #6366f1; /* indigo-500 */
-    --btn-primary-text: #ffffff;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-    --btn-secondary-bg: #2563eb; /* blue-600 */
-    --btn-secondary-bg-hover: #3b82f6; /* blue-500 */
-    --btn-secondary-text: #ffffff;
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
 
-    --btn-success-bg: #16a34a; /* green-600 */
-    --btn-success-bg-hover: #22c55e; /* green-500 */
-    --btn-success-text: #ffffff;
-
-    --btn-danger-bg: #dc2626; /* red-600 */
-    --btn-danger-bg-hover: #ef4444; /* red-500 */
-    --btn-danger-text: #ffffff;
-    --btn-danger-ring: #f87171; /* red-400 */
-
-    --btn-warning-bg: #d97706; /* yellow-600 */
-    --btn-warning-bg-hover: #eab308; /* yellow-500 */
-    --btn-warning-text: #ffffff;
-
-    --btn-neutral-bg: #525252; /* gray-600 */
-    --btn-neutral-bg-hover: #737373; /* gray-500 */
-    --btn-neutral-text: #ededed; /* foreground */
-    --btn-cancel-bg: #737373; /* gray-500 */
-    --btn-cancel-bg-hover: #a3a3a3; /* gray-400 */
-    --btn-cancel-text: #171717; /* near black */
-
-    /* Sections */
-    --section-bg: #1f2937; /* gray-800 - Example */
-    --section-bg-alt: #262626; /* gray-800 */
-    --section-bg-subtle: #171717; /* near black */
-    --section-border: #404040;
-
-    /* Forms */
-    --form-input-bg: #262626; /* gray-800 */
-    --form-input-border: #404040;
-    --form-label-text: var(--text-secondary);
-    --form-file-btn-bg: #3730a3; /* indigo-800 */
-    --form-file-btn-text: #c7d2fe; /* indigo-200 */
-    --form-file-btn-bg-hover: #4338ca; /* indigo-700 */
-    --form-checkbox-accent: var(--btn-danger-ring); /* red-400 */
-
-    /* Alerts/Status */
-    --alert-info-bg: #1e3a8a; /* blue-900 */
-    --alert-info-border: #1e40af; /* blue-800 */
-    --alert-info-text: #93c5fd; /* blue-300 */
-    --alert-success-bg: #14532d; /* green-900 */
-    --alert-success-border: #166534; /* green-800 */
-    --alert-success-text: #86efac; /* green-300 */
-    --alert-warning-bg: #78350f; /* yellow-900 */
-    --alert-warning-border: #854d0e; /* yellow-800 */
-    --alert-warning-text: #fcd34d; /* yellow-300 */
-    --alert-error-bg: #991b1b; /* red-900 */
-    --alert-error-border: #b91c1c; /* red-800 */
-    --alert-error-text: #fca5a5; /* red-300 */
-
-    /* ReactFlow Nodes/Edges */
-    --node-border: #737373; /* gray-500 */
-    --node-bg: #262626; /* gray-800 */
-    --edge-stroke: #a3a3a3; /* gray-400 */
-
-    /* Footer */
-    --footer-bg: #1f2937; /* gray-800 */
-    --footer-text: var(--text-muted); /* gray-500 */
+  /* Focus: 2px solid --clay with 2px offset, everywhere (DIRECTION §3) */
+  :focus-visible {
+    outline: 2px solid var(--clay);
+    outline-offset: 2px;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
+/* ==========================================================================
+   Cross-cutting utilities. Component-specific styling lives with each
+   component in src/app/components/ui — only shared, screen-agnostic pieces
+   belong here.
+   ========================================================================== */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  /* The type scale's structural weight (DIRECTION §2: 400 + 650 do the work).
+     Tailwind ships 400/500/600/700 only, so 650 gets its own class. */
+  .font-650 {
+    font-weight: 650;
+  }
+
+  /* Markdown prose for the bio / About panel (member.html .prose), plus
+     blockquote + code for the bio's quotes/links amendment (DIRECTION §1). */
+  .prose {
+    padding: 16px 22px 20px;
+    font-size: var(--t-body);
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  .prose p {
+    margin: 0;
+  }
+
+  .prose p + p,
+  .prose ul,
+  .prose ol,
+  .prose blockquote {
+    margin-top: 10px;
+  }
+
+  .prose strong {
+    color: var(--ink);
+    font-weight: 650;
+  }
+
+  .prose a {
+    color: var(--clay);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .prose ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+  }
+
+  .prose ol {
+    padding-left: 20px;
+  }
+
+  .prose blockquote {
+    padding-left: 14px;
+    border-left: 3px solid var(--line-strong);
+  }
+
+  .prose code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #f4ede3;
+    font-size: 0.92em;
+  }
+
+  /* Tree canvas dot grid (index.html .canvas). Pair with bg-[var(--canvas)]
+     and border --line for the full canvas-wrap treatment. */
+  .dot-grid {
+    background-image: radial-gradient(circle, rgba(140, 120, 95, 0.28) 1px, transparent 1px);
+    background-size: 26px 26px;
   }
 }
