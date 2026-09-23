@@ -6,10 +6,10 @@ import { Button } from '@/app/components/ui';
 
 /**
  * PNG export of the tree viewport (the selector targets TreeCanvas's
- * `react-flow-image-download` class). Presentation is the shared secondary
- * Button so it sits inline, aligned, with the page head's other actions —
- * review finding on #16. The proper export rework (warm paper background,
- * PDF, filename) remains ticket #9.
+ * `react-flow-image-download` class). Renders as the same primary Button as
+ * "Add member" (matched background + text colour, same 36px height, one
+ * baseline in the page head — review feedback on #16). The proper export
+ * rework (warm paper background, PDF, filename) remains ticket #9.
  */
 const DownloadButton: React.FC = () => {
   const onClick = () => {
@@ -42,7 +42,7 @@ const DownloadButton: React.FC = () => {
   };
 
   return (
-    <Button variant="secondary" type="button" onClick={onClick}>
+    <Button variant="primary" type="button" onClick={onClick}>
       Download image
     </Button>
   );
