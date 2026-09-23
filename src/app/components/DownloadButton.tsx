@@ -2,19 +2,18 @@
 
 import React from 'react';
 import { toPng } from 'html-to-image';
+import { Button } from '@/app/components/ui';
 
-function downloadImage(dataUrl: string) {
-  const a = document.createElement('a');
-  a.setAttribute('download', 'family-tree.png');
-  a.setAttribute('href', dataUrl);
-  a.click();
-}
-
+/**
+ * PNG export of the tree viewport (the selector targets TreeCanvas's
+ * `react-flow-image-download` class). Presentation is the shared secondary
+ * Button so it sits inline, aligned, with the page head's other actions —
+ * review finding on #16. The proper export rework (warm paper background,
+ * PDF, filename) remains ticket #9.
+ */
 const DownloadButton: React.FC = () => {
   const onClick = () => {
-    // The selector for the React Flow viewport.
-    // Ensure your ReactFlow component has a className that matches.
-    // For example, you can add className="react-flow-image-download" to your ReactFlow component.
+    // The React Flow viewport TreeCanvas renders for image export.
     const flowViewport = document.querySelector('.react-flow-image-download .react-flow__viewport');
 
     if (!flowViewport) {
@@ -31,21 +30,21 @@ const DownloadButton: React.FC = () => {
         height: flowViewport.clientHeight.toString(),
       }
     })
-      .then(downloadImage)
+      .then((dataUrl) => {
+        const a = document.createElement('a');
+        a.setAttribute('download', 'family-tree.png');
+        a.setAttribute('href', dataUrl);
+        a.click();
+      })
       .catch((error) => {
         console.error('Error generating image:', error);
       });
   };
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label="Download tree as image"
-      className="absolute right-2.5 top-2.5 z-[4] cursor-pointer border border-[var(--line-strong)] bg-[var(--card)] px-3 py-2 text-[13.5px] font-semibold text-[var(--ink-soft)] shadow-[var(--shadow)] transition-colors hover:border-[var(--clay)] hover:text-[var(--clay)]"
-    >
-      Download Image
-    </button>
+    <Button variant="secondary" type="button" onClick={onClick}>
+      Download image
+    </Button>
   );
 };
 

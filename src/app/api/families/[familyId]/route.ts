@@ -15,7 +15,7 @@ async function getUserIdFromSession(): Promise<number | null> {
 
 // Define the expected structure of your resolved params
 interface GetFamiliesParams {
-  familyIdString: string;
+  familyId: string;
 }
 
 // GET /api/families/[familyId] - Fetch details of a specific family
@@ -24,7 +24,10 @@ export async function GET(
   { params }: { params: Promise<GetFamiliesParams> }
 ) {
   const resolvedParams = await params;
-  const { familyIdString } = resolvedParams;
+  // The route segment is `[familyId]` — rename it (destructure of a
+  // non-existent `familyIdString` key yielded undefined → 400 on every call;
+  // surfaced by the profile crumb / drawer subtitle fetching the family name).
+  const { familyId: familyIdString } = resolvedParams;
 
   const userId = await getUserIdFromSession();
   if (!userId) {

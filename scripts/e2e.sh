@@ -46,6 +46,8 @@ expect "demo login session" "$(curl -s -o /dev/null -w '%{http_code}' -b $J1 $BA
 
 FAM_ID=$(curl -s -b $J1 $BASE/api/families | python3 -c 'import json,sys;print(json.load(sys.stdin)[0]["id"])')
 echo "      demo family id=$FAM_ID"
+# Regression for the profile-crumb 400 (params destructured the wrong key).
+expect "family details 200" "$(curl -s -o /dev/null -w '%{http_code}' -b $J1 $BASE/api/families/$FAM_ID)" "200"
 
 echo "--- 2. feed shape & seeded content"
 curl -s -b $J1 $BASE/api/families/$FAM_ID/people -o feed.json

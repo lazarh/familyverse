@@ -692,11 +692,14 @@ export function MemberForm({
         <div className="h-4" />
       </div>
 
-      {/* footer (form.html .drawer-foot): destructive pair left, Cancel + the
-          drawer's ONE primary right */}
-      <div className="flex items-center gap-[10px] border-t border-[var(--line)] bg-[var(--card)] px-[26px] py-4">
-        {isEdit && (
-          <>
+      {/* footer (form.html .drawer-foot): destructive pair, Cancel + the
+          drawer's ONE primary. Four items measure 552px together — they
+          cannot fit the 486px drawer on one row (Save member was clipped
+          off-screen), so edit mode stacks: destructive row above, actions
+          right-aligned below. Add mode keeps the original single row. */}
+      {isEdit ? (
+        <div className="flex flex-col gap-[10px] border-t border-[var(--line)] bg-[var(--card)] px-[26px] py-4">
+          <div className="flex items-center gap-[10px]">
             <Button
               variant="danger"
               onClick={removeFromFamily}
@@ -714,16 +717,27 @@ export function MemberForm({
             >
               Delete person
             </Button>
-          </>
-        )}
-        <span className="flex-1" />
-        <Button variant="ghost" onClick={onClose} disabled={saving}>
-          Cancel
-        </Button>
-        <Button variant="primary" size="lg" type="submit" disabled={saving}>
-          {saving ? 'Saving…' : 'Save member'}
-        </Button>
-      </div>
+          </div>
+          <div className="flex items-center justify-end gap-[10px]">
+            <Button variant="ghost" onClick={onClose} disabled={saving}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="lg" type="submit" disabled={saving}>
+              {saving ? 'Saving…' : 'Save member'}
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center gap-[10px] border-t border-[var(--line)] bg-[var(--card)] px-[26px] py-4">
+          <span className="flex-1" />
+          <Button variant="ghost" onClick={onClose} disabled={saving}>
+            Cancel
+          </Button>
+          <Button variant="primary" size="lg" type="submit" disabled={saving}>
+            {saving ? 'Saving…' : 'Save member'}
+          </Button>
+        </div>
+      )}
 
       {/* Delete person — whole-person semantics, confirm step (#14 decision 3) */}
       <Dialog

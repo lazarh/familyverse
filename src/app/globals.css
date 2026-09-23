@@ -6,6 +6,19 @@
    reactflow entirely. */
 @import "reactflow/dist/style.css";
 
+/* React Flow writes INLINE `pointer-events: none` + `z-index: 0` (beneath the
+   pane's z-index 1) on nodes when draggable, connectable, selectable AND
+   focusable are all disabled — which ours are, because person cards are
+   navigation targets, not flow objects. Result: the pane swallowed every
+   card click (review finding on #16). Force nodes interactive and above the
+   pane; !important is required because the blocker is an inline style. The
+   edge canvas (renderer, z-index 4) stays above nodes as before, and the
+   override is scoped to .react-flow__node so nothing else is affected. */
+.react-flow__node {
+  pointer-events: all !important;
+  z-index: 2 !important;
+}
+
 /* ==========================================================================
    Familyverse token layer — prototype/DIRECTION.md §1–3, verbatim.
    Warm paper and clay: a family album on a shelf, not a SaaS dashboard.

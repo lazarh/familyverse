@@ -189,13 +189,10 @@ function TreeScreen() {
               Add member
             </Button>
           )}
-          {/* DownloadButton still absolutely positions itself, so it gets a
-              fixed-size host box; its presentation was restyled to tokens at
-              integration (the old blue inline style) — the real PDF/export
-              rework remains ticket #9. */}
-          <span className="relative inline-block h-[46px] w-[150px]">
-            <DownloadButton />
-          </span>
+          {/* Secondary PNG export (restyled at integration review: now a
+              shared Button so it aligns in this row — the export rework
+              itself remains ticket #9). */}
+          <DownloadButton />
           <ZoomBar
             zoom={zoom}
             onZoomOut={() => canvasRef.current?.zoomOut()}
