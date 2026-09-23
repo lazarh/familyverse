@@ -51,7 +51,7 @@ export async function GET(
       return NextResponse.json({ message: 'Forbidden: You are not a member of this family' }, { status: 403 });
     }
 
-    // Fetch the family details, including its members (users) and family members (tree nodes)
+    // Fetch the family details (its user accounts — NOT tree people, see below)
     const familyDetails = await prisma.family.findUnique({
       where: { id: familyId },
       include: {
@@ -62,11 +62,8 @@ export async function GET(
             },
           },
         },
-        familyMembers: { // Include the actual family tree members
-          orderBy: {
-            birthDate: 'asc',
-          }
-        }
+        // Tree people are NOT included: GET /api/families/[familyId]/people
+        // owns that feed now (global Person model, #15).
       },
     });
 

@@ -78,6 +78,11 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
 
+# Picture storage (#15/#16): compose mounts a volume at /app/data/pictures;
+# pre-create it owned by the non-root app user so uploads and seed pictures
+# can be written (a named volume inherits this ownership on first mount).
+RUN mkdir -p /app/data/pictures && chown -R nextjs:nodejs /app/data/pictures
+
 USER nextjs
 
 # Expose the port the app runs on

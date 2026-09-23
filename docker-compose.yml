@@ -26,6 +26,13 @@ services:
       # Seed script (scripts/seed.mjs) — demo user created on container start
       SEED_DEMO_EMAIL: ${SEED_DEMO_EMAIL:-demo@familyverse.local}
       SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-demo123}
+
+      # Picture storage (#15): files under this dir are served same-origin by
+      # GET /api/pictures/<file>. Named volume keeps writes on the non-root
+      # app user's terms (image dir pre-owned, see Dockerfile).
+      PICTURES_DIR: /app/data/pictures
+    volumes:
+      - pictures_data:/app/data/pictures
     depends_on:
       postgres:
         condition: service_healthy
@@ -59,3 +66,4 @@ services:
 
 volumes:
   postgres_data:
+  pictures_data:

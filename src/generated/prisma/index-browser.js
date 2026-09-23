@@ -145,19 +145,40 @@ exports.Prisma.UserFamilyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.FamilyMemberScalarFieldEnum = {
+exports.Prisma.PersonScalarFieldEnum = {
   id: 'id',
   fullName: 'fullName',
   gender: 'gender',
   birthDate: 'birthDate',
   deathDate: 'deathDate',
   birthPlace: 'birthPlace',
-  picture: 'picture',
-  parentId1: 'parentId1',
-  parentId2: 'parentId2',
+  bio: 'bio',
+  picturePath: 'picturePath',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  familyId: 'familyId'
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FamilyMembershipScalarFieldEnum = {
+  personId: 'personId',
+  familyId: 'familyId',
+  joinedAt: 'joinedAt'
+};
+
+exports.Prisma.ParentChildScalarFieldEnum = {
+  childId: 'childId',
+  parentId: 'parentId',
+  role: 'role'
+};
+
+exports.Prisma.PartnershipScalarFieldEnum = {
+  id: 'id',
+  personAId: 'personAId',
+  personBId: 'personBId',
+  kind: 'kind',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -174,13 +195,28 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.ParentRole = exports.$Enums.ParentRole = {
+  BIOLOGICAL: 'BIOLOGICAL',
+  ADOPTIVE: 'ADOPTIVE',
+  STEP: 'STEP',
+  FOSTER: 'FOSTER',
+  LEGAL_GUARDIAN: 'LEGAL_GUARDIAN'
+};
 
+exports.PartnershipKind = exports.$Enums.PartnershipKind = {
+  MARRIED: 'MARRIED',
+  CIVIL_UNION: 'CIVIL_UNION',
+  COHABITATION: 'COHABITATION'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Family: 'Family',
   UserFamily: 'UserFamily',
-  FamilyMember: 'FamilyMember'
+  Person: 'Person',
+  FamilyMembership: 'FamilyMembership',
+  ParentChild: 'ParentChild',
+  Partnership: 'Partnership'
 };
 
 /**

@@ -1,8 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Familyverse domain model — the approved shape from ticket #5:
+//   global Person + FamilyMembership join, ParentChild edge with FamilySearch's
+//   five-role enum (no parent cap), gender-agnostic Partnership (kind enum,
+//   canonical personAId < personBId, N per person), bio as Markdown,
+//   pictures as files under PICTURES_DIR referenced by picturePath.
+// Deliberate behaviour changes (see #5): deleting a family no longer deletes
+// its people; deleting a person cascades only their own edges.
 
 generator client {
   provider      = "prisma-client-js"
@@ -16,14 +18,14 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String    // Will store the hashed password
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  password  String // Will store the hashed password
   isConfirmed Boolean @default(false)
   confirmationToken String?
   confirmationTokenExpiry DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   userFamilies UserFamily[] // Relation to the UserFamily join table
 }
@@ -34,50 +36,101 @@ model Family {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  familyMembers FamilyMember[] // Relation to FamilyMember
-  userFamilies  UserFamily[]   // Relation to the UserFamily join table
+  memberships  FamilyMembership[] // Person ↔ Family join (a family no longer owns people)
+  userFamilies UserFamily[]       // Relation to the UserFamily join table
 }
 
-// Join table for User and Family (many-to-many)
+// Join table for User and Family (many-to-many) — access control only,
+// orthogonal to genealogy (SUBM ≠ INDI). Auth questions live in ticket #8.
 model UserFamily {
   userId    Int
   familyId  Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
-  // role   String?  // Optional: e.g., "admin", "member" for role-based access within a family
+  // role   String?  // Optional — an explicit question on ticket #8
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@id([userId, familyId])
 }
 
-model FamilyMember {
-  id         Int       @id @default(autoincrement())
-  fullName   String
-  gender     String // Consider using an Enum if your DB supports it
-  birthDate  DateTime? // Removed @db.Date
-  deathDate  DateTime? // Removed @db.Date
-  birthPlace String?
-  picture    Bytes? // Changed from pictureUrl String?
+// A person is global; families reference people through memberships.
+model Person {
+  id          Int    @id @default(autoincrement())
+  fullName    String
+  gender      String // display-only; never inferred from partnerships (#5)
+  birthDate   DateTime?
+  deathDate   DateTime? // null ⇒ "Living" in the UI (no separate flag — accepted limitation, #14)
+  birthPlace  String?
+  bio         String? // Markdown, rendered sanitized (#5 Q5)
+  picturePath String? // filename relative to PICTURES_DIR; null ⇒ monogram (#5 Q4/Q6)
 
-  // Self-referencing relations for parents
-  parentId1 Int?
-  parentId2 Int?
-
-  // Define the relation to self for children
-  children1 FamilyMember[] @relation("Parent1Children")
-  children2 FamilyMember[] @relation("Parent2Children")
-
-  // Define the relation fields for parents (optional, improves clarity)
-  parent1   FamilyMember? @relation("Parent1Children", fields: [parentId1], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  parent2   FamilyMember? @relation("Parent2Children", fields: [parentId2], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  memberships FamilyMembership[]
+  childEdges  ParentChild[]      @relation("Child")
+  parentEdges ParentChild[]      @relation("Parent")
+  partnershipsA Partnership[]    @relation("PersonA")
+  partnershipsB Partnership[]    @relation("PersonB")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
 
-  // Add relation to User
-  // Relation to Family
+// Person ↔ Family join. Deleting a family cascades only this row — the
+// person survives (deliberate change from the old FamilyMember model, #5).
+model FamilyMembership {
+  personId Int
   familyId Int
-  family   Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
-  @@index([familyId]) // Add index for querying by family
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  family   Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  joinedAt DateTime @default(now())
+
+  @@id([personId, familyId])
+}
+
+// One parent-of edge with an explicit role. No cap on parents per child;
+// one role per (child, parent) pair; deleting a person cascades only their
+// own edges.
+model ParentChild {
+  childId  Int
+  parentId Int
+  role     ParentRole
+  child    Person @relation("Child", fields: [childId], references: [id], onDelete: Cascade)
+  parent   Person @relation("Parent", fields: [parentId], references: [id], onDelete: Cascade)
+
+  @@id([childId, parentId])
+}
+
+// FamilySearch's five parent-child roles; GEDCOM lacks STEP, which is why
+// this is an enum on our side (#4 research, #5 Q2).
+enum ParentRole {
+  BIOLOGICAL
+  ADOPTIVE
+  STEP
+  FOSTER
+  LEGAL_GUARDIAN
+}
+
+// Gender-agnostic partnership. Canonical order: personAId < personBId
+// (enforced server-side) so mirrored duplicates can't be created; slot order
+// never implies gender or role (#5 Q3).
+model Partnership {
+  id        Int      @id @default(autoincrement())
+  personAId Int
+  personBId Int
+  kind      PartnershipKind
+  startDate DateTime?
+  endDate   DateTime?
+  personA   Person   @relation("PersonA", fields: [personAId], references: [id], onDelete: Cascade)
+  personB   Person   @relation("PersonB", fields: [personBId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([personAId])
+  @@index([personBId])
+}
+
+enum PartnershipKind {
+  MARRIED
+  CIVIL_UNION
+  COHABITATION
 }

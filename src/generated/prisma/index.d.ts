@@ -29,10 +29,58 @@ export type Family = $Result.DefaultSelection<Prisma.$FamilyPayload>
  */
 export type UserFamily = $Result.DefaultSelection<Prisma.$UserFamilyPayload>
 /**
- * Model FamilyMember
+ * Model Person
  * 
  */
-export type FamilyMember = $Result.DefaultSelection<Prisma.$FamilyMemberPayload>
+export type Person = $Result.DefaultSelection<Prisma.$PersonPayload>
+/**
+ * Model FamilyMembership
+ * 
+ */
+export type FamilyMembership = $Result.DefaultSelection<Prisma.$FamilyMembershipPayload>
+/**
+ * Model ParentChild
+ * 
+ */
+export type ParentChild = $Result.DefaultSelection<Prisma.$ParentChildPayload>
+/**
+ * Model Partnership
+ * 
+ */
+export type Partnership = $Result.DefaultSelection<Prisma.$PartnershipPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const ParentRole: {
+  BIOLOGICAL: 'BIOLOGICAL',
+  ADOPTIVE: 'ADOPTIVE',
+  STEP: 'STEP',
+  FOSTER: 'FOSTER',
+  LEGAL_GUARDIAN: 'LEGAL_GUARDIAN'
+};
+
+export type ParentRole = (typeof ParentRole)[keyof typeof ParentRole]
+
+
+export const PartnershipKind: {
+  MARRIED: 'MARRIED',
+  CIVIL_UNION: 'CIVIL_UNION',
+  COHABITATION: 'COHABITATION'
+};
+
+export type PartnershipKind = (typeof PartnershipKind)[keyof typeof PartnershipKind]
+
+}
+
+export type ParentRole = $Enums.ParentRole
+
+export const ParentRole: typeof $Enums.ParentRole
+
+export type PartnershipKind = $Enums.PartnershipKind
+
+export const PartnershipKind: typeof $Enums.PartnershipKind
 
 /**
  * ##  Prisma Client ʲˢ
@@ -190,14 +238,44 @@ export class PrismaClient<
   get userFamily(): Prisma.UserFamilyDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.familyMember`: Exposes CRUD operations for the **FamilyMember** model.
+   * `prisma.person`: Exposes CRUD operations for the **Person** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more FamilyMembers
-    * const familyMembers = await prisma.familyMember.findMany()
+    * // Fetch zero or more People
+    * const people = await prisma.person.findMany()
     * ```
     */
-  get familyMember(): Prisma.FamilyMemberDelegate<ExtArgs, ClientOptions>;
+  get person(): Prisma.PersonDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.familyMembership`: Exposes CRUD operations for the **FamilyMembership** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FamilyMemberships
+    * const familyMemberships = await prisma.familyMembership.findMany()
+    * ```
+    */
+  get familyMembership(): Prisma.FamilyMembershipDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.parentChild`: Exposes CRUD operations for the **ParentChild** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ParentChildren
+    * const parentChildren = await prisma.parentChild.findMany()
+    * ```
+    */
+  get parentChild(): Prisma.ParentChildDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.partnership`: Exposes CRUD operations for the **Partnership** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Partnerships
+    * const partnerships = await prisma.partnership.findMany()
+    * ```
+    */
+  get partnership(): Prisma.PartnershipDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -641,7 +719,10 @@ export namespace Prisma {
     User: 'User',
     Family: 'Family',
     UserFamily: 'UserFamily',
-    FamilyMember: 'FamilyMember'
+    Person: 'Person',
+    FamilyMembership: 'FamilyMembership',
+    ParentChild: 'ParentChild',
+    Partnership: 'Partnership'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -660,7 +741,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "family" | "userFamily" | "familyMember"
+      modelProps: "user" | "family" | "userFamily" | "person" | "familyMembership" | "parentChild" | "partnership"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -886,77 +967,299 @@ export namespace Prisma {
           }
         }
       }
-      FamilyMember: {
-        payload: Prisma.$FamilyMemberPayload<ExtArgs>
-        fields: Prisma.FamilyMemberFieldRefs
+      Person: {
+        payload: Prisma.$PersonPayload<ExtArgs>
+        fields: Prisma.PersonFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.FamilyMemberFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload> | null
+            args: Prisma.PersonFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.FamilyMemberFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+            args: Prisma.PersonFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>
           }
           findFirst: {
-            args: Prisma.FamilyMemberFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload> | null
+            args: Prisma.PersonFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.FamilyMemberFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+            args: Prisma.PersonFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>
           }
           findMany: {
-            args: Prisma.FamilyMemberFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>[]
+            args: Prisma.PersonFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>[]
           }
           create: {
-            args: Prisma.FamilyMemberCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+            args: Prisma.PersonCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>
           }
           createMany: {
-            args: Prisma.FamilyMemberCreateManyArgs<ExtArgs>
+            args: Prisma.PersonCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.FamilyMemberCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>[]
+            args: Prisma.PersonCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>[]
           }
           delete: {
-            args: Prisma.FamilyMemberDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+            args: Prisma.PersonDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>
           }
           update: {
-            args: Prisma.FamilyMemberUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+            args: Prisma.PersonUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>
           }
           deleteMany: {
-            args: Prisma.FamilyMemberDeleteManyArgs<ExtArgs>
+            args: Prisma.PersonDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.FamilyMemberUpdateManyArgs<ExtArgs>
+            args: Prisma.PersonUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.FamilyMemberUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>[]
+            args: Prisma.PersonUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>[]
           }
           upsert: {
-            args: Prisma.FamilyMemberUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FamilyMemberPayload>
+            args: Prisma.PersonUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonPayload>
           }
           aggregate: {
-            args: Prisma.FamilyMemberAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateFamilyMember>
+            args: Prisma.PersonAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePerson>
           }
           groupBy: {
-            args: Prisma.FamilyMemberGroupByArgs<ExtArgs>
-            result: $Utils.Optional<FamilyMemberGroupByOutputType>[]
+            args: Prisma.PersonGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PersonGroupByOutputType>[]
           }
           count: {
-            args: Prisma.FamilyMemberCountArgs<ExtArgs>
-            result: $Utils.Optional<FamilyMemberCountAggregateOutputType> | number
+            args: Prisma.PersonCountArgs<ExtArgs>
+            result: $Utils.Optional<PersonCountAggregateOutputType> | number
+          }
+        }
+      }
+      FamilyMembership: {
+        payload: Prisma.$FamilyMembershipPayload<ExtArgs>
+        fields: Prisma.FamilyMembershipFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FamilyMembershipFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FamilyMembershipFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>
+          }
+          findFirst: {
+            args: Prisma.FamilyMembershipFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FamilyMembershipFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>
+          }
+          findMany: {
+            args: Prisma.FamilyMembershipFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>[]
+          }
+          create: {
+            args: Prisma.FamilyMembershipCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>
+          }
+          createMany: {
+            args: Prisma.FamilyMembershipCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FamilyMembershipCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>[]
+          }
+          delete: {
+            args: Prisma.FamilyMembershipDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>
+          }
+          update: {
+            args: Prisma.FamilyMembershipUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>
+          }
+          deleteMany: {
+            args: Prisma.FamilyMembershipDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FamilyMembershipUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FamilyMembershipUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>[]
+          }
+          upsert: {
+            args: Prisma.FamilyMembershipUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyMembershipPayload>
+          }
+          aggregate: {
+            args: Prisma.FamilyMembershipAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFamilyMembership>
+          }
+          groupBy: {
+            args: Prisma.FamilyMembershipGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FamilyMembershipGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FamilyMembershipCountArgs<ExtArgs>
+            result: $Utils.Optional<FamilyMembershipCountAggregateOutputType> | number
+          }
+        }
+      }
+      ParentChild: {
+        payload: Prisma.$ParentChildPayload<ExtArgs>
+        fields: Prisma.ParentChildFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ParentChildFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ParentChildFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>
+          }
+          findFirst: {
+            args: Prisma.ParentChildFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ParentChildFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>
+          }
+          findMany: {
+            args: Prisma.ParentChildFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>[]
+          }
+          create: {
+            args: Prisma.ParentChildCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>
+          }
+          createMany: {
+            args: Prisma.ParentChildCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ParentChildCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>[]
+          }
+          delete: {
+            args: Prisma.ParentChildDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>
+          }
+          update: {
+            args: Prisma.ParentChildUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>
+          }
+          deleteMany: {
+            args: Prisma.ParentChildDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ParentChildUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ParentChildUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>[]
+          }
+          upsert: {
+            args: Prisma.ParentChildUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParentChildPayload>
+          }
+          aggregate: {
+            args: Prisma.ParentChildAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateParentChild>
+          }
+          groupBy: {
+            args: Prisma.ParentChildGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ParentChildGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ParentChildCountArgs<ExtArgs>
+            result: $Utils.Optional<ParentChildCountAggregateOutputType> | number
+          }
+        }
+      }
+      Partnership: {
+        payload: Prisma.$PartnershipPayload<ExtArgs>
+        fields: Prisma.PartnershipFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PartnershipFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PartnershipFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>
+          }
+          findFirst: {
+            args: Prisma.PartnershipFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PartnershipFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>
+          }
+          findMany: {
+            args: Prisma.PartnershipFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>[]
+          }
+          create: {
+            args: Prisma.PartnershipCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>
+          }
+          createMany: {
+            args: Prisma.PartnershipCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PartnershipCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>[]
+          }
+          delete: {
+            args: Prisma.PartnershipDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>
+          }
+          update: {
+            args: Prisma.PartnershipUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>
+          }
+          deleteMany: {
+            args: Prisma.PartnershipDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PartnershipUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PartnershipUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>[]
+          }
+          upsert: {
+            args: Prisma.PartnershipUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnershipPayload>
+          }
+          aggregate: {
+            args: Prisma.PartnershipAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePartnership>
+          }
+          groupBy: {
+            args: Prisma.PartnershipGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PartnershipGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PartnershipCountArgs<ExtArgs>
+            result: $Utils.Optional<PartnershipCountAggregateOutputType> | number
           }
         }
       }
@@ -1047,7 +1350,10 @@ export namespace Prisma {
     user?: UserOmit
     family?: FamilyOmit
     userFamily?: UserFamilyOmit
-    familyMember?: FamilyMemberOmit
+    person?: PersonOmit
+    familyMembership?: FamilyMembershipOmit
+    parentChild?: ParentChildOmit
+    partnership?: PartnershipOmit
   }
 
   /* Types for Logging */
@@ -1173,12 +1479,12 @@ export namespace Prisma {
    */
 
   export type FamilyCountOutputType = {
-    familyMembers: number
+    memberships: number
     userFamilies: number
   }
 
   export type FamilyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    familyMembers?: boolean | FamilyCountOutputTypeCountFamilyMembersArgs
+    memberships?: boolean | FamilyCountOutputTypeCountMembershipsArgs
     userFamilies?: boolean | FamilyCountOutputTypeCountUserFamiliesArgs
   }
 
@@ -1196,8 +1502,8 @@ export namespace Prisma {
   /**
    * FamilyCountOutputType without action
    */
-  export type FamilyCountOutputTypeCountFamilyMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FamilyMemberWhereInput
+  export type FamilyCountOutputTypeCountMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyMembershipWhereInput
   }
 
   /**
@@ -1209,42 +1515,69 @@ export namespace Prisma {
 
 
   /**
-   * Count Type FamilyMemberCountOutputType
+   * Count Type PersonCountOutputType
    */
 
-  export type FamilyMemberCountOutputType = {
-    children1: number
-    children2: number
+  export type PersonCountOutputType = {
+    memberships: number
+    childEdges: number
+    parentEdges: number
+    partnershipsA: number
+    partnershipsB: number
   }
 
-  export type FamilyMemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    children1?: boolean | FamilyMemberCountOutputTypeCountChildren1Args
-    children2?: boolean | FamilyMemberCountOutputTypeCountChildren2Args
+  export type PersonCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    memberships?: boolean | PersonCountOutputTypeCountMembershipsArgs
+    childEdges?: boolean | PersonCountOutputTypeCountChildEdgesArgs
+    parentEdges?: boolean | PersonCountOutputTypeCountParentEdgesArgs
+    partnershipsA?: boolean | PersonCountOutputTypeCountPartnershipsAArgs
+    partnershipsB?: boolean | PersonCountOutputTypeCountPartnershipsBArgs
   }
 
   // Custom InputTypes
   /**
-   * FamilyMemberCountOutputType without action
+   * PersonCountOutputType without action
    */
-  export type FamilyMemberCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PersonCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMemberCountOutputType
+     * Select specific fields to fetch from the PersonCountOutputType
      */
-    select?: FamilyMemberCountOutputTypeSelect<ExtArgs> | null
+    select?: PersonCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * FamilyMemberCountOutputType without action
+   * PersonCountOutputType without action
    */
-  export type FamilyMemberCountOutputTypeCountChildren1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FamilyMemberWhereInput
+  export type PersonCountOutputTypeCountMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyMembershipWhereInput
   }
 
   /**
-   * FamilyMemberCountOutputType without action
+   * PersonCountOutputType without action
    */
-  export type FamilyMemberCountOutputTypeCountChildren2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FamilyMemberWhereInput
+  export type PersonCountOutputTypeCountChildEdgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParentChildWhereInput
+  }
+
+  /**
+   * PersonCountOutputType without action
+   */
+  export type PersonCountOutputTypeCountParentEdgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParentChildWhereInput
+  }
+
+  /**
+   * PersonCountOutputType without action
+   */
+  export type PersonCountOutputTypeCountPartnershipsAArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnershipWhereInput
+  }
+
+  /**
+   * PersonCountOutputType without action
+   */
+  export type PersonCountOutputTypeCountPartnershipsBArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnershipWhereInput
   }
 
 
@@ -2585,7 +2918,7 @@ export namespace Prisma {
     name?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    familyMembers?: boolean | Family$familyMembersArgs<ExtArgs>
+    memberships?: boolean | Family$membershipsArgs<ExtArgs>
     userFamilies?: boolean | Family$userFamiliesArgs<ExtArgs>
     _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["family"]>
@@ -2613,7 +2946,7 @@ export namespace Prisma {
 
   export type FamilyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["family"]>
   export type FamilyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    familyMembers?: boolean | Family$familyMembersArgs<ExtArgs>
+    memberships?: boolean | Family$membershipsArgs<ExtArgs>
     userFamilies?: boolean | Family$userFamiliesArgs<ExtArgs>
     _count?: boolean | FamilyCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2623,7 +2956,7 @@ export namespace Prisma {
   export type $FamilyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Family"
     objects: {
-      familyMembers: Prisma.$FamilyMemberPayload<ExtArgs>[]
+      memberships: Prisma.$FamilyMembershipPayload<ExtArgs>[]
       userFamilies: Prisma.$UserFamilyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -3025,7 +3358,7 @@ export namespace Prisma {
    */
   export interface Prisma__FamilyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    familyMembers<T extends Family$familyMembersArgs<ExtArgs> = {}>(args?: Subset<T, Family$familyMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    memberships<T extends Family$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, Family$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userFamilies<T extends Family$userFamiliesArgs<ExtArgs> = {}>(args?: Subset<T, Family$userFamiliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFamilyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3448,27 +3781,27 @@ export namespace Prisma {
   }
 
   /**
-   * Family.familyMembers
+   * Family.memberships
    */
-  export type Family$familyMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Family$membershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
-    where?: FamilyMemberWhereInput
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
-    cursor?: FamilyMemberWhereUniqueInput
+    include?: FamilyMembershipInclude<ExtArgs> | null
+    where?: FamilyMembershipWhereInput
+    orderBy?: FamilyMembershipOrderByWithRelationInput | FamilyMembershipOrderByWithRelationInput[]
+    cursor?: FamilyMembershipWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+    distinct?: FamilyMembershipScalarFieldEnum | FamilyMembershipScalarFieldEnum[]
   }
 
   /**
@@ -4606,358 +4939,310 @@ export namespace Prisma {
 
 
   /**
-   * Model FamilyMember
+   * Model Person
    */
 
-  export type AggregateFamilyMember = {
-    _count: FamilyMemberCountAggregateOutputType | null
-    _avg: FamilyMemberAvgAggregateOutputType | null
-    _sum: FamilyMemberSumAggregateOutputType | null
-    _min: FamilyMemberMinAggregateOutputType | null
-    _max: FamilyMemberMaxAggregateOutputType | null
+  export type AggregatePerson = {
+    _count: PersonCountAggregateOutputType | null
+    _avg: PersonAvgAggregateOutputType | null
+    _sum: PersonSumAggregateOutputType | null
+    _min: PersonMinAggregateOutputType | null
+    _max: PersonMaxAggregateOutputType | null
   }
 
-  export type FamilyMemberAvgAggregateOutputType = {
+  export type PersonAvgAggregateOutputType = {
     id: number | null
-    parentId1: number | null
-    parentId2: number | null
-    familyId: number | null
   }
 
-  export type FamilyMemberSumAggregateOutputType = {
+  export type PersonSumAggregateOutputType = {
     id: number | null
-    parentId1: number | null
-    parentId2: number | null
-    familyId: number | null
   }
 
-  export type FamilyMemberMinAggregateOutputType = {
+  export type PersonMinAggregateOutputType = {
     id: number | null
     fullName: string | null
     gender: string | null
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
-    picture: Uint8Array | null
-    parentId1: number | null
-    parentId2: number | null
+    bio: string | null
+    picturePath: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    familyId: number | null
   }
 
-  export type FamilyMemberMaxAggregateOutputType = {
+  export type PersonMaxAggregateOutputType = {
     id: number | null
     fullName: string | null
     gender: string | null
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
-    picture: Uint8Array | null
-    parentId1: number | null
-    parentId2: number | null
+    bio: string | null
+    picturePath: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    familyId: number | null
   }
 
-  export type FamilyMemberCountAggregateOutputType = {
+  export type PersonCountAggregateOutputType = {
     id: number
     fullName: number
     gender: number
     birthDate: number
     deathDate: number
     birthPlace: number
-    picture: number
-    parentId1: number
-    parentId2: number
+    bio: number
+    picturePath: number
     createdAt: number
     updatedAt: number
-    familyId: number
     _all: number
   }
 
 
-  export type FamilyMemberAvgAggregateInputType = {
+  export type PersonAvgAggregateInputType = {
     id?: true
-    parentId1?: true
-    parentId2?: true
-    familyId?: true
   }
 
-  export type FamilyMemberSumAggregateInputType = {
+  export type PersonSumAggregateInputType = {
     id?: true
-    parentId1?: true
-    parentId2?: true
-    familyId?: true
   }
 
-  export type FamilyMemberMinAggregateInputType = {
+  export type PersonMinAggregateInputType = {
     id?: true
     fullName?: true
     gender?: true
     birthDate?: true
     deathDate?: true
     birthPlace?: true
-    picture?: true
-    parentId1?: true
-    parentId2?: true
+    bio?: true
+    picturePath?: true
     createdAt?: true
     updatedAt?: true
-    familyId?: true
   }
 
-  export type FamilyMemberMaxAggregateInputType = {
+  export type PersonMaxAggregateInputType = {
     id?: true
     fullName?: true
     gender?: true
     birthDate?: true
     deathDate?: true
     birthPlace?: true
-    picture?: true
-    parentId1?: true
-    parentId2?: true
+    bio?: true
+    picturePath?: true
     createdAt?: true
     updatedAt?: true
-    familyId?: true
   }
 
-  export type FamilyMemberCountAggregateInputType = {
+  export type PersonCountAggregateInputType = {
     id?: true
     fullName?: true
     gender?: true
     birthDate?: true
     deathDate?: true
     birthPlace?: true
-    picture?: true
-    parentId1?: true
-    parentId2?: true
+    bio?: true
+    picturePath?: true
     createdAt?: true
     updatedAt?: true
-    familyId?: true
     _all?: true
   }
 
-  export type FamilyMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PersonAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which FamilyMember to aggregate.
+     * Filter which Person to aggregate.
      */
-    where?: FamilyMemberWhereInput
+    where?: PersonWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FamilyMembers to fetch.
+     * Determine the order of People to fetch.
      */
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    orderBy?: PersonOrderByWithRelationInput | PersonOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: FamilyMemberWhereUniqueInput
+    cursor?: PersonWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FamilyMembers from the position of the cursor.
+     * Take `±n` People from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FamilyMembers.
+     * Skip the first `n` People.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned FamilyMembers
+     * Count returned People
     **/
-    _count?: true | FamilyMemberCountAggregateInputType
+    _count?: true | PersonCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: FamilyMemberAvgAggregateInputType
+    _avg?: PersonAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: FamilyMemberSumAggregateInputType
+    _sum?: PersonSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: FamilyMemberMinAggregateInputType
+    _min?: PersonMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: FamilyMemberMaxAggregateInputType
+    _max?: PersonMaxAggregateInputType
   }
 
-  export type GetFamilyMemberAggregateType<T extends FamilyMemberAggregateArgs> = {
-        [P in keyof T & keyof AggregateFamilyMember]: P extends '_count' | 'count'
+  export type GetPersonAggregateType<T extends PersonAggregateArgs> = {
+        [P in keyof T & keyof AggregatePerson]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateFamilyMember[P]>
-      : GetScalarType<T[P], AggregateFamilyMember[P]>
+        : GetScalarType<T[P], AggregatePerson[P]>
+      : GetScalarType<T[P], AggregatePerson[P]>
   }
 
 
 
 
-  export type FamilyMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FamilyMemberWhereInput
-    orderBy?: FamilyMemberOrderByWithAggregationInput | FamilyMemberOrderByWithAggregationInput[]
-    by: FamilyMemberScalarFieldEnum[] | FamilyMemberScalarFieldEnum
-    having?: FamilyMemberScalarWhereWithAggregatesInput
+  export type PersonGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PersonWhereInput
+    orderBy?: PersonOrderByWithAggregationInput | PersonOrderByWithAggregationInput[]
+    by: PersonScalarFieldEnum[] | PersonScalarFieldEnum
+    having?: PersonScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: FamilyMemberCountAggregateInputType | true
-    _avg?: FamilyMemberAvgAggregateInputType
-    _sum?: FamilyMemberSumAggregateInputType
-    _min?: FamilyMemberMinAggregateInputType
-    _max?: FamilyMemberMaxAggregateInputType
+    _count?: PersonCountAggregateInputType | true
+    _avg?: PersonAvgAggregateInputType
+    _sum?: PersonSumAggregateInputType
+    _min?: PersonMinAggregateInputType
+    _max?: PersonMaxAggregateInputType
   }
 
-  export type FamilyMemberGroupByOutputType = {
+  export type PersonGroupByOutputType = {
     id: number
     fullName: string
     gender: string
     birthDate: Date | null
     deathDate: Date | null
     birthPlace: string | null
-    picture: Uint8Array | null
-    parentId1: number | null
-    parentId2: number | null
+    bio: string | null
+    picturePath: string | null
     createdAt: Date
     updatedAt: Date
-    familyId: number
-    _count: FamilyMemberCountAggregateOutputType | null
-    _avg: FamilyMemberAvgAggregateOutputType | null
-    _sum: FamilyMemberSumAggregateOutputType | null
-    _min: FamilyMemberMinAggregateOutputType | null
-    _max: FamilyMemberMaxAggregateOutputType | null
+    _count: PersonCountAggregateOutputType | null
+    _avg: PersonAvgAggregateOutputType | null
+    _sum: PersonSumAggregateOutputType | null
+    _min: PersonMinAggregateOutputType | null
+    _max: PersonMaxAggregateOutputType | null
   }
 
-  type GetFamilyMemberGroupByPayload<T extends FamilyMemberGroupByArgs> = Prisma.PrismaPromise<
+  type GetPersonGroupByPayload<T extends PersonGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<FamilyMemberGroupByOutputType, T['by']> &
+      PickEnumerable<PersonGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof FamilyMemberGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof PersonGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], FamilyMemberGroupByOutputType[P]>
-            : GetScalarType<T[P], FamilyMemberGroupByOutputType[P]>
+              : GetScalarType<T[P], PersonGroupByOutputType[P]>
+            : GetScalarType<T[P], PersonGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type FamilyMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PersonSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     fullName?: boolean
     gender?: boolean
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    picture?: boolean
-    parentId1?: boolean
-    parentId2?: boolean
+    bio?: boolean
+    picturePath?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    familyId?: boolean
-    children1?: boolean | FamilyMember$children1Args<ExtArgs>
-    children2?: boolean | FamilyMember$children2Args<ExtArgs>
-    parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
-    parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    family?: boolean | FamilyDefaultArgs<ExtArgs>
-    _count?: boolean | FamilyMemberCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["familyMember"]>
+    memberships?: boolean | Person$membershipsArgs<ExtArgs>
+    childEdges?: boolean | Person$childEdgesArgs<ExtArgs>
+    parentEdges?: boolean | Person$parentEdgesArgs<ExtArgs>
+    partnershipsA?: boolean | Person$partnershipsAArgs<ExtArgs>
+    partnershipsB?: boolean | Person$partnershipsBArgs<ExtArgs>
+    _count?: boolean | PersonCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["person"]>
 
-  export type FamilyMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PersonSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     fullName?: boolean
     gender?: boolean
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    picture?: boolean
-    parentId1?: boolean
-    parentId2?: boolean
+    bio?: boolean
+    picturePath?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    familyId?: boolean
-    parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
-    parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    family?: boolean | FamilyDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["familyMember"]>
+  }, ExtArgs["result"]["person"]>
 
-  export type FamilyMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PersonSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     fullName?: boolean
     gender?: boolean
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    picture?: boolean
-    parentId1?: boolean
-    parentId2?: boolean
+    bio?: boolean
+    picturePath?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    familyId?: boolean
-    parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
-    parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    family?: boolean | FamilyDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["familyMember"]>
+  }, ExtArgs["result"]["person"]>
 
-  export type FamilyMemberSelectScalar = {
+  export type PersonSelectScalar = {
     id?: boolean
     fullName?: boolean
     gender?: boolean
     birthDate?: boolean
     deathDate?: boolean
     birthPlace?: boolean
-    picture?: boolean
-    parentId1?: boolean
-    parentId2?: boolean
+    bio?: boolean
+    picturePath?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    familyId?: boolean
   }
 
-  export type FamilyMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "gender" | "birthDate" | "deathDate" | "birthPlace" | "picture" | "parentId1" | "parentId2" | "createdAt" | "updatedAt" | "familyId", ExtArgs["result"]["familyMember"]>
-  export type FamilyMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    children1?: boolean | FamilyMember$children1Args<ExtArgs>
-    children2?: boolean | FamilyMember$children2Args<ExtArgs>
-    parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
-    parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    family?: boolean | FamilyDefaultArgs<ExtArgs>
-    _count?: boolean | FamilyMemberCountOutputTypeDefaultArgs<ExtArgs>
+  export type PersonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "gender" | "birthDate" | "deathDate" | "birthPlace" | "bio" | "picturePath" | "createdAt" | "updatedAt", ExtArgs["result"]["person"]>
+  export type PersonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    memberships?: boolean | Person$membershipsArgs<ExtArgs>
+    childEdges?: boolean | Person$childEdgesArgs<ExtArgs>
+    parentEdges?: boolean | Person$parentEdgesArgs<ExtArgs>
+    partnershipsA?: boolean | Person$partnershipsAArgs<ExtArgs>
+    partnershipsB?: boolean | Person$partnershipsBArgs<ExtArgs>
+    _count?: boolean | PersonCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type FamilyMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
-    parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    family?: boolean | FamilyDefaultArgs<ExtArgs>
-  }
-  export type FamilyMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    parent1?: boolean | FamilyMember$parent1Args<ExtArgs>
-    parent2?: boolean | FamilyMember$parent2Args<ExtArgs>
-    family?: boolean | FamilyDefaultArgs<ExtArgs>
-  }
+  export type PersonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PersonIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $FamilyMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "FamilyMember"
+  export type $PersonPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Person"
     objects: {
-      children1: Prisma.$FamilyMemberPayload<ExtArgs>[]
-      children2: Prisma.$FamilyMemberPayload<ExtArgs>[]
-      parent1: Prisma.$FamilyMemberPayload<ExtArgs> | null
-      parent2: Prisma.$FamilyMemberPayload<ExtArgs> | null
-      family: Prisma.$FamilyPayload<ExtArgs>
+      memberships: Prisma.$FamilyMembershipPayload<ExtArgs>[]
+      childEdges: Prisma.$ParentChildPayload<ExtArgs>[]
+      parentEdges: Prisma.$ParentChildPayload<ExtArgs>[]
+      partnershipsA: Prisma.$PartnershipPayload<ExtArgs>[]
+      partnershipsB: Prisma.$PartnershipPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4966,142 +5251,140 @@ export namespace Prisma {
       birthDate: Date | null
       deathDate: Date | null
       birthPlace: string | null
-      picture: Uint8Array | null
-      parentId1: number | null
-      parentId2: number | null
+      bio: string | null
+      picturePath: string | null
       createdAt: Date
       updatedAt: Date
-      familyId: number
-    }, ExtArgs["result"]["familyMember"]>
+    }, ExtArgs["result"]["person"]>
     composites: {}
   }
 
-  type FamilyMemberGetPayload<S extends boolean | null | undefined | FamilyMemberDefaultArgs> = $Result.GetResult<Prisma.$FamilyMemberPayload, S>
+  type PersonGetPayload<S extends boolean | null | undefined | PersonDefaultArgs> = $Result.GetResult<Prisma.$PersonPayload, S>
 
-  type FamilyMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<FamilyMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: FamilyMemberCountAggregateInputType | true
+  type PersonCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PersonFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PersonCountAggregateInputType | true
     }
 
-  export interface FamilyMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FamilyMember'], meta: { name: 'FamilyMember' } }
+  export interface PersonDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Person'], meta: { name: 'Person' } }
     /**
-     * Find zero or one FamilyMember that matches the filter.
-     * @param {FamilyMemberFindUniqueArgs} args - Arguments to find a FamilyMember
+     * Find zero or one Person that matches the filter.
+     * @param {PersonFindUniqueArgs} args - Arguments to find a Person
      * @example
-     * // Get one FamilyMember
-     * const familyMember = await prisma.familyMember.findUnique({
+     * // Get one Person
+     * const person = await prisma.person.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends FamilyMemberFindUniqueArgs>(args: SelectSubset<T, FamilyMemberFindUniqueArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends PersonFindUniqueArgs>(args: SelectSubset<T, PersonFindUniqueArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one FamilyMember that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Person that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {FamilyMemberFindUniqueOrThrowArgs} args - Arguments to find a FamilyMember
+     * @param {PersonFindUniqueOrThrowArgs} args - Arguments to find a Person
      * @example
-     * // Get one FamilyMember
-     * const familyMember = await prisma.familyMember.findUniqueOrThrow({
+     * // Get one Person
+     * const person = await prisma.person.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends FamilyMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, FamilyMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends PersonFindUniqueOrThrowArgs>(args: SelectSubset<T, PersonFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first FamilyMember that matches the filter.
+     * Find the first Person that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FamilyMemberFindFirstArgs} args - Arguments to find a FamilyMember
+     * @param {PersonFindFirstArgs} args - Arguments to find a Person
      * @example
-     * // Get one FamilyMember
-     * const familyMember = await prisma.familyMember.findFirst({
+     * // Get one Person
+     * const person = await prisma.person.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends FamilyMemberFindFirstArgs>(args?: SelectSubset<T, FamilyMemberFindFirstArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends PersonFindFirstArgs>(args?: SelectSubset<T, PersonFindFirstArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first FamilyMember that matches the filter or
+     * Find the first Person that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FamilyMemberFindFirstOrThrowArgs} args - Arguments to find a FamilyMember
+     * @param {PersonFindFirstOrThrowArgs} args - Arguments to find a Person
      * @example
-     * // Get one FamilyMember
-     * const familyMember = await prisma.familyMember.findFirstOrThrow({
+     * // Get one Person
+     * const person = await prisma.person.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends FamilyMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, FamilyMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends PersonFindFirstOrThrowArgs>(args?: SelectSubset<T, PersonFindFirstOrThrowArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more FamilyMembers that matches the filter.
+     * Find zero or more People that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FamilyMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {PersonFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all FamilyMembers
-     * const familyMembers = await prisma.familyMember.findMany()
+     * // Get all People
+     * const people = await prisma.person.findMany()
      * 
-     * // Get first 10 FamilyMembers
-     * const familyMembers = await prisma.familyMember.findMany({ take: 10 })
+     * // Get first 10 People
+     * const people = await prisma.person.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const familyMemberWithIdOnly = await prisma.familyMember.findMany({ select: { id: true } })
+     * const personWithIdOnly = await prisma.person.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends FamilyMemberFindManyArgs>(args?: SelectSubset<T, FamilyMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends PersonFindManyArgs>(args?: SelectSubset<T, PersonFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a FamilyMember.
-     * @param {FamilyMemberCreateArgs} args - Arguments to create a FamilyMember.
+     * Create a Person.
+     * @param {PersonCreateArgs} args - Arguments to create a Person.
      * @example
-     * // Create one FamilyMember
-     * const FamilyMember = await prisma.familyMember.create({
+     * // Create one Person
+     * const Person = await prisma.person.create({
      *   data: {
-     *     // ... data to create a FamilyMember
+     *     // ... data to create a Person
      *   }
      * })
      * 
      */
-    create<T extends FamilyMemberCreateArgs>(args: SelectSubset<T, FamilyMemberCreateArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends PersonCreateArgs>(args: SelectSubset<T, PersonCreateArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many FamilyMembers.
-     * @param {FamilyMemberCreateManyArgs} args - Arguments to create many FamilyMembers.
+     * Create many People.
+     * @param {PersonCreateManyArgs} args - Arguments to create many People.
      * @example
-     * // Create many FamilyMembers
-     * const familyMember = await prisma.familyMember.createMany({
+     * // Create many People
+     * const person = await prisma.person.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends FamilyMemberCreateManyArgs>(args?: SelectSubset<T, FamilyMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends PersonCreateManyArgs>(args?: SelectSubset<T, PersonCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many FamilyMembers and returns the data saved in the database.
-     * @param {FamilyMemberCreateManyAndReturnArgs} args - Arguments to create many FamilyMembers.
+     * Create many People and returns the data saved in the database.
+     * @param {PersonCreateManyAndReturnArgs} args - Arguments to create many People.
      * @example
-     * // Create many FamilyMembers
-     * const familyMember = await prisma.familyMember.createManyAndReturn({
+     * // Create many People
+     * const person = await prisma.person.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many FamilyMembers and only return the `id`
-     * const familyMemberWithIdOnly = await prisma.familyMember.createManyAndReturn({
+     * // Create many People and only return the `id`
+     * const personWithIdOnly = await prisma.person.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -5111,28 +5394,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends FamilyMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, FamilyMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends PersonCreateManyAndReturnArgs>(args?: SelectSubset<T, PersonCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a FamilyMember.
-     * @param {FamilyMemberDeleteArgs} args - Arguments to delete one FamilyMember.
+     * Delete a Person.
+     * @param {PersonDeleteArgs} args - Arguments to delete one Person.
      * @example
-     * // Delete one FamilyMember
-     * const FamilyMember = await prisma.familyMember.delete({
+     * // Delete one Person
+     * const Person = await prisma.person.delete({
      *   where: {
-     *     // ... filter to delete one FamilyMember
+     *     // ... filter to delete one Person
      *   }
      * })
      * 
      */
-    delete<T extends FamilyMemberDeleteArgs>(args: SelectSubset<T, FamilyMemberDeleteArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends PersonDeleteArgs>(args: SelectSubset<T, PersonDeleteArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one FamilyMember.
-     * @param {FamilyMemberUpdateArgs} args - Arguments to update one FamilyMember.
+     * Update one Person.
+     * @param {PersonUpdateArgs} args - Arguments to update one Person.
      * @example
-     * // Update one FamilyMember
-     * const familyMember = await prisma.familyMember.update({
+     * // Update one Person
+     * const person = await prisma.person.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5142,30 +5425,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends FamilyMemberUpdateArgs>(args: SelectSubset<T, FamilyMemberUpdateArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends PersonUpdateArgs>(args: SelectSubset<T, PersonUpdateArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more FamilyMembers.
-     * @param {FamilyMemberDeleteManyArgs} args - Arguments to filter FamilyMembers to delete.
+     * Delete zero or more People.
+     * @param {PersonDeleteManyArgs} args - Arguments to filter People to delete.
      * @example
-     * // Delete a few FamilyMembers
-     * const { count } = await prisma.familyMember.deleteMany({
+     * // Delete a few People
+     * const { count } = await prisma.person.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends FamilyMemberDeleteManyArgs>(args?: SelectSubset<T, FamilyMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends PersonDeleteManyArgs>(args?: SelectSubset<T, PersonDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more FamilyMembers.
+     * Update zero or more People.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FamilyMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {PersonUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many FamilyMembers
-     * const familyMember = await prisma.familyMember.updateMany({
+     * // Update many People
+     * const person = await prisma.person.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5175,14 +5458,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends FamilyMemberUpdateManyArgs>(args: SelectSubset<T, FamilyMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends PersonUpdateManyArgs>(args: SelectSubset<T, PersonUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more FamilyMembers and returns the data updated in the database.
-     * @param {FamilyMemberUpdateManyAndReturnArgs} args - Arguments to update many FamilyMembers.
+     * Update zero or more People and returns the data updated in the database.
+     * @param {PersonUpdateManyAndReturnArgs} args - Arguments to update many People.
      * @example
-     * // Update many FamilyMembers
-     * const familyMember = await prisma.familyMember.updateManyAndReturn({
+     * // Update many People
+     * const person = await prisma.person.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5191,8 +5474,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more FamilyMembers and only return the `id`
-     * const familyMemberWithIdOnly = await prisma.familyMember.updateManyAndReturn({
+     * // Update zero or more People and only return the `id`
+     * const personWithIdOnly = await prisma.person.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -5205,56 +5488,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends FamilyMemberUpdateManyAndReturnArgs>(args: SelectSubset<T, FamilyMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends PersonUpdateManyAndReturnArgs>(args: SelectSubset<T, PersonUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one FamilyMember.
-     * @param {FamilyMemberUpsertArgs} args - Arguments to update or create a FamilyMember.
+     * Create or update one Person.
+     * @param {PersonUpsertArgs} args - Arguments to update or create a Person.
      * @example
-     * // Update or create a FamilyMember
-     * const familyMember = await prisma.familyMember.upsert({
+     * // Update or create a Person
+     * const person = await prisma.person.upsert({
      *   create: {
-     *     // ... data to create a FamilyMember
+     *     // ... data to create a Person
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the FamilyMember we want to update
+     *     // ... the filter for the Person we want to update
      *   }
      * })
      */
-    upsert<T extends FamilyMemberUpsertArgs>(args: SelectSubset<T, FamilyMemberUpsertArgs<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends PersonUpsertArgs>(args: SelectSubset<T, PersonUpsertArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of FamilyMembers.
+     * Count the number of People.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FamilyMemberCountArgs} args - Arguments to filter FamilyMembers to count.
+     * @param {PersonCountArgs} args - Arguments to filter People to count.
      * @example
-     * // Count the number of FamilyMembers
-     * const count = await prisma.familyMember.count({
+     * // Count the number of People
+     * const count = await prisma.person.count({
      *   where: {
-     *     // ... the filter for the FamilyMembers we want to count
+     *     // ... the filter for the People we want to count
      *   }
      * })
     **/
-    count<T extends FamilyMemberCountArgs>(
-      args?: Subset<T, FamilyMemberCountArgs>,
+    count<T extends PersonCountArgs>(
+      args?: Subset<T, PersonCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], FamilyMemberCountAggregateOutputType>
+          : GetScalarType<T['select'], PersonCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a FamilyMember.
+     * Allows you to perform aggregations operations on a Person.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FamilyMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {PersonAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -5274,13 +5557,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends FamilyMemberAggregateArgs>(args: Subset<T, FamilyMemberAggregateArgs>): Prisma.PrismaPromise<GetFamilyMemberAggregateType<T>>
+    aggregate<T extends PersonAggregateArgs>(args: Subset<T, PersonAggregateArgs>): Prisma.PrismaPromise<GetPersonAggregateType<T>>
 
     /**
-     * Group by FamilyMember.
+     * Group by Person.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FamilyMemberGroupByArgs} args - Group by arguments.
+     * @param {PersonGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -5295,14 +5578,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends FamilyMemberGroupByArgs,
+      T extends PersonGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: FamilyMemberGroupByArgs['orderBy'] }
-        : { orderBy?: FamilyMemberGroupByArgs['orderBy'] },
+        ? { orderBy: PersonGroupByArgs['orderBy'] }
+        : { orderBy?: PersonGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -5351,25 +5634,1222 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, FamilyMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFamilyMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, PersonGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPersonGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the FamilyMember model
+   * Fields of the Person model
    */
-  readonly fields: FamilyMemberFieldRefs;
+  readonly fields: PersonFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for FamilyMember.
+   * The delegate class that acts as a "Promise-like" for Person.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__FamilyMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PersonClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    children1<T extends FamilyMember$children1Args<ExtArgs> = {}>(args?: Subset<T, FamilyMember$children1Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    children2<T extends FamilyMember$children2Args<ExtArgs> = {}>(args?: Subset<T, FamilyMember$children2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    parent1<T extends FamilyMember$parent1Args<ExtArgs> = {}>(args?: Subset<T, FamilyMember$parent1Args<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    parent2<T extends FamilyMember$parent2Args<ExtArgs> = {}>(args?: Subset<T, FamilyMember$parent2Args<ExtArgs>>): Prisma__FamilyMemberClient<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    memberships<T extends Person$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, Person$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    childEdges<T extends Person$childEdgesArgs<ExtArgs> = {}>(args?: Subset<T, Person$childEdgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    parentEdges<T extends Person$parentEdgesArgs<ExtArgs> = {}>(args?: Subset<T, Person$parentEdgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    partnershipsA<T extends Person$partnershipsAArgs<ExtArgs> = {}>(args?: Subset<T, Person$partnershipsAArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    partnershipsB<T extends Person$partnershipsBArgs<ExtArgs> = {}>(args?: Subset<T, Person$partnershipsBArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Person model
+   */
+  interface PersonFieldRefs {
+    readonly id: FieldRef<"Person", 'Int'>
+    readonly fullName: FieldRef<"Person", 'String'>
+    readonly gender: FieldRef<"Person", 'String'>
+    readonly birthDate: FieldRef<"Person", 'DateTime'>
+    readonly deathDate: FieldRef<"Person", 'DateTime'>
+    readonly birthPlace: FieldRef<"Person", 'String'>
+    readonly bio: FieldRef<"Person", 'String'>
+    readonly picturePath: FieldRef<"Person", 'String'>
+    readonly createdAt: FieldRef<"Person", 'DateTime'>
+    readonly updatedAt: FieldRef<"Person", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Person findUnique
+   */
+  export type PersonFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * Filter, which Person to fetch.
+     */
+    where: PersonWhereUniqueInput
+  }
+
+  /**
+   * Person findUniqueOrThrow
+   */
+  export type PersonFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * Filter, which Person to fetch.
+     */
+    where: PersonWhereUniqueInput
+  }
+
+  /**
+   * Person findFirst
+   */
+  export type PersonFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * Filter, which Person to fetch.
+     */
+    where?: PersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of People to fetch.
+     */
+    orderBy?: PersonOrderByWithRelationInput | PersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for People.
+     */
+    cursor?: PersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` People from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` People.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of People.
+     */
+    distinct?: PersonScalarFieldEnum | PersonScalarFieldEnum[]
+  }
+
+  /**
+   * Person findFirstOrThrow
+   */
+  export type PersonFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * Filter, which Person to fetch.
+     */
+    where?: PersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of People to fetch.
+     */
+    orderBy?: PersonOrderByWithRelationInput | PersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for People.
+     */
+    cursor?: PersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` People from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` People.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of People.
+     */
+    distinct?: PersonScalarFieldEnum | PersonScalarFieldEnum[]
+  }
+
+  /**
+   * Person findMany
+   */
+  export type PersonFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * Filter, which People to fetch.
+     */
+    where?: PersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of People to fetch.
+     */
+    orderBy?: PersonOrderByWithRelationInput | PersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing People.
+     */
+    cursor?: PersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` People from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` People.
+     */
+    skip?: number
+    distinct?: PersonScalarFieldEnum | PersonScalarFieldEnum[]
+  }
+
+  /**
+   * Person create
+   */
+  export type PersonCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Person.
+     */
+    data: XOR<PersonCreateInput, PersonUncheckedCreateInput>
+  }
+
+  /**
+   * Person createMany
+   */
+  export type PersonCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many People.
+     */
+    data: PersonCreateManyInput | PersonCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Person createManyAndReturn
+   */
+  export type PersonCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * The data used to create many People.
+     */
+    data: PersonCreateManyInput | PersonCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Person update
+   */
+  export type PersonUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Person.
+     */
+    data: XOR<PersonUpdateInput, PersonUncheckedUpdateInput>
+    /**
+     * Choose, which Person to update.
+     */
+    where: PersonWhereUniqueInput
+  }
+
+  /**
+   * Person updateMany
+   */
+  export type PersonUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update People.
+     */
+    data: XOR<PersonUpdateManyMutationInput, PersonUncheckedUpdateManyInput>
+    /**
+     * Filter which People to update
+     */
+    where?: PersonWhereInput
+    /**
+     * Limit how many People to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Person updateManyAndReturn
+   */
+  export type PersonUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * The data used to update People.
+     */
+    data: XOR<PersonUpdateManyMutationInput, PersonUncheckedUpdateManyInput>
+    /**
+     * Filter which People to update
+     */
+    where?: PersonWhereInput
+    /**
+     * Limit how many People to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Person upsert
+   */
+  export type PersonUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Person to update in case it exists.
+     */
+    where: PersonWhereUniqueInput
+    /**
+     * In case the Person found by the `where` argument doesn't exist, create a new Person with this data.
+     */
+    create: XOR<PersonCreateInput, PersonUncheckedCreateInput>
+    /**
+     * In case the Person was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PersonUpdateInput, PersonUncheckedUpdateInput>
+  }
+
+  /**
+   * Person delete
+   */
+  export type PersonDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+    /**
+     * Filter which Person to delete.
+     */
+    where: PersonWhereUniqueInput
+  }
+
+  /**
+   * Person deleteMany
+   */
+  export type PersonDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which People to delete
+     */
+    where?: PersonWhereInput
+    /**
+     * Limit how many People to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Person.memberships
+   */
+  export type Person$membershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyMembership
+     */
+    select?: FamilyMembershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyMembership
+     */
+    omit?: FamilyMembershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyMembershipInclude<ExtArgs> | null
+    where?: FamilyMembershipWhereInput
+    orderBy?: FamilyMembershipOrderByWithRelationInput | FamilyMembershipOrderByWithRelationInput[]
+    cursor?: FamilyMembershipWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FamilyMembershipScalarFieldEnum | FamilyMembershipScalarFieldEnum[]
+  }
+
+  /**
+   * Person.childEdges
+   */
+  export type Person$childEdgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    where?: ParentChildWhereInput
+    orderBy?: ParentChildOrderByWithRelationInput | ParentChildOrderByWithRelationInput[]
+    cursor?: ParentChildWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ParentChildScalarFieldEnum | ParentChildScalarFieldEnum[]
+  }
+
+  /**
+   * Person.parentEdges
+   */
+  export type Person$parentEdgesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    where?: ParentChildWhereInput
+    orderBy?: ParentChildOrderByWithRelationInput | ParentChildOrderByWithRelationInput[]
+    cursor?: ParentChildWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ParentChildScalarFieldEnum | ParentChildScalarFieldEnum[]
+  }
+
+  /**
+   * Person.partnershipsA
+   */
+  export type Person$partnershipsAArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    where?: PartnershipWhereInput
+    orderBy?: PartnershipOrderByWithRelationInput | PartnershipOrderByWithRelationInput[]
+    cursor?: PartnershipWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartnershipScalarFieldEnum | PartnershipScalarFieldEnum[]
+  }
+
+  /**
+   * Person.partnershipsB
+   */
+  export type Person$partnershipsBArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    where?: PartnershipWhereInput
+    orderBy?: PartnershipOrderByWithRelationInput | PartnershipOrderByWithRelationInput[]
+    cursor?: PartnershipWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartnershipScalarFieldEnum | PartnershipScalarFieldEnum[]
+  }
+
+  /**
+   * Person without action
+   */
+  export type PersonDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Person
+     */
+    select?: PersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Person
+     */
+    omit?: PersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FamilyMembership
+   */
+
+  export type AggregateFamilyMembership = {
+    _count: FamilyMembershipCountAggregateOutputType | null
+    _avg: FamilyMembershipAvgAggregateOutputType | null
+    _sum: FamilyMembershipSumAggregateOutputType | null
+    _min: FamilyMembershipMinAggregateOutputType | null
+    _max: FamilyMembershipMaxAggregateOutputType | null
+  }
+
+  export type FamilyMembershipAvgAggregateOutputType = {
+    personId: number | null
+    familyId: number | null
+  }
+
+  export type FamilyMembershipSumAggregateOutputType = {
+    personId: number | null
+    familyId: number | null
+  }
+
+  export type FamilyMembershipMinAggregateOutputType = {
+    personId: number | null
+    familyId: number | null
+    joinedAt: Date | null
+  }
+
+  export type FamilyMembershipMaxAggregateOutputType = {
+    personId: number | null
+    familyId: number | null
+    joinedAt: Date | null
+  }
+
+  export type FamilyMembershipCountAggregateOutputType = {
+    personId: number
+    familyId: number
+    joinedAt: number
+    _all: number
+  }
+
+
+  export type FamilyMembershipAvgAggregateInputType = {
+    personId?: true
+    familyId?: true
+  }
+
+  export type FamilyMembershipSumAggregateInputType = {
+    personId?: true
+    familyId?: true
+  }
+
+  export type FamilyMembershipMinAggregateInputType = {
+    personId?: true
+    familyId?: true
+    joinedAt?: true
+  }
+
+  export type FamilyMembershipMaxAggregateInputType = {
+    personId?: true
+    familyId?: true
+    joinedAt?: true
+  }
+
+  export type FamilyMembershipCountAggregateInputType = {
+    personId?: true
+    familyId?: true
+    joinedAt?: true
+    _all?: true
+  }
+
+  export type FamilyMembershipAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FamilyMembership to aggregate.
+     */
+    where?: FamilyMembershipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyMemberships to fetch.
+     */
+    orderBy?: FamilyMembershipOrderByWithRelationInput | FamilyMembershipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FamilyMembershipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyMemberships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyMemberships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FamilyMemberships
+    **/
+    _count?: true | FamilyMembershipCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FamilyMembershipAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FamilyMembershipSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FamilyMembershipMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FamilyMembershipMaxAggregateInputType
+  }
+
+  export type GetFamilyMembershipAggregateType<T extends FamilyMembershipAggregateArgs> = {
+        [P in keyof T & keyof AggregateFamilyMembership]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFamilyMembership[P]>
+      : GetScalarType<T[P], AggregateFamilyMembership[P]>
+  }
+
+
+
+
+  export type FamilyMembershipGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyMembershipWhereInput
+    orderBy?: FamilyMembershipOrderByWithAggregationInput | FamilyMembershipOrderByWithAggregationInput[]
+    by: FamilyMembershipScalarFieldEnum[] | FamilyMembershipScalarFieldEnum
+    having?: FamilyMembershipScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FamilyMembershipCountAggregateInputType | true
+    _avg?: FamilyMembershipAvgAggregateInputType
+    _sum?: FamilyMembershipSumAggregateInputType
+    _min?: FamilyMembershipMinAggregateInputType
+    _max?: FamilyMembershipMaxAggregateInputType
+  }
+
+  export type FamilyMembershipGroupByOutputType = {
+    personId: number
+    familyId: number
+    joinedAt: Date
+    _count: FamilyMembershipCountAggregateOutputType | null
+    _avg: FamilyMembershipAvgAggregateOutputType | null
+    _sum: FamilyMembershipSumAggregateOutputType | null
+    _min: FamilyMembershipMinAggregateOutputType | null
+    _max: FamilyMembershipMaxAggregateOutputType | null
+  }
+
+  type GetFamilyMembershipGroupByPayload<T extends FamilyMembershipGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FamilyMembershipGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FamilyMembershipGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FamilyMembershipGroupByOutputType[P]>
+            : GetScalarType<T[P], FamilyMembershipGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FamilyMembershipSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    personId?: boolean
+    familyId?: boolean
+    joinedAt?: boolean
+    person?: boolean | PersonDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["familyMembership"]>
+
+  export type FamilyMembershipSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    personId?: boolean
+    familyId?: boolean
+    joinedAt?: boolean
+    person?: boolean | PersonDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["familyMembership"]>
+
+  export type FamilyMembershipSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    personId?: boolean
+    familyId?: boolean
+    joinedAt?: boolean
+    person?: boolean | PersonDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["familyMembership"]>
+
+  export type FamilyMembershipSelectScalar = {
+    personId?: boolean
+    familyId?: boolean
+    joinedAt?: boolean
+  }
+
+  export type FamilyMembershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"personId" | "familyId" | "joinedAt", ExtArgs["result"]["familyMembership"]>
+  export type FamilyMembershipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    person?: boolean | PersonDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+  export type FamilyMembershipIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    person?: boolean | PersonDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+  export type FamilyMembershipIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    person?: boolean | PersonDefaultArgs<ExtArgs>
+    family?: boolean | FamilyDefaultArgs<ExtArgs>
+  }
+
+  export type $FamilyMembershipPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FamilyMembership"
+    objects: {
+      person: Prisma.$PersonPayload<ExtArgs>
+      family: Prisma.$FamilyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      personId: number
+      familyId: number
+      joinedAt: Date
+    }, ExtArgs["result"]["familyMembership"]>
+    composites: {}
+  }
+
+  type FamilyMembershipGetPayload<S extends boolean | null | undefined | FamilyMembershipDefaultArgs> = $Result.GetResult<Prisma.$FamilyMembershipPayload, S>
+
+  type FamilyMembershipCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FamilyMembershipFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FamilyMembershipCountAggregateInputType | true
+    }
+
+  export interface FamilyMembershipDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FamilyMembership'], meta: { name: 'FamilyMembership' } }
+    /**
+     * Find zero or one FamilyMembership that matches the filter.
+     * @param {FamilyMembershipFindUniqueArgs} args - Arguments to find a FamilyMembership
+     * @example
+     * // Get one FamilyMembership
+     * const familyMembership = await prisma.familyMembership.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FamilyMembershipFindUniqueArgs>(args: SelectSubset<T, FamilyMembershipFindUniqueArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FamilyMembership that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FamilyMembershipFindUniqueOrThrowArgs} args - Arguments to find a FamilyMembership
+     * @example
+     * // Get one FamilyMembership
+     * const familyMembership = await prisma.familyMembership.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FamilyMembershipFindUniqueOrThrowArgs>(args: SelectSubset<T, FamilyMembershipFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FamilyMembership that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMembershipFindFirstArgs} args - Arguments to find a FamilyMembership
+     * @example
+     * // Get one FamilyMembership
+     * const familyMembership = await prisma.familyMembership.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FamilyMembershipFindFirstArgs>(args?: SelectSubset<T, FamilyMembershipFindFirstArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FamilyMembership that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMembershipFindFirstOrThrowArgs} args - Arguments to find a FamilyMembership
+     * @example
+     * // Get one FamilyMembership
+     * const familyMembership = await prisma.familyMembership.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FamilyMembershipFindFirstOrThrowArgs>(args?: SelectSubset<T, FamilyMembershipFindFirstOrThrowArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FamilyMemberships that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMembershipFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FamilyMemberships
+     * const familyMemberships = await prisma.familyMembership.findMany()
+     * 
+     * // Get first 10 FamilyMemberships
+     * const familyMemberships = await prisma.familyMembership.findMany({ take: 10 })
+     * 
+     * // Only select the `personId`
+     * const familyMembershipWithPersonIdOnly = await prisma.familyMembership.findMany({ select: { personId: true } })
+     * 
+     */
+    findMany<T extends FamilyMembershipFindManyArgs>(args?: SelectSubset<T, FamilyMembershipFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FamilyMembership.
+     * @param {FamilyMembershipCreateArgs} args - Arguments to create a FamilyMembership.
+     * @example
+     * // Create one FamilyMembership
+     * const FamilyMembership = await prisma.familyMembership.create({
+     *   data: {
+     *     // ... data to create a FamilyMembership
+     *   }
+     * })
+     * 
+     */
+    create<T extends FamilyMembershipCreateArgs>(args: SelectSubset<T, FamilyMembershipCreateArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FamilyMemberships.
+     * @param {FamilyMembershipCreateManyArgs} args - Arguments to create many FamilyMemberships.
+     * @example
+     * // Create many FamilyMemberships
+     * const familyMembership = await prisma.familyMembership.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FamilyMembershipCreateManyArgs>(args?: SelectSubset<T, FamilyMembershipCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FamilyMemberships and returns the data saved in the database.
+     * @param {FamilyMembershipCreateManyAndReturnArgs} args - Arguments to create many FamilyMemberships.
+     * @example
+     * // Create many FamilyMemberships
+     * const familyMembership = await prisma.familyMembership.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FamilyMemberships and only return the `personId`
+     * const familyMembershipWithPersonIdOnly = await prisma.familyMembership.createManyAndReturn({
+     *   select: { personId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FamilyMembershipCreateManyAndReturnArgs>(args?: SelectSubset<T, FamilyMembershipCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FamilyMembership.
+     * @param {FamilyMembershipDeleteArgs} args - Arguments to delete one FamilyMembership.
+     * @example
+     * // Delete one FamilyMembership
+     * const FamilyMembership = await prisma.familyMembership.delete({
+     *   where: {
+     *     // ... filter to delete one FamilyMembership
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FamilyMembershipDeleteArgs>(args: SelectSubset<T, FamilyMembershipDeleteArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FamilyMembership.
+     * @param {FamilyMembershipUpdateArgs} args - Arguments to update one FamilyMembership.
+     * @example
+     * // Update one FamilyMembership
+     * const familyMembership = await prisma.familyMembership.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FamilyMembershipUpdateArgs>(args: SelectSubset<T, FamilyMembershipUpdateArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FamilyMemberships.
+     * @param {FamilyMembershipDeleteManyArgs} args - Arguments to filter FamilyMemberships to delete.
+     * @example
+     * // Delete a few FamilyMemberships
+     * const { count } = await prisma.familyMembership.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FamilyMembershipDeleteManyArgs>(args?: SelectSubset<T, FamilyMembershipDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FamilyMemberships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMembershipUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FamilyMemberships
+     * const familyMembership = await prisma.familyMembership.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FamilyMembershipUpdateManyArgs>(args: SelectSubset<T, FamilyMembershipUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FamilyMemberships and returns the data updated in the database.
+     * @param {FamilyMembershipUpdateManyAndReturnArgs} args - Arguments to update many FamilyMemberships.
+     * @example
+     * // Update many FamilyMemberships
+     * const familyMembership = await prisma.familyMembership.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FamilyMemberships and only return the `personId`
+     * const familyMembershipWithPersonIdOnly = await prisma.familyMembership.updateManyAndReturn({
+     *   select: { personId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FamilyMembershipUpdateManyAndReturnArgs>(args: SelectSubset<T, FamilyMembershipUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FamilyMembership.
+     * @param {FamilyMembershipUpsertArgs} args - Arguments to update or create a FamilyMembership.
+     * @example
+     * // Update or create a FamilyMembership
+     * const familyMembership = await prisma.familyMembership.upsert({
+     *   create: {
+     *     // ... data to create a FamilyMembership
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FamilyMembership we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FamilyMembershipUpsertArgs>(args: SelectSubset<T, FamilyMembershipUpsertArgs<ExtArgs>>): Prisma__FamilyMembershipClient<$Result.GetResult<Prisma.$FamilyMembershipPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FamilyMemberships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMembershipCountArgs} args - Arguments to filter FamilyMemberships to count.
+     * @example
+     * // Count the number of FamilyMemberships
+     * const count = await prisma.familyMembership.count({
+     *   where: {
+     *     // ... the filter for the FamilyMemberships we want to count
+     *   }
+     * })
+    **/
+    count<T extends FamilyMembershipCountArgs>(
+      args?: Subset<T, FamilyMembershipCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FamilyMembershipCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FamilyMembership.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMembershipAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FamilyMembershipAggregateArgs>(args: Subset<T, FamilyMembershipAggregateArgs>): Prisma.PrismaPromise<GetFamilyMembershipAggregateType<T>>
+
+    /**
+     * Group by FamilyMembership.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyMembershipGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FamilyMembershipGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FamilyMembershipGroupByArgs['orderBy'] }
+        : { orderBy?: FamilyMembershipGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FamilyMembershipGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFamilyMembershipGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FamilyMembership model
+   */
+  readonly fields: FamilyMembershipFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FamilyMembership.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FamilyMembershipClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    person<T extends PersonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PersonDefaultArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     family<T extends FamilyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FamilyDefaultArgs<ExtArgs>>): Prisma__FamilyClient<$Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5397,518 +6877,2648 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the FamilyMember model
+   * Fields of the FamilyMembership model
    */
-  interface FamilyMemberFieldRefs {
-    readonly id: FieldRef<"FamilyMember", 'Int'>
-    readonly fullName: FieldRef<"FamilyMember", 'String'>
-    readonly gender: FieldRef<"FamilyMember", 'String'>
-    readonly birthDate: FieldRef<"FamilyMember", 'DateTime'>
-    readonly deathDate: FieldRef<"FamilyMember", 'DateTime'>
-    readonly birthPlace: FieldRef<"FamilyMember", 'String'>
-    readonly picture: FieldRef<"FamilyMember", 'Bytes'>
-    readonly parentId1: FieldRef<"FamilyMember", 'Int'>
-    readonly parentId2: FieldRef<"FamilyMember", 'Int'>
-    readonly createdAt: FieldRef<"FamilyMember", 'DateTime'>
-    readonly updatedAt: FieldRef<"FamilyMember", 'DateTime'>
-    readonly familyId: FieldRef<"FamilyMember", 'Int'>
+  interface FamilyMembershipFieldRefs {
+    readonly personId: FieldRef<"FamilyMembership", 'Int'>
+    readonly familyId: FieldRef<"FamilyMembership", 'Int'>
+    readonly joinedAt: FieldRef<"FamilyMembership", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * FamilyMember findUnique
+   * FamilyMembership findUnique
    */
-  export type FamilyMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * Filter, which FamilyMember to fetch.
+     * Filter, which FamilyMembership to fetch.
      */
-    where: FamilyMemberWhereUniqueInput
+    where: FamilyMembershipWhereUniqueInput
   }
 
   /**
-   * FamilyMember findUniqueOrThrow
+   * FamilyMembership findUniqueOrThrow
    */
-  export type FamilyMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * Filter, which FamilyMember to fetch.
+     * Filter, which FamilyMembership to fetch.
      */
-    where: FamilyMemberWhereUniqueInput
+    where: FamilyMembershipWhereUniqueInput
   }
 
   /**
-   * FamilyMember findFirst
+   * FamilyMembership findFirst
    */
-  export type FamilyMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * Filter, which FamilyMember to fetch.
+     * Filter, which FamilyMembership to fetch.
      */
-    where?: FamilyMemberWhereInput
+    where?: FamilyMembershipWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FamilyMembers to fetch.
+     * Determine the order of FamilyMemberships to fetch.
      */
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    orderBy?: FamilyMembershipOrderByWithRelationInput | FamilyMembershipOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for FamilyMembers.
+     * Sets the position for searching for FamilyMemberships.
      */
-    cursor?: FamilyMemberWhereUniqueInput
+    cursor?: FamilyMembershipWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FamilyMembers from the position of the cursor.
+     * Take `±n` FamilyMemberships from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FamilyMembers.
+     * Skip the first `n` FamilyMemberships.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of FamilyMembers.
+     * Filter by unique combinations of FamilyMemberships.
      */
-    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+    distinct?: FamilyMembershipScalarFieldEnum | FamilyMembershipScalarFieldEnum[]
   }
 
   /**
-   * FamilyMember findFirstOrThrow
+   * FamilyMembership findFirstOrThrow
    */
-  export type FamilyMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * Filter, which FamilyMember to fetch.
+     * Filter, which FamilyMembership to fetch.
      */
-    where?: FamilyMemberWhereInput
+    where?: FamilyMembershipWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FamilyMembers to fetch.
+     * Determine the order of FamilyMemberships to fetch.
      */
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    orderBy?: FamilyMembershipOrderByWithRelationInput | FamilyMembershipOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for FamilyMembers.
+     * Sets the position for searching for FamilyMemberships.
      */
-    cursor?: FamilyMemberWhereUniqueInput
+    cursor?: FamilyMembershipWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FamilyMembers from the position of the cursor.
+     * Take `±n` FamilyMemberships from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FamilyMembers.
+     * Skip the first `n` FamilyMemberships.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of FamilyMembers.
+     * Filter by unique combinations of FamilyMemberships.
      */
-    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+    distinct?: FamilyMembershipScalarFieldEnum | FamilyMembershipScalarFieldEnum[]
   }
 
   /**
-   * FamilyMember findMany
+   * FamilyMembership findMany
    */
-  export type FamilyMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * Filter, which FamilyMembers to fetch.
+     * Filter, which FamilyMemberships to fetch.
      */
-    where?: FamilyMemberWhereInput
+    where?: FamilyMembershipWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of FamilyMembers to fetch.
+     * Determine the order of FamilyMemberships to fetch.
      */
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
+    orderBy?: FamilyMembershipOrderByWithRelationInput | FamilyMembershipOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing FamilyMembers.
+     * Sets the position for listing FamilyMemberships.
      */
-    cursor?: FamilyMemberWhereUniqueInput
+    cursor?: FamilyMembershipWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` FamilyMembers from the position of the cursor.
+     * Take `±n` FamilyMemberships from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` FamilyMembers.
+     * Skip the first `n` FamilyMemberships.
      */
     skip?: number
-    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+    distinct?: FamilyMembershipScalarFieldEnum | FamilyMembershipScalarFieldEnum[]
   }
 
   /**
-   * FamilyMember create
+   * FamilyMembership create
    */
-  export type FamilyMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * The data needed to create a FamilyMember.
+     * The data needed to create a FamilyMembership.
      */
-    data: XOR<FamilyMemberCreateInput, FamilyMemberUncheckedCreateInput>
+    data: XOR<FamilyMembershipCreateInput, FamilyMembershipUncheckedCreateInput>
   }
 
   /**
-   * FamilyMember createMany
+   * FamilyMembership createMany
    */
-  export type FamilyMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many FamilyMembers.
+     * The data used to create many FamilyMemberships.
      */
-    data: FamilyMemberCreateManyInput | FamilyMemberCreateManyInput[]
+    data: FamilyMembershipCreateManyInput | FamilyMembershipCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * FamilyMember createManyAndReturn
+   * FamilyMembership createManyAndReturn
    */
-  export type FamilyMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelectCreateManyAndReturn<ExtArgs> | null
+    select?: FamilyMembershipSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
-     * The data used to create many FamilyMembers.
+     * The data used to create many FamilyMemberships.
      */
-    data: FamilyMemberCreateManyInput | FamilyMemberCreateManyInput[]
+    data: FamilyMembershipCreateManyInput | FamilyMembershipCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: FamilyMembershipIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * FamilyMember update
+   * FamilyMembership update
    */
-  export type FamilyMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * The data needed to update a FamilyMember.
+     * The data needed to update a FamilyMembership.
      */
-    data: XOR<FamilyMemberUpdateInput, FamilyMemberUncheckedUpdateInput>
+    data: XOR<FamilyMembershipUpdateInput, FamilyMembershipUncheckedUpdateInput>
     /**
-     * Choose, which FamilyMember to update.
+     * Choose, which FamilyMembership to update.
      */
-    where: FamilyMemberWhereUniqueInput
+    where: FamilyMembershipWhereUniqueInput
   }
 
   /**
-   * FamilyMember updateMany
+   * FamilyMembership updateMany
    */
-  export type FamilyMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update FamilyMembers.
+     * The data used to update FamilyMemberships.
      */
-    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyInput>
+    data: XOR<FamilyMembershipUpdateManyMutationInput, FamilyMembershipUncheckedUpdateManyInput>
     /**
-     * Filter which FamilyMembers to update
+     * Filter which FamilyMemberships to update
      */
-    where?: FamilyMemberWhereInput
+    where?: FamilyMembershipWhereInput
     /**
-     * Limit how many FamilyMembers to update.
+     * Limit how many FamilyMemberships to update.
      */
     limit?: number
   }
 
   /**
-   * FamilyMember updateManyAndReturn
+   * FamilyMembership updateManyAndReturn
    */
-  export type FamilyMemberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: FamilyMembershipSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
-     * The data used to update FamilyMembers.
+     * The data used to update FamilyMemberships.
      */
-    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyInput>
+    data: XOR<FamilyMembershipUpdateManyMutationInput, FamilyMembershipUncheckedUpdateManyInput>
     /**
-     * Filter which FamilyMembers to update
+     * Filter which FamilyMemberships to update
      */
-    where?: FamilyMemberWhereInput
+    where?: FamilyMembershipWhereInput
     /**
-     * Limit how many FamilyMembers to update.
+     * Limit how many FamilyMemberships to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: FamilyMembershipIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * FamilyMember upsert
+   * FamilyMembership upsert
    */
-  export type FamilyMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * The filter to search for the FamilyMember to update in case it exists.
+     * The filter to search for the FamilyMembership to update in case it exists.
      */
-    where: FamilyMemberWhereUniqueInput
+    where: FamilyMembershipWhereUniqueInput
     /**
-     * In case the FamilyMember found by the `where` argument doesn't exist, create a new FamilyMember with this data.
+     * In case the FamilyMembership found by the `where` argument doesn't exist, create a new FamilyMembership with this data.
      */
-    create: XOR<FamilyMemberCreateInput, FamilyMemberUncheckedCreateInput>
+    create: XOR<FamilyMembershipCreateInput, FamilyMembershipUncheckedCreateInput>
     /**
-     * In case the FamilyMember was found with the provided `where` argument, update it with this data.
+     * In case the FamilyMembership was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<FamilyMemberUpdateInput, FamilyMemberUncheckedUpdateInput>
+    update: XOR<FamilyMembershipUpdateInput, FamilyMembershipUncheckedUpdateInput>
   }
 
   /**
-   * FamilyMember delete
+   * FamilyMembership delete
    */
-  export type FamilyMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: FamilyMembershipInclude<ExtArgs> | null
     /**
-     * Filter which FamilyMember to delete.
+     * Filter which FamilyMembership to delete.
      */
-    where: FamilyMemberWhereUniqueInput
+    where: FamilyMembershipWhereUniqueInput
   }
 
   /**
-   * FamilyMember deleteMany
+   * FamilyMembership deleteMany
    */
-  export type FamilyMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which FamilyMembers to delete
+     * Filter which FamilyMemberships to delete
      */
-    where?: FamilyMemberWhereInput
+    where?: FamilyMembershipWhereInput
     /**
-     * Limit how many FamilyMembers to delete.
+     * Limit how many FamilyMemberships to delete.
      */
     limit?: number
   }
 
   /**
-   * FamilyMember.children1
+   * FamilyMembership without action
    */
-  export type FamilyMember$children1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FamilyMembershipDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the FamilyMembership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: FamilyMembershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the FamilyMembership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: FamilyMembershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
-    where?: FamilyMemberWhereInput
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
-    cursor?: FamilyMemberWhereUniqueInput
+    include?: FamilyMembershipInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ParentChild
+   */
+
+  export type AggregateParentChild = {
+    _count: ParentChildCountAggregateOutputType | null
+    _avg: ParentChildAvgAggregateOutputType | null
+    _sum: ParentChildSumAggregateOutputType | null
+    _min: ParentChildMinAggregateOutputType | null
+    _max: ParentChildMaxAggregateOutputType | null
+  }
+
+  export type ParentChildAvgAggregateOutputType = {
+    childId: number | null
+    parentId: number | null
+  }
+
+  export type ParentChildSumAggregateOutputType = {
+    childId: number | null
+    parentId: number | null
+  }
+
+  export type ParentChildMinAggregateOutputType = {
+    childId: number | null
+    parentId: number | null
+    role: $Enums.ParentRole | null
+  }
+
+  export type ParentChildMaxAggregateOutputType = {
+    childId: number | null
+    parentId: number | null
+    role: $Enums.ParentRole | null
+  }
+
+  export type ParentChildCountAggregateOutputType = {
+    childId: number
+    parentId: number
+    role: number
+    _all: number
+  }
+
+
+  export type ParentChildAvgAggregateInputType = {
+    childId?: true
+    parentId?: true
+  }
+
+  export type ParentChildSumAggregateInputType = {
+    childId?: true
+    parentId?: true
+  }
+
+  export type ParentChildMinAggregateInputType = {
+    childId?: true
+    parentId?: true
+    role?: true
+  }
+
+  export type ParentChildMaxAggregateInputType = {
+    childId?: true
+    parentId?: true
+    role?: true
+  }
+
+  export type ParentChildCountAggregateInputType = {
+    childId?: true
+    parentId?: true
+    role?: true
+    _all?: true
+  }
+
+  export type ParentChildAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ParentChild to aggregate.
+     */
+    where?: ParentChildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParentChildren to fetch.
+     */
+    orderBy?: ParentChildOrderByWithRelationInput | ParentChildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ParentChildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParentChildren from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParentChildren.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ParentChildren
+    **/
+    _count?: true | ParentChildCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ParentChildAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ParentChildSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ParentChildMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ParentChildMaxAggregateInputType
+  }
+
+  export type GetParentChildAggregateType<T extends ParentChildAggregateArgs> = {
+        [P in keyof T & keyof AggregateParentChild]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateParentChild[P]>
+      : GetScalarType<T[P], AggregateParentChild[P]>
+  }
+
+
+
+
+  export type ParentChildGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParentChildWhereInput
+    orderBy?: ParentChildOrderByWithAggregationInput | ParentChildOrderByWithAggregationInput[]
+    by: ParentChildScalarFieldEnum[] | ParentChildScalarFieldEnum
+    having?: ParentChildScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+    _count?: ParentChildCountAggregateInputType | true
+    _avg?: ParentChildAvgAggregateInputType
+    _sum?: ParentChildSumAggregateInputType
+    _min?: ParentChildMinAggregateInputType
+    _max?: ParentChildMaxAggregateInputType
+  }
+
+  export type ParentChildGroupByOutputType = {
+    childId: number
+    parentId: number
+    role: $Enums.ParentRole
+    _count: ParentChildCountAggregateOutputType | null
+    _avg: ParentChildAvgAggregateOutputType | null
+    _sum: ParentChildSumAggregateOutputType | null
+    _min: ParentChildMinAggregateOutputType | null
+    _max: ParentChildMaxAggregateOutputType | null
+  }
+
+  type GetParentChildGroupByPayload<T extends ParentChildGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ParentChildGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ParentChildGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ParentChildGroupByOutputType[P]>
+            : GetScalarType<T[P], ParentChildGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ParentChildSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    childId?: boolean
+    parentId?: boolean
+    role?: boolean
+    child?: boolean | PersonDefaultArgs<ExtArgs>
+    parent?: boolean | PersonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["parentChild"]>
+
+  export type ParentChildSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    childId?: boolean
+    parentId?: boolean
+    role?: boolean
+    child?: boolean | PersonDefaultArgs<ExtArgs>
+    parent?: boolean | PersonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["parentChild"]>
+
+  export type ParentChildSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    childId?: boolean
+    parentId?: boolean
+    role?: boolean
+    child?: boolean | PersonDefaultArgs<ExtArgs>
+    parent?: boolean | PersonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["parentChild"]>
+
+  export type ParentChildSelectScalar = {
+    childId?: boolean
+    parentId?: boolean
+    role?: boolean
+  }
+
+  export type ParentChildOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"childId" | "parentId" | "role", ExtArgs["result"]["parentChild"]>
+  export type ParentChildInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    child?: boolean | PersonDefaultArgs<ExtArgs>
+    parent?: boolean | PersonDefaultArgs<ExtArgs>
+  }
+  export type ParentChildIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    child?: boolean | PersonDefaultArgs<ExtArgs>
+    parent?: boolean | PersonDefaultArgs<ExtArgs>
+  }
+  export type ParentChildIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    child?: boolean | PersonDefaultArgs<ExtArgs>
+    parent?: boolean | PersonDefaultArgs<ExtArgs>
+  }
+
+  export type $ParentChildPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ParentChild"
+    objects: {
+      child: Prisma.$PersonPayload<ExtArgs>
+      parent: Prisma.$PersonPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      childId: number
+      parentId: number
+      role: $Enums.ParentRole
+    }, ExtArgs["result"]["parentChild"]>
+    composites: {}
+  }
+
+  type ParentChildGetPayload<S extends boolean | null | undefined | ParentChildDefaultArgs> = $Result.GetResult<Prisma.$ParentChildPayload, S>
+
+  type ParentChildCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ParentChildFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ParentChildCountAggregateInputType | true
+    }
+
+  export interface ParentChildDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ParentChild'], meta: { name: 'ParentChild' } }
+    /**
+     * Find zero or one ParentChild that matches the filter.
+     * @param {ParentChildFindUniqueArgs} args - Arguments to find a ParentChild
+     * @example
+     * // Get one ParentChild
+     * const parentChild = await prisma.parentChild.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ParentChildFindUniqueArgs>(args: SelectSubset<T, ParentChildFindUniqueArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ParentChild that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ParentChildFindUniqueOrThrowArgs} args - Arguments to find a ParentChild
+     * @example
+     * // Get one ParentChild
+     * const parentChild = await prisma.parentChild.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ParentChildFindUniqueOrThrowArgs>(args: SelectSubset<T, ParentChildFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ParentChild that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParentChildFindFirstArgs} args - Arguments to find a ParentChild
+     * @example
+     * // Get one ParentChild
+     * const parentChild = await prisma.parentChild.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ParentChildFindFirstArgs>(args?: SelectSubset<T, ParentChildFindFirstArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ParentChild that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParentChildFindFirstOrThrowArgs} args - Arguments to find a ParentChild
+     * @example
+     * // Get one ParentChild
+     * const parentChild = await prisma.parentChild.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ParentChildFindFirstOrThrowArgs>(args?: SelectSubset<T, ParentChildFindFirstOrThrowArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ParentChildren that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParentChildFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ParentChildren
+     * const parentChildren = await prisma.parentChild.findMany()
+     * 
+     * // Get first 10 ParentChildren
+     * const parentChildren = await prisma.parentChild.findMany({ take: 10 })
+     * 
+     * // Only select the `childId`
+     * const parentChildWithChildIdOnly = await prisma.parentChild.findMany({ select: { childId: true } })
+     * 
+     */
+    findMany<T extends ParentChildFindManyArgs>(args?: SelectSubset<T, ParentChildFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ParentChild.
+     * @param {ParentChildCreateArgs} args - Arguments to create a ParentChild.
+     * @example
+     * // Create one ParentChild
+     * const ParentChild = await prisma.parentChild.create({
+     *   data: {
+     *     // ... data to create a ParentChild
+     *   }
+     * })
+     * 
+     */
+    create<T extends ParentChildCreateArgs>(args: SelectSubset<T, ParentChildCreateArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ParentChildren.
+     * @param {ParentChildCreateManyArgs} args - Arguments to create many ParentChildren.
+     * @example
+     * // Create many ParentChildren
+     * const parentChild = await prisma.parentChild.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ParentChildCreateManyArgs>(args?: SelectSubset<T, ParentChildCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ParentChildren and returns the data saved in the database.
+     * @param {ParentChildCreateManyAndReturnArgs} args - Arguments to create many ParentChildren.
+     * @example
+     * // Create many ParentChildren
+     * const parentChild = await prisma.parentChild.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ParentChildren and only return the `childId`
+     * const parentChildWithChildIdOnly = await prisma.parentChild.createManyAndReturn({
+     *   select: { childId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ParentChildCreateManyAndReturnArgs>(args?: SelectSubset<T, ParentChildCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ParentChild.
+     * @param {ParentChildDeleteArgs} args - Arguments to delete one ParentChild.
+     * @example
+     * // Delete one ParentChild
+     * const ParentChild = await prisma.parentChild.delete({
+     *   where: {
+     *     // ... filter to delete one ParentChild
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ParentChildDeleteArgs>(args: SelectSubset<T, ParentChildDeleteArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ParentChild.
+     * @param {ParentChildUpdateArgs} args - Arguments to update one ParentChild.
+     * @example
+     * // Update one ParentChild
+     * const parentChild = await prisma.parentChild.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ParentChildUpdateArgs>(args: SelectSubset<T, ParentChildUpdateArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ParentChildren.
+     * @param {ParentChildDeleteManyArgs} args - Arguments to filter ParentChildren to delete.
+     * @example
+     * // Delete a few ParentChildren
+     * const { count } = await prisma.parentChild.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ParentChildDeleteManyArgs>(args?: SelectSubset<T, ParentChildDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ParentChildren.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParentChildUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ParentChildren
+     * const parentChild = await prisma.parentChild.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ParentChildUpdateManyArgs>(args: SelectSubset<T, ParentChildUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ParentChildren and returns the data updated in the database.
+     * @param {ParentChildUpdateManyAndReturnArgs} args - Arguments to update many ParentChildren.
+     * @example
+     * // Update many ParentChildren
+     * const parentChild = await prisma.parentChild.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ParentChildren and only return the `childId`
+     * const parentChildWithChildIdOnly = await prisma.parentChild.updateManyAndReturn({
+     *   select: { childId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ParentChildUpdateManyAndReturnArgs>(args: SelectSubset<T, ParentChildUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ParentChild.
+     * @param {ParentChildUpsertArgs} args - Arguments to update or create a ParentChild.
+     * @example
+     * // Update or create a ParentChild
+     * const parentChild = await prisma.parentChild.upsert({
+     *   create: {
+     *     // ... data to create a ParentChild
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ParentChild we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ParentChildUpsertArgs>(args: SelectSubset<T, ParentChildUpsertArgs<ExtArgs>>): Prisma__ParentChildClient<$Result.GetResult<Prisma.$ParentChildPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ParentChildren.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParentChildCountArgs} args - Arguments to filter ParentChildren to count.
+     * @example
+     * // Count the number of ParentChildren
+     * const count = await prisma.parentChild.count({
+     *   where: {
+     *     // ... the filter for the ParentChildren we want to count
+     *   }
+     * })
+    **/
+    count<T extends ParentChildCountArgs>(
+      args?: Subset<T, ParentChildCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ParentChildCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ParentChild.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParentChildAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ParentChildAggregateArgs>(args: Subset<T, ParentChildAggregateArgs>): Prisma.PrismaPromise<GetParentChildAggregateType<T>>
+
+    /**
+     * Group by ParentChild.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParentChildGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ParentChildGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ParentChildGroupByArgs['orderBy'] }
+        : { orderBy?: ParentChildGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ParentChildGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetParentChildGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ParentChild model
+   */
+  readonly fields: ParentChildFieldRefs;
   }
 
   /**
-   * FamilyMember.children2
+   * The delegate class that acts as a "Promise-like" for ParentChild.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export type FamilyMember$children2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export interface Prisma__ParentChildClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    child<T extends PersonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PersonDefaultArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    parent<T extends PersonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PersonDefaultArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
     /**
-     * Omit specific fields from the FamilyMember
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ParentChild model
+   */
+  interface ParentChildFieldRefs {
+    readonly childId: FieldRef<"ParentChild", 'Int'>
+    readonly parentId: FieldRef<"ParentChild", 'Int'>
+    readonly role: FieldRef<"ParentChild", 'ParentRole'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ParentChild findUnique
+   */
+  export type ParentChildFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
-    where?: FamilyMemberWhereInput
-    orderBy?: FamilyMemberOrderByWithRelationInput | FamilyMemberOrderByWithRelationInput[]
-    cursor?: FamilyMemberWhereUniqueInput
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * Filter, which ParentChild to fetch.
+     */
+    where: ParentChildWhereUniqueInput
+  }
+
+  /**
+   * ParentChild findUniqueOrThrow
+   */
+  export type ParentChildFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * Filter, which ParentChild to fetch.
+     */
+    where: ParentChildWhereUniqueInput
+  }
+
+  /**
+   * ParentChild findFirst
+   */
+  export type ParentChildFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * Filter, which ParentChild to fetch.
+     */
+    where?: ParentChildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParentChildren to fetch.
+     */
+    orderBy?: ParentChildOrderByWithRelationInput | ParentChildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ParentChildren.
+     */
+    cursor?: ParentChildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParentChildren from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParentChildren.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ParentChildren.
+     */
+    distinct?: ParentChildScalarFieldEnum | ParentChildScalarFieldEnum[]
+  }
+
+  /**
+   * ParentChild findFirstOrThrow
+   */
+  export type ParentChildFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * Filter, which ParentChild to fetch.
+     */
+    where?: ParentChildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParentChildren to fetch.
+     */
+    orderBy?: ParentChildOrderByWithRelationInput | ParentChildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ParentChildren.
+     */
+    cursor?: ParentChildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParentChildren from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParentChildren.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ParentChildren.
+     */
+    distinct?: ParentChildScalarFieldEnum | ParentChildScalarFieldEnum[]
+  }
+
+  /**
+   * ParentChild findMany
+   */
+  export type ParentChildFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * Filter, which ParentChildren to fetch.
+     */
+    where?: ParentChildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ParentChildren to fetch.
+     */
+    orderBy?: ParentChildOrderByWithRelationInput | ParentChildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ParentChildren.
+     */
+    cursor?: ParentChildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ParentChildren from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ParentChildren.
+     */
+    skip?: number
+    distinct?: ParentChildScalarFieldEnum | ParentChildScalarFieldEnum[]
+  }
+
+  /**
+   * ParentChild create
+   */
+  export type ParentChildCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ParentChild.
+     */
+    data: XOR<ParentChildCreateInput, ParentChildUncheckedCreateInput>
+  }
+
+  /**
+   * ParentChild createMany
+   */
+  export type ParentChildCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ParentChildren.
+     */
+    data: ParentChildCreateManyInput | ParentChildCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ParentChild createManyAndReturn
+   */
+  export type ParentChildCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * The data used to create many ParentChildren.
+     */
+    data: ParentChildCreateManyInput | ParentChildCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ParentChild update
+   */
+  export type ParentChildUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ParentChild.
+     */
+    data: XOR<ParentChildUpdateInput, ParentChildUncheckedUpdateInput>
+    /**
+     * Choose, which ParentChild to update.
+     */
+    where: ParentChildWhereUniqueInput
+  }
+
+  /**
+   * ParentChild updateMany
+   */
+  export type ParentChildUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ParentChildren.
+     */
+    data: XOR<ParentChildUpdateManyMutationInput, ParentChildUncheckedUpdateManyInput>
+    /**
+     * Filter which ParentChildren to update
+     */
+    where?: ParentChildWhereInput
+    /**
+     * Limit how many ParentChildren to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ParentChild updateManyAndReturn
+   */
+  export type ParentChildUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * The data used to update ParentChildren.
+     */
+    data: XOR<ParentChildUpdateManyMutationInput, ParentChildUncheckedUpdateManyInput>
+    /**
+     * Filter which ParentChildren to update
+     */
+    where?: ParentChildWhereInput
+    /**
+     * Limit how many ParentChildren to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ParentChild upsert
+   */
+  export type ParentChildUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ParentChild to update in case it exists.
+     */
+    where: ParentChildWhereUniqueInput
+    /**
+     * In case the ParentChild found by the `where` argument doesn't exist, create a new ParentChild with this data.
+     */
+    create: XOR<ParentChildCreateInput, ParentChildUncheckedCreateInput>
+    /**
+     * In case the ParentChild was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ParentChildUpdateInput, ParentChildUncheckedUpdateInput>
+  }
+
+  /**
+   * ParentChild delete
+   */
+  export type ParentChildDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+    /**
+     * Filter which ParentChild to delete.
+     */
+    where: ParentChildWhereUniqueInput
+  }
+
+  /**
+   * ParentChild deleteMany
+   */
+  export type ParentChildDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ParentChildren to delete
+     */
+    where?: ParentChildWhereInput
+    /**
+     * Limit how many ParentChildren to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ParentChild without action
+   */
+  export type ParentChildDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentChild
+     */
+    select?: ParentChildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentChild
+     */
+    omit?: ParentChildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentChildInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Partnership
+   */
+
+  export type AggregatePartnership = {
+    _count: PartnershipCountAggregateOutputType | null
+    _avg: PartnershipAvgAggregateOutputType | null
+    _sum: PartnershipSumAggregateOutputType | null
+    _min: PartnershipMinAggregateOutputType | null
+    _max: PartnershipMaxAggregateOutputType | null
+  }
+
+  export type PartnershipAvgAggregateOutputType = {
+    id: number | null
+    personAId: number | null
+    personBId: number | null
+  }
+
+  export type PartnershipSumAggregateOutputType = {
+    id: number | null
+    personAId: number | null
+    personBId: number | null
+  }
+
+  export type PartnershipMinAggregateOutputType = {
+    id: number | null
+    personAId: number | null
+    personBId: number | null
+    kind: $Enums.PartnershipKind | null
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PartnershipMaxAggregateOutputType = {
+    id: number | null
+    personAId: number | null
+    personBId: number | null
+    kind: $Enums.PartnershipKind | null
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PartnershipCountAggregateOutputType = {
+    id: number
+    personAId: number
+    personBId: number
+    kind: number
+    startDate: number
+    endDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PartnershipAvgAggregateInputType = {
+    id?: true
+    personAId?: true
+    personBId?: true
+  }
+
+  export type PartnershipSumAggregateInputType = {
+    id?: true
+    personAId?: true
+    personBId?: true
+  }
+
+  export type PartnershipMinAggregateInputType = {
+    id?: true
+    personAId?: true
+    personBId?: true
+    kind?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PartnershipMaxAggregateInputType = {
+    id?: true
+    personAId?: true
+    personBId?: true
+    kind?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PartnershipCountAggregateInputType = {
+    id?: true
+    personAId?: true
+    personBId?: true
+    kind?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PartnershipAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Partnership to aggregate.
+     */
+    where?: PartnershipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partnerships to fetch.
+     */
+    orderBy?: PartnershipOrderByWithRelationInput | PartnershipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PartnershipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partnerships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partnerships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Partnerships
+    **/
+    _count?: true | PartnershipCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PartnershipAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PartnershipSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PartnershipMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PartnershipMaxAggregateInputType
+  }
+
+  export type GetPartnershipAggregateType<T extends PartnershipAggregateArgs> = {
+        [P in keyof T & keyof AggregatePartnership]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePartnership[P]>
+      : GetScalarType<T[P], AggregatePartnership[P]>
+  }
+
+
+
+
+  export type PartnershipGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnershipWhereInput
+    orderBy?: PartnershipOrderByWithAggregationInput | PartnershipOrderByWithAggregationInput[]
+    by: PartnershipScalarFieldEnum[] | PartnershipScalarFieldEnum
+    having?: PartnershipScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    distinct?: FamilyMemberScalarFieldEnum | FamilyMemberScalarFieldEnum[]
+    _count?: PartnershipCountAggregateInputType | true
+    _avg?: PartnershipAvgAggregateInputType
+    _sum?: PartnershipSumAggregateInputType
+    _min?: PartnershipMinAggregateInputType
+    _max?: PartnershipMaxAggregateInputType
+  }
+
+  export type PartnershipGroupByOutputType = {
+    id: number
+    personAId: number
+    personBId: number
+    kind: $Enums.PartnershipKind
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PartnershipCountAggregateOutputType | null
+    _avg: PartnershipAvgAggregateOutputType | null
+    _sum: PartnershipSumAggregateOutputType | null
+    _min: PartnershipMinAggregateOutputType | null
+    _max: PartnershipMaxAggregateOutputType | null
+  }
+
+  type GetPartnershipGroupByPayload<T extends PartnershipGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PartnershipGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PartnershipGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PartnershipGroupByOutputType[P]>
+            : GetScalarType<T[P], PartnershipGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PartnershipSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    personAId?: boolean
+    personBId?: boolean
+    kind?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    personA?: boolean | PersonDefaultArgs<ExtArgs>
+    personB?: boolean | PersonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["partnership"]>
+
+  export type PartnershipSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    personAId?: boolean
+    personBId?: boolean
+    kind?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    personA?: boolean | PersonDefaultArgs<ExtArgs>
+    personB?: boolean | PersonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["partnership"]>
+
+  export type PartnershipSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    personAId?: boolean
+    personBId?: boolean
+    kind?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    personA?: boolean | PersonDefaultArgs<ExtArgs>
+    personB?: boolean | PersonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["partnership"]>
+
+  export type PartnershipSelectScalar = {
+    id?: boolean
+    personAId?: boolean
+    personBId?: boolean
+    kind?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PartnershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "personAId" | "personBId" | "kind" | "startDate" | "endDate" | "createdAt" | "updatedAt", ExtArgs["result"]["partnership"]>
+  export type PartnershipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    personA?: boolean | PersonDefaultArgs<ExtArgs>
+    personB?: boolean | PersonDefaultArgs<ExtArgs>
+  }
+  export type PartnershipIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    personA?: boolean | PersonDefaultArgs<ExtArgs>
+    personB?: boolean | PersonDefaultArgs<ExtArgs>
+  }
+  export type PartnershipIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    personA?: boolean | PersonDefaultArgs<ExtArgs>
+    personB?: boolean | PersonDefaultArgs<ExtArgs>
+  }
+
+  export type $PartnershipPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Partnership"
+    objects: {
+      personA: Prisma.$PersonPayload<ExtArgs>
+      personB: Prisma.$PersonPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      personAId: number
+      personBId: number
+      kind: $Enums.PartnershipKind
+      startDate: Date | null
+      endDate: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["partnership"]>
+    composites: {}
+  }
+
+  type PartnershipGetPayload<S extends boolean | null | undefined | PartnershipDefaultArgs> = $Result.GetResult<Prisma.$PartnershipPayload, S>
+
+  type PartnershipCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PartnershipFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PartnershipCountAggregateInputType | true
+    }
+
+  export interface PartnershipDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Partnership'], meta: { name: 'Partnership' } }
+    /**
+     * Find zero or one Partnership that matches the filter.
+     * @param {PartnershipFindUniqueArgs} args - Arguments to find a Partnership
+     * @example
+     * // Get one Partnership
+     * const partnership = await prisma.partnership.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PartnershipFindUniqueArgs>(args: SelectSubset<T, PartnershipFindUniqueArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Partnership that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PartnershipFindUniqueOrThrowArgs} args - Arguments to find a Partnership
+     * @example
+     * // Get one Partnership
+     * const partnership = await prisma.partnership.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PartnershipFindUniqueOrThrowArgs>(args: SelectSubset<T, PartnershipFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Partnership that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnershipFindFirstArgs} args - Arguments to find a Partnership
+     * @example
+     * // Get one Partnership
+     * const partnership = await prisma.partnership.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PartnershipFindFirstArgs>(args?: SelectSubset<T, PartnershipFindFirstArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Partnership that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnershipFindFirstOrThrowArgs} args - Arguments to find a Partnership
+     * @example
+     * // Get one Partnership
+     * const partnership = await prisma.partnership.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PartnershipFindFirstOrThrowArgs>(args?: SelectSubset<T, PartnershipFindFirstOrThrowArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Partnerships that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnershipFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Partnerships
+     * const partnerships = await prisma.partnership.findMany()
+     * 
+     * // Get first 10 Partnerships
+     * const partnerships = await prisma.partnership.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const partnershipWithIdOnly = await prisma.partnership.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PartnershipFindManyArgs>(args?: SelectSubset<T, PartnershipFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Partnership.
+     * @param {PartnershipCreateArgs} args - Arguments to create a Partnership.
+     * @example
+     * // Create one Partnership
+     * const Partnership = await prisma.partnership.create({
+     *   data: {
+     *     // ... data to create a Partnership
+     *   }
+     * })
+     * 
+     */
+    create<T extends PartnershipCreateArgs>(args: SelectSubset<T, PartnershipCreateArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Partnerships.
+     * @param {PartnershipCreateManyArgs} args - Arguments to create many Partnerships.
+     * @example
+     * // Create many Partnerships
+     * const partnership = await prisma.partnership.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PartnershipCreateManyArgs>(args?: SelectSubset<T, PartnershipCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Partnerships and returns the data saved in the database.
+     * @param {PartnershipCreateManyAndReturnArgs} args - Arguments to create many Partnerships.
+     * @example
+     * // Create many Partnerships
+     * const partnership = await prisma.partnership.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Partnerships and only return the `id`
+     * const partnershipWithIdOnly = await prisma.partnership.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PartnershipCreateManyAndReturnArgs>(args?: SelectSubset<T, PartnershipCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Partnership.
+     * @param {PartnershipDeleteArgs} args - Arguments to delete one Partnership.
+     * @example
+     * // Delete one Partnership
+     * const Partnership = await prisma.partnership.delete({
+     *   where: {
+     *     // ... filter to delete one Partnership
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PartnershipDeleteArgs>(args: SelectSubset<T, PartnershipDeleteArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Partnership.
+     * @param {PartnershipUpdateArgs} args - Arguments to update one Partnership.
+     * @example
+     * // Update one Partnership
+     * const partnership = await prisma.partnership.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PartnershipUpdateArgs>(args: SelectSubset<T, PartnershipUpdateArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Partnerships.
+     * @param {PartnershipDeleteManyArgs} args - Arguments to filter Partnerships to delete.
+     * @example
+     * // Delete a few Partnerships
+     * const { count } = await prisma.partnership.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PartnershipDeleteManyArgs>(args?: SelectSubset<T, PartnershipDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Partnerships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnershipUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Partnerships
+     * const partnership = await prisma.partnership.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PartnershipUpdateManyArgs>(args: SelectSubset<T, PartnershipUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Partnerships and returns the data updated in the database.
+     * @param {PartnershipUpdateManyAndReturnArgs} args - Arguments to update many Partnerships.
+     * @example
+     * // Update many Partnerships
+     * const partnership = await prisma.partnership.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Partnerships and only return the `id`
+     * const partnershipWithIdOnly = await prisma.partnership.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PartnershipUpdateManyAndReturnArgs>(args: SelectSubset<T, PartnershipUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Partnership.
+     * @param {PartnershipUpsertArgs} args - Arguments to update or create a Partnership.
+     * @example
+     * // Update or create a Partnership
+     * const partnership = await prisma.partnership.upsert({
+     *   create: {
+     *     // ... data to create a Partnership
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Partnership we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PartnershipUpsertArgs>(args: SelectSubset<T, PartnershipUpsertArgs<ExtArgs>>): Prisma__PartnershipClient<$Result.GetResult<Prisma.$PartnershipPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Partnerships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnershipCountArgs} args - Arguments to filter Partnerships to count.
+     * @example
+     * // Count the number of Partnerships
+     * const count = await prisma.partnership.count({
+     *   where: {
+     *     // ... the filter for the Partnerships we want to count
+     *   }
+     * })
+    **/
+    count<T extends PartnershipCountArgs>(
+      args?: Subset<T, PartnershipCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PartnershipCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Partnership.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnershipAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PartnershipAggregateArgs>(args: Subset<T, PartnershipAggregateArgs>): Prisma.PrismaPromise<GetPartnershipAggregateType<T>>
+
+    /**
+     * Group by Partnership.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnershipGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PartnershipGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PartnershipGroupByArgs['orderBy'] }
+        : { orderBy?: PartnershipGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PartnershipGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPartnershipGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Partnership model
+   */
+  readonly fields: PartnershipFieldRefs;
   }
 
   /**
-   * FamilyMember.parent1
+   * The delegate class that acts as a "Promise-like" for Partnership.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export type FamilyMember$parent1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export interface Prisma__PartnershipClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    personA<T extends PersonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PersonDefaultArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    personB<T extends PersonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PersonDefaultArgs<ExtArgs>>): Prisma__PersonClient<$Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
     /**
-     * Omit specific fields from the FamilyMember
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Partnership model
+   */
+  interface PartnershipFieldRefs {
+    readonly id: FieldRef<"Partnership", 'Int'>
+    readonly personAId: FieldRef<"Partnership", 'Int'>
+    readonly personBId: FieldRef<"Partnership", 'Int'>
+    readonly kind: FieldRef<"Partnership", 'PartnershipKind'>
+    readonly startDate: FieldRef<"Partnership", 'DateTime'>
+    readonly endDate: FieldRef<"Partnership", 'DateTime'>
+    readonly createdAt: FieldRef<"Partnership", 'DateTime'>
+    readonly updatedAt: FieldRef<"Partnership", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Partnership findUnique
+   */
+  export type PartnershipFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
-    where?: FamilyMemberWhereInput
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * Filter, which Partnership to fetch.
+     */
+    where: PartnershipWhereUniqueInput
   }
 
   /**
-   * FamilyMember.parent2
+   * Partnership findUniqueOrThrow
    */
-  export type FamilyMember$parent2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PartnershipFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the Partnership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: PartnershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the Partnership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: PartnershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
-    where?: FamilyMemberWhereInput
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * Filter, which Partnership to fetch.
+     */
+    where: PartnershipWhereUniqueInput
   }
 
   /**
-   * FamilyMember without action
+   * Partnership findFirst
    */
-  export type FamilyMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PartnershipFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FamilyMember
+     * Select specific fields to fetch from the Partnership
      */
-    select?: FamilyMemberSelect<ExtArgs> | null
+    select?: PartnershipSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FamilyMember
+     * Omit specific fields from the Partnership
      */
-    omit?: FamilyMemberOmit<ExtArgs> | null
+    omit?: PartnershipOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FamilyMemberInclude<ExtArgs> | null
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * Filter, which Partnership to fetch.
+     */
+    where?: PartnershipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partnerships to fetch.
+     */
+    orderBy?: PartnershipOrderByWithRelationInput | PartnershipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Partnerships.
+     */
+    cursor?: PartnershipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partnerships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partnerships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Partnerships.
+     */
+    distinct?: PartnershipScalarFieldEnum | PartnershipScalarFieldEnum[]
+  }
+
+  /**
+   * Partnership findFirstOrThrow
+   */
+  export type PartnershipFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * Filter, which Partnership to fetch.
+     */
+    where?: PartnershipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partnerships to fetch.
+     */
+    orderBy?: PartnershipOrderByWithRelationInput | PartnershipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Partnerships.
+     */
+    cursor?: PartnershipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partnerships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partnerships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Partnerships.
+     */
+    distinct?: PartnershipScalarFieldEnum | PartnershipScalarFieldEnum[]
+  }
+
+  /**
+   * Partnership findMany
+   */
+  export type PartnershipFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * Filter, which Partnerships to fetch.
+     */
+    where?: PartnershipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partnerships to fetch.
+     */
+    orderBy?: PartnershipOrderByWithRelationInput | PartnershipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Partnerships.
+     */
+    cursor?: PartnershipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partnerships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partnerships.
+     */
+    skip?: number
+    distinct?: PartnershipScalarFieldEnum | PartnershipScalarFieldEnum[]
+  }
+
+  /**
+   * Partnership create
+   */
+  export type PartnershipCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Partnership.
+     */
+    data: XOR<PartnershipCreateInput, PartnershipUncheckedCreateInput>
+  }
+
+  /**
+   * Partnership createMany
+   */
+  export type PartnershipCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Partnerships.
+     */
+    data: PartnershipCreateManyInput | PartnershipCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Partnership createManyAndReturn
+   */
+  export type PartnershipCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * The data used to create many Partnerships.
+     */
+    data: PartnershipCreateManyInput | PartnershipCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Partnership update
+   */
+  export type PartnershipUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Partnership.
+     */
+    data: XOR<PartnershipUpdateInput, PartnershipUncheckedUpdateInput>
+    /**
+     * Choose, which Partnership to update.
+     */
+    where: PartnershipWhereUniqueInput
+  }
+
+  /**
+   * Partnership updateMany
+   */
+  export type PartnershipUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Partnerships.
+     */
+    data: XOR<PartnershipUpdateManyMutationInput, PartnershipUncheckedUpdateManyInput>
+    /**
+     * Filter which Partnerships to update
+     */
+    where?: PartnershipWhereInput
+    /**
+     * Limit how many Partnerships to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Partnership updateManyAndReturn
+   */
+  export type PartnershipUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * The data used to update Partnerships.
+     */
+    data: XOR<PartnershipUpdateManyMutationInput, PartnershipUncheckedUpdateManyInput>
+    /**
+     * Filter which Partnerships to update
+     */
+    where?: PartnershipWhereInput
+    /**
+     * Limit how many Partnerships to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Partnership upsert
+   */
+  export type PartnershipUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Partnership to update in case it exists.
+     */
+    where: PartnershipWhereUniqueInput
+    /**
+     * In case the Partnership found by the `where` argument doesn't exist, create a new Partnership with this data.
+     */
+    create: XOR<PartnershipCreateInput, PartnershipUncheckedCreateInput>
+    /**
+     * In case the Partnership was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PartnershipUpdateInput, PartnershipUncheckedUpdateInput>
+  }
+
+  /**
+   * Partnership delete
+   */
+  export type PartnershipDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
+    /**
+     * Filter which Partnership to delete.
+     */
+    where: PartnershipWhereUniqueInput
+  }
+
+  /**
+   * Partnership deleteMany
+   */
+  export type PartnershipDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Partnerships to delete
+     */
+    where?: PartnershipWhereInput
+    /**
+     * Limit how many Partnerships to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Partnership without action
+   */
+  export type PartnershipDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partnership
+     */
+    select?: PartnershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partnership
+     */
+    omit?: PartnershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnershipInclude<ExtArgs> | null
   }
 
 
@@ -5960,22 +9570,52 @@ export namespace Prisma {
   export type UserFamilyScalarFieldEnum = (typeof UserFamilyScalarFieldEnum)[keyof typeof UserFamilyScalarFieldEnum]
 
 
-  export const FamilyMemberScalarFieldEnum: {
+  export const PersonScalarFieldEnum: {
     id: 'id',
     fullName: 'fullName',
     gender: 'gender',
     birthDate: 'birthDate',
     deathDate: 'deathDate',
     birthPlace: 'birthPlace',
-    picture: 'picture',
-    parentId1: 'parentId1',
-    parentId2: 'parentId2',
+    bio: 'bio',
+    picturePath: 'picturePath',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    familyId: 'familyId'
+    updatedAt: 'updatedAt'
   };
 
-  export type FamilyMemberScalarFieldEnum = (typeof FamilyMemberScalarFieldEnum)[keyof typeof FamilyMemberScalarFieldEnum]
+  export type PersonScalarFieldEnum = (typeof PersonScalarFieldEnum)[keyof typeof PersonScalarFieldEnum]
+
+
+  export const FamilyMembershipScalarFieldEnum: {
+    personId: 'personId',
+    familyId: 'familyId',
+    joinedAt: 'joinedAt'
+  };
+
+  export type FamilyMembershipScalarFieldEnum = (typeof FamilyMembershipScalarFieldEnum)[keyof typeof FamilyMembershipScalarFieldEnum]
+
+
+  export const ParentChildScalarFieldEnum: {
+    childId: 'childId',
+    parentId: 'parentId',
+    role: 'role'
+  };
+
+  export type ParentChildScalarFieldEnum = (typeof ParentChildScalarFieldEnum)[keyof typeof ParentChildScalarFieldEnum]
+
+
+  export const PartnershipScalarFieldEnum: {
+    id: 'id',
+    personAId: 'personAId',
+    personBId: 'personBId',
+    kind: 'kind',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PartnershipScalarFieldEnum = (typeof PartnershipScalarFieldEnum)[keyof typeof PartnershipScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6057,16 +9697,30 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Bytes'
+   * Reference to a field of type 'ParentRole'
    */
-  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+  export type EnumParentRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParentRole'>
     
 
 
   /**
-   * Reference to a field of type 'Bytes[]'
+   * Reference to a field of type 'ParentRole[]'
    */
-  export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+  export type ListEnumParentRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParentRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PartnershipKind'
+   */
+  export type EnumPartnershipKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartnershipKind'>
+    
+
+
+  /**
+   * Reference to a field of type 'PartnershipKind[]'
+   */
+  export type ListEnumPartnershipKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PartnershipKind[]'>
     
 
 
@@ -6167,7 +9821,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"Family"> | string | null
     createdAt?: DateTimeFilter<"Family"> | Date | string
     updatedAt?: DateTimeFilter<"Family"> | Date | string
-    familyMembers?: FamilyMemberListRelationFilter
+    memberships?: FamilyMembershipListRelationFilter
     userFamilies?: UserFamilyListRelationFilter
   }
 
@@ -6176,7 +9830,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    familyMembers?: FamilyMemberOrderByRelationAggregateInput
+    memberships?: FamilyMembershipOrderByRelationAggregateInput
     userFamilies?: UserFamilyOrderByRelationAggregateInput
   }
 
@@ -6188,7 +9842,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"Family"> | string | null
     createdAt?: DateTimeFilter<"Family"> | Date | string
     updatedAt?: DateTimeFilter<"Family"> | Date | string
-    familyMembers?: FamilyMemberListRelationFilter
+    memberships?: FamilyMembershipListRelationFilter
     userFamilies?: UserFamilyListRelationFilter
   }, "id">
 
@@ -6270,108 +9924,275 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"UserFamily"> | Date | string
   }
 
-  export type FamilyMemberWhereInput = {
-    AND?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
-    OR?: FamilyMemberWhereInput[]
-    NOT?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
-    id?: IntFilter<"FamilyMember"> | number
-    fullName?: StringFilter<"FamilyMember"> | string
-    gender?: StringFilter<"FamilyMember"> | string
-    birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
-    deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
-    birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
-    picture?: BytesNullableFilter<"FamilyMember"> | Uint8Array | null
-    parentId1?: IntNullableFilter<"FamilyMember"> | number | null
-    parentId2?: IntNullableFilter<"FamilyMember"> | number | null
-    createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    familyId?: IntFilter<"FamilyMember"> | number
-    children1?: FamilyMemberListRelationFilter
-    children2?: FamilyMemberListRelationFilter
-    parent1?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
-    parent2?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
-    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+  export type PersonWhereInput = {
+    AND?: PersonWhereInput | PersonWhereInput[]
+    OR?: PersonWhereInput[]
+    NOT?: PersonWhereInput | PersonWhereInput[]
+    id?: IntFilter<"Person"> | number
+    fullName?: StringFilter<"Person"> | string
+    gender?: StringFilter<"Person"> | string
+    birthDate?: DateTimeNullableFilter<"Person"> | Date | string | null
+    deathDate?: DateTimeNullableFilter<"Person"> | Date | string | null
+    birthPlace?: StringNullableFilter<"Person"> | string | null
+    bio?: StringNullableFilter<"Person"> | string | null
+    picturePath?: StringNullableFilter<"Person"> | string | null
+    createdAt?: DateTimeFilter<"Person"> | Date | string
+    updatedAt?: DateTimeFilter<"Person"> | Date | string
+    memberships?: FamilyMembershipListRelationFilter
+    childEdges?: ParentChildListRelationFilter
+    parentEdges?: ParentChildListRelationFilter
+    partnershipsA?: PartnershipListRelationFilter
+    partnershipsB?: PartnershipListRelationFilter
   }
 
-  export type FamilyMemberOrderByWithRelationInput = {
+  export type PersonOrderByWithRelationInput = {
     id?: SortOrder
     fullName?: SortOrder
     gender?: SortOrder
     birthDate?: SortOrderInput | SortOrder
     deathDate?: SortOrderInput | SortOrder
     birthPlace?: SortOrderInput | SortOrder
-    picture?: SortOrderInput | SortOrder
-    parentId1?: SortOrderInput | SortOrder
-    parentId2?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
+    picturePath?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    memberships?: FamilyMembershipOrderByRelationAggregateInput
+    childEdges?: ParentChildOrderByRelationAggregateInput
+    parentEdges?: ParentChildOrderByRelationAggregateInput
+    partnershipsA?: PartnershipOrderByRelationAggregateInput
+    partnershipsB?: PartnershipOrderByRelationAggregateInput
+  }
+
+  export type PersonWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: PersonWhereInput | PersonWhereInput[]
+    OR?: PersonWhereInput[]
+    NOT?: PersonWhereInput | PersonWhereInput[]
+    fullName?: StringFilter<"Person"> | string
+    gender?: StringFilter<"Person"> | string
+    birthDate?: DateTimeNullableFilter<"Person"> | Date | string | null
+    deathDate?: DateTimeNullableFilter<"Person"> | Date | string | null
+    birthPlace?: StringNullableFilter<"Person"> | string | null
+    bio?: StringNullableFilter<"Person"> | string | null
+    picturePath?: StringNullableFilter<"Person"> | string | null
+    createdAt?: DateTimeFilter<"Person"> | Date | string
+    updatedAt?: DateTimeFilter<"Person"> | Date | string
+    memberships?: FamilyMembershipListRelationFilter
+    childEdges?: ParentChildListRelationFilter
+    parentEdges?: ParentChildListRelationFilter
+    partnershipsA?: PartnershipListRelationFilter
+    partnershipsB?: PartnershipListRelationFilter
+  }, "id">
+
+  export type PersonOrderByWithAggregationInput = {
+    id?: SortOrder
+    fullName?: SortOrder
+    gender?: SortOrder
+    birthDate?: SortOrderInput | SortOrder
+    deathDate?: SortOrderInput | SortOrder
+    birthPlace?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
+    picturePath?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PersonCountOrderByAggregateInput
+    _avg?: PersonAvgOrderByAggregateInput
+    _max?: PersonMaxOrderByAggregateInput
+    _min?: PersonMinOrderByAggregateInput
+    _sum?: PersonSumOrderByAggregateInput
+  }
+
+  export type PersonScalarWhereWithAggregatesInput = {
+    AND?: PersonScalarWhereWithAggregatesInput | PersonScalarWhereWithAggregatesInput[]
+    OR?: PersonScalarWhereWithAggregatesInput[]
+    NOT?: PersonScalarWhereWithAggregatesInput | PersonScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Person"> | number
+    fullName?: StringWithAggregatesFilter<"Person"> | string
+    gender?: StringWithAggregatesFilter<"Person"> | string
+    birthDate?: DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
+    deathDate?: DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
+    birthPlace?: StringNullableWithAggregatesFilter<"Person"> | string | null
+    bio?: StringNullableWithAggregatesFilter<"Person"> | string | null
+    picturePath?: StringNullableWithAggregatesFilter<"Person"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Person"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Person"> | Date | string
+  }
+
+  export type FamilyMembershipWhereInput = {
+    AND?: FamilyMembershipWhereInput | FamilyMembershipWhereInput[]
+    OR?: FamilyMembershipWhereInput[]
+    NOT?: FamilyMembershipWhereInput | FamilyMembershipWhereInput[]
+    personId?: IntFilter<"FamilyMembership"> | number
+    familyId?: IntFilter<"FamilyMembership"> | number
+    joinedAt?: DateTimeFilter<"FamilyMembership"> | Date | string
+    person?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+    family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
+  }
+
+  export type FamilyMembershipOrderByWithRelationInput = {
+    personId?: SortOrder
     familyId?: SortOrder
-    children1?: FamilyMemberOrderByRelationAggregateInput
-    children2?: FamilyMemberOrderByRelationAggregateInput
-    parent1?: FamilyMemberOrderByWithRelationInput
-    parent2?: FamilyMemberOrderByWithRelationInput
+    joinedAt?: SortOrder
+    person?: PersonOrderByWithRelationInput
     family?: FamilyOrderByWithRelationInput
   }
 
-  export type FamilyMemberWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
-    OR?: FamilyMemberWhereInput[]
-    NOT?: FamilyMemberWhereInput | FamilyMemberWhereInput[]
-    fullName?: StringFilter<"FamilyMember"> | string
-    gender?: StringFilter<"FamilyMember"> | string
-    birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
-    deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
-    birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
-    picture?: BytesNullableFilter<"FamilyMember"> | Uint8Array | null
-    parentId1?: IntNullableFilter<"FamilyMember"> | number | null
-    parentId2?: IntNullableFilter<"FamilyMember"> | number | null
-    createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    familyId?: IntFilter<"FamilyMember"> | number
-    children1?: FamilyMemberListRelationFilter
-    children2?: FamilyMemberListRelationFilter
-    parent1?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
-    parent2?: XOR<FamilyMemberNullableScalarRelationFilter, FamilyMemberWhereInput> | null
+  export type FamilyMembershipWhereUniqueInput = Prisma.AtLeast<{
+    personId_familyId?: FamilyMembershipPersonIdFamilyIdCompoundUniqueInput
+    AND?: FamilyMembershipWhereInput | FamilyMembershipWhereInput[]
+    OR?: FamilyMembershipWhereInput[]
+    NOT?: FamilyMembershipWhereInput | FamilyMembershipWhereInput[]
+    personId?: IntFilter<"FamilyMembership"> | number
+    familyId?: IntFilter<"FamilyMembership"> | number
+    joinedAt?: DateTimeFilter<"FamilyMembership"> | Date | string
+    person?: XOR<PersonScalarRelationFilter, PersonWhereInput>
     family?: XOR<FamilyScalarRelationFilter, FamilyWhereInput>
-  }, "id">
+  }, "personId_familyId">
 
-  export type FamilyMemberOrderByWithAggregationInput = {
-    id?: SortOrder
-    fullName?: SortOrder
-    gender?: SortOrder
-    birthDate?: SortOrderInput | SortOrder
-    deathDate?: SortOrderInput | SortOrder
-    birthPlace?: SortOrderInput | SortOrder
-    picture?: SortOrderInput | SortOrder
-    parentId1?: SortOrderInput | SortOrder
-    parentId2?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+  export type FamilyMembershipOrderByWithAggregationInput = {
+    personId?: SortOrder
     familyId?: SortOrder
-    _count?: FamilyMemberCountOrderByAggregateInput
-    _avg?: FamilyMemberAvgOrderByAggregateInput
-    _max?: FamilyMemberMaxOrderByAggregateInput
-    _min?: FamilyMemberMinOrderByAggregateInput
-    _sum?: FamilyMemberSumOrderByAggregateInput
+    joinedAt?: SortOrder
+    _count?: FamilyMembershipCountOrderByAggregateInput
+    _avg?: FamilyMembershipAvgOrderByAggregateInput
+    _max?: FamilyMembershipMaxOrderByAggregateInput
+    _min?: FamilyMembershipMinOrderByAggregateInput
+    _sum?: FamilyMembershipSumOrderByAggregateInput
   }
 
-  export type FamilyMemberScalarWhereWithAggregatesInput = {
-    AND?: FamilyMemberScalarWhereWithAggregatesInput | FamilyMemberScalarWhereWithAggregatesInput[]
-    OR?: FamilyMemberScalarWhereWithAggregatesInput[]
-    NOT?: FamilyMemberScalarWhereWithAggregatesInput | FamilyMemberScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"FamilyMember"> | number
-    fullName?: StringWithAggregatesFilter<"FamilyMember"> | string
-    gender?: StringWithAggregatesFilter<"FamilyMember"> | string
-    birthDate?: DateTimeNullableWithAggregatesFilter<"FamilyMember"> | Date | string | null
-    deathDate?: DateTimeNullableWithAggregatesFilter<"FamilyMember"> | Date | string | null
-    birthPlace?: StringNullableWithAggregatesFilter<"FamilyMember"> | string | null
-    picture?: BytesNullableWithAggregatesFilter<"FamilyMember"> | Uint8Array | null
-    parentId1?: IntNullableWithAggregatesFilter<"FamilyMember"> | number | null
-    parentId2?: IntNullableWithAggregatesFilter<"FamilyMember"> | number | null
-    createdAt?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"FamilyMember"> | Date | string
-    familyId?: IntWithAggregatesFilter<"FamilyMember"> | number
+  export type FamilyMembershipScalarWhereWithAggregatesInput = {
+    AND?: FamilyMembershipScalarWhereWithAggregatesInput | FamilyMembershipScalarWhereWithAggregatesInput[]
+    OR?: FamilyMembershipScalarWhereWithAggregatesInput[]
+    NOT?: FamilyMembershipScalarWhereWithAggregatesInput | FamilyMembershipScalarWhereWithAggregatesInput[]
+    personId?: IntWithAggregatesFilter<"FamilyMembership"> | number
+    familyId?: IntWithAggregatesFilter<"FamilyMembership"> | number
+    joinedAt?: DateTimeWithAggregatesFilter<"FamilyMembership"> | Date | string
+  }
+
+  export type ParentChildWhereInput = {
+    AND?: ParentChildWhereInput | ParentChildWhereInput[]
+    OR?: ParentChildWhereInput[]
+    NOT?: ParentChildWhereInput | ParentChildWhereInput[]
+    childId?: IntFilter<"ParentChild"> | number
+    parentId?: IntFilter<"ParentChild"> | number
+    role?: EnumParentRoleFilter<"ParentChild"> | $Enums.ParentRole
+    child?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+    parent?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+  }
+
+  export type ParentChildOrderByWithRelationInput = {
+    childId?: SortOrder
+    parentId?: SortOrder
+    role?: SortOrder
+    child?: PersonOrderByWithRelationInput
+    parent?: PersonOrderByWithRelationInput
+  }
+
+  export type ParentChildWhereUniqueInput = Prisma.AtLeast<{
+    childId_parentId?: ParentChildChildIdParentIdCompoundUniqueInput
+    AND?: ParentChildWhereInput | ParentChildWhereInput[]
+    OR?: ParentChildWhereInput[]
+    NOT?: ParentChildWhereInput | ParentChildWhereInput[]
+    childId?: IntFilter<"ParentChild"> | number
+    parentId?: IntFilter<"ParentChild"> | number
+    role?: EnumParentRoleFilter<"ParentChild"> | $Enums.ParentRole
+    child?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+    parent?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+  }, "childId_parentId">
+
+  export type ParentChildOrderByWithAggregationInput = {
+    childId?: SortOrder
+    parentId?: SortOrder
+    role?: SortOrder
+    _count?: ParentChildCountOrderByAggregateInput
+    _avg?: ParentChildAvgOrderByAggregateInput
+    _max?: ParentChildMaxOrderByAggregateInput
+    _min?: ParentChildMinOrderByAggregateInput
+    _sum?: ParentChildSumOrderByAggregateInput
+  }
+
+  export type ParentChildScalarWhereWithAggregatesInput = {
+    AND?: ParentChildScalarWhereWithAggregatesInput | ParentChildScalarWhereWithAggregatesInput[]
+    OR?: ParentChildScalarWhereWithAggregatesInput[]
+    NOT?: ParentChildScalarWhereWithAggregatesInput | ParentChildScalarWhereWithAggregatesInput[]
+    childId?: IntWithAggregatesFilter<"ParentChild"> | number
+    parentId?: IntWithAggregatesFilter<"ParentChild"> | number
+    role?: EnumParentRoleWithAggregatesFilter<"ParentChild"> | $Enums.ParentRole
+  }
+
+  export type PartnershipWhereInput = {
+    AND?: PartnershipWhereInput | PartnershipWhereInput[]
+    OR?: PartnershipWhereInput[]
+    NOT?: PartnershipWhereInput | PartnershipWhereInput[]
+    id?: IntFilter<"Partnership"> | number
+    personAId?: IntFilter<"Partnership"> | number
+    personBId?: IntFilter<"Partnership"> | number
+    kind?: EnumPartnershipKindFilter<"Partnership"> | $Enums.PartnershipKind
+    startDate?: DateTimeNullableFilter<"Partnership"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"Partnership"> | Date | string | null
+    createdAt?: DateTimeFilter<"Partnership"> | Date | string
+    updatedAt?: DateTimeFilter<"Partnership"> | Date | string
+    personA?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+    personB?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+  }
+
+  export type PartnershipOrderByWithRelationInput = {
+    id?: SortOrder
+    personAId?: SortOrder
+    personBId?: SortOrder
+    kind?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    personA?: PersonOrderByWithRelationInput
+    personB?: PersonOrderByWithRelationInput
+  }
+
+  export type PartnershipWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: PartnershipWhereInput | PartnershipWhereInput[]
+    OR?: PartnershipWhereInput[]
+    NOT?: PartnershipWhereInput | PartnershipWhereInput[]
+    personAId?: IntFilter<"Partnership"> | number
+    personBId?: IntFilter<"Partnership"> | number
+    kind?: EnumPartnershipKindFilter<"Partnership"> | $Enums.PartnershipKind
+    startDate?: DateTimeNullableFilter<"Partnership"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"Partnership"> | Date | string | null
+    createdAt?: DateTimeFilter<"Partnership"> | Date | string
+    updatedAt?: DateTimeFilter<"Partnership"> | Date | string
+    personA?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+    personB?: XOR<PersonScalarRelationFilter, PersonWhereInput>
+  }, "id">
+
+  export type PartnershipOrderByWithAggregationInput = {
+    id?: SortOrder
+    personAId?: SortOrder
+    personBId?: SortOrder
+    kind?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PartnershipCountOrderByAggregateInput
+    _avg?: PartnershipAvgOrderByAggregateInput
+    _max?: PartnershipMaxOrderByAggregateInput
+    _min?: PartnershipMinOrderByAggregateInput
+    _sum?: PartnershipSumOrderByAggregateInput
+  }
+
+  export type PartnershipScalarWhereWithAggregatesInput = {
+    AND?: PartnershipScalarWhereWithAggregatesInput | PartnershipScalarWhereWithAggregatesInput[]
+    OR?: PartnershipScalarWhereWithAggregatesInput[]
+    NOT?: PartnershipScalarWhereWithAggregatesInput | PartnershipScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Partnership"> | number
+    personAId?: IntWithAggregatesFilter<"Partnership"> | number
+    personBId?: IntWithAggregatesFilter<"Partnership"> | number
+    kind?: EnumPartnershipKindWithAggregatesFilter<"Partnership"> | $Enums.PartnershipKind
+    startDate?: DateTimeNullableWithAggregatesFilter<"Partnership"> | Date | string | null
+    endDate?: DateTimeNullableWithAggregatesFilter<"Partnership"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Partnership"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Partnership"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -6456,7 +10277,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyMembers?: FamilyMemberCreateNestedManyWithoutFamilyInput
+    memberships?: FamilyMembershipCreateNestedManyWithoutFamilyInput
     userFamilies?: UserFamilyCreateNestedManyWithoutFamilyInput
   }
 
@@ -6465,7 +10286,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput
+    memberships?: FamilyMembershipUncheckedCreateNestedManyWithoutFamilyInput
     userFamilies?: UserFamilyUncheckedCreateNestedManyWithoutFamilyInput
   }
 
@@ -6473,7 +10294,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyMembers?: FamilyMemberUpdateManyWithoutFamilyNestedInput
+    memberships?: FamilyMembershipUpdateManyWithoutFamilyNestedInput
     userFamilies?: UserFamilyUpdateManyWithoutFamilyNestedInput
   }
 
@@ -6482,7 +10303,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput
+    memberships?: FamilyMembershipUncheckedUpdateManyWithoutFamilyNestedInput
     userFamilies?: UserFamilyUncheckedUpdateManyWithoutFamilyNestedInput
   }
 
@@ -6553,111 +10374,264 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberCreateInput = {
+  export type PersonCreateInput = {
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    picture?: Uint8Array | null
+    bio?: string | null
+    picturePath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    children1?: FamilyMemberCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberCreateNestedManyWithoutParent2Input
-    parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
-    parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    family: FamilyCreateNestedOneWithoutFamilyMembersInput
+    memberships?: FamilyMembershipCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipCreateNestedManyWithoutPersonBInput
   }
 
-  export type FamilyMemberUncheckedCreateInput = {
+  export type PersonUncheckedCreateInput = {
     id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
-    parentId2?: number | null
+    bio?: string | null
+    picturePath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyId: number
-    children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
+    memberships?: FamilyMembershipUncheckedCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildUncheckedCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildUncheckedCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipUncheckedCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipUncheckedCreateNestedManyWithoutPersonBInput
   }
 
-  export type FamilyMemberUpdateInput = {
+  export type PersonUpdateInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
-    parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
-    parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
+    memberships?: FamilyMembershipUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUpdateManyWithoutPersonBNestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateInput = {
+  export type PersonUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyId?: IntFieldUpdateOperationsInput | number
-    children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
+    memberships?: FamilyMembershipUncheckedUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUncheckedUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUncheckedUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUncheckedUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUncheckedUpdateManyWithoutPersonBNestedInput
   }
 
-  export type FamilyMemberCreateManyInput = {
+  export type PersonCreateManyInput = {
     id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
-    parentId2?: number | null
+    bio?: string | null
+    picturePath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyId: number
   }
 
-  export type FamilyMemberUpdateManyMutationInput = {
+  export type PersonUpdateManyMutationInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberUncheckedUpdateManyInput = {
+  export type PersonUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMembershipCreateInput = {
+    joinedAt?: Date | string
+    person: PersonCreateNestedOneWithoutMembershipsInput
+    family: FamilyCreateNestedOneWithoutMembershipsInput
+  }
+
+  export type FamilyMembershipUncheckedCreateInput = {
+    personId: number
+    familyId: number
+    joinedAt?: Date | string
+  }
+
+  export type FamilyMembershipUpdateInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    person?: PersonUpdateOneRequiredWithoutMembershipsNestedInput
+    family?: FamilyUpdateOneRequiredWithoutMembershipsNestedInput
+  }
+
+  export type FamilyMembershipUncheckedUpdateInput = {
+    personId?: IntFieldUpdateOperationsInput | number
     familyId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMembershipCreateManyInput = {
+    personId: number
+    familyId: number
+    joinedAt?: Date | string
+  }
+
+  export type FamilyMembershipUpdateManyMutationInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyMembershipUncheckedUpdateManyInput = {
+    personId?: IntFieldUpdateOperationsInput | number
+    familyId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParentChildCreateInput = {
+    role: $Enums.ParentRole
+    child: PersonCreateNestedOneWithoutChildEdgesInput
+    parent: PersonCreateNestedOneWithoutParentEdgesInput
+  }
+
+  export type ParentChildUncheckedCreateInput = {
+    childId: number
+    parentId: number
+    role: $Enums.ParentRole
+  }
+
+  export type ParentChildUpdateInput = {
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+    child?: PersonUpdateOneRequiredWithoutChildEdgesNestedInput
+    parent?: PersonUpdateOneRequiredWithoutParentEdgesNestedInput
+  }
+
+  export type ParentChildUncheckedUpdateInput = {
+    childId?: IntFieldUpdateOperationsInput | number
+    parentId?: IntFieldUpdateOperationsInput | number
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+  }
+
+  export type ParentChildCreateManyInput = {
+    childId: number
+    parentId: number
+    role: $Enums.ParentRole
+  }
+
+  export type ParentChildUpdateManyMutationInput = {
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+  }
+
+  export type ParentChildUncheckedUpdateManyInput = {
+    childId?: IntFieldUpdateOperationsInput | number
+    parentId?: IntFieldUpdateOperationsInput | number
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+  }
+
+  export type PartnershipCreateInput = {
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    personA: PersonCreateNestedOneWithoutPartnershipsAInput
+    personB: PersonCreateNestedOneWithoutPartnershipsBInput
+  }
+
+  export type PartnershipUncheckedCreateInput = {
+    id?: number
+    personAId: number
+    personBId: number
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartnershipUpdateInput = {
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    personA?: PersonUpdateOneRequiredWithoutPartnershipsANestedInput
+    personB?: PersonUpdateOneRequiredWithoutPartnershipsBNestedInput
+  }
+
+  export type PartnershipUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    personAId?: IntFieldUpdateOperationsInput | number
+    personBId?: IntFieldUpdateOperationsInput | number
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnershipCreateManyInput = {
+    id?: number
+    personAId: number
+    personBId: number
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartnershipUpdateManyMutationInput = {
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnershipUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    personAId?: IntFieldUpdateOperationsInput | number
+    personBId?: IntFieldUpdateOperationsInput | number
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6872,13 +10846,13 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type FamilyMemberListRelationFilter = {
-    every?: FamilyMemberWhereInput
-    some?: FamilyMemberWhereInput
-    none?: FamilyMemberWhereInput
+  export type FamilyMembershipListRelationFilter = {
+    every?: FamilyMembershipWhereInput
+    some?: FamilyMembershipWhereInput
+    none?: FamilyMembershipWhereInput
   }
 
-  export type FamilyMemberOrderByRelationAggregateInput = {
+  export type FamilyMembershipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6957,112 +10931,221 @@ export namespace Prisma {
     familyId?: SortOrder
   }
 
-  export type BytesNullableFilter<$PrismaModel = never> = {
-    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
-    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  export type ParentChildListRelationFilter = {
+    every?: ParentChildWhereInput
+    some?: ParentChildWhereInput
+    none?: ParentChildWhereInput
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type PartnershipListRelationFilter = {
+    every?: PartnershipWhereInput
+    some?: PartnershipWhereInput
+    none?: PartnershipWhereInput
   }
 
-  export type FamilyMemberNullableScalarRelationFilter = {
-    is?: FamilyMemberWhereInput | null
-    isNot?: FamilyMemberWhereInput | null
+  export type ParentChildOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type FamilyMemberCountOrderByAggregateInput = {
+  export type PartnershipOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PersonCountOrderByAggregateInput = {
     id?: SortOrder
     fullName?: SortOrder
     gender?: SortOrder
     birthDate?: SortOrder
     deathDate?: SortOrder
     birthPlace?: SortOrder
-    picture?: SortOrder
-    parentId1?: SortOrder
-    parentId2?: SortOrder
+    bio?: SortOrder
+    picturePath?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    familyId?: SortOrder
   }
 
-  export type FamilyMemberAvgOrderByAggregateInput = {
+  export type PersonAvgOrderByAggregateInput = {
     id?: SortOrder
-    parentId1?: SortOrder
-    parentId2?: SortOrder
-    familyId?: SortOrder
   }
 
-  export type FamilyMemberMaxOrderByAggregateInput = {
+  export type PersonMaxOrderByAggregateInput = {
     id?: SortOrder
     fullName?: SortOrder
     gender?: SortOrder
     birthDate?: SortOrder
     deathDate?: SortOrder
     birthPlace?: SortOrder
-    picture?: SortOrder
-    parentId1?: SortOrder
-    parentId2?: SortOrder
+    bio?: SortOrder
+    picturePath?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    familyId?: SortOrder
   }
 
-  export type FamilyMemberMinOrderByAggregateInput = {
+  export type PersonMinOrderByAggregateInput = {
     id?: SortOrder
     fullName?: SortOrder
     gender?: SortOrder
     birthDate?: SortOrder
     deathDate?: SortOrder
     birthPlace?: SortOrder
-    picture?: SortOrder
-    parentId1?: SortOrder
-    parentId2?: SortOrder
+    bio?: SortOrder
+    picturePath?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    familyId?: SortOrder
   }
 
-  export type FamilyMemberSumOrderByAggregateInput = {
+  export type PersonSumOrderByAggregateInput = {
     id?: SortOrder
-    parentId1?: SortOrder
-    parentId2?: SortOrder
+  }
+
+  export type PersonScalarRelationFilter = {
+    is?: PersonWhereInput
+    isNot?: PersonWhereInput
+  }
+
+  export type FamilyMembershipPersonIdFamilyIdCompoundUniqueInput = {
+    personId: number
+    familyId: number
+  }
+
+  export type FamilyMembershipCountOrderByAggregateInput = {
+    personId?: SortOrder
+    familyId?: SortOrder
+    joinedAt?: SortOrder
+  }
+
+  export type FamilyMembershipAvgOrderByAggregateInput = {
+    personId?: SortOrder
     familyId?: SortOrder
   }
 
-  export type BytesNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
-    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedBytesNullableFilter<$PrismaModel>
-    _max?: NestedBytesNullableFilter<$PrismaModel>
+  export type FamilyMembershipMaxOrderByAggregateInput = {
+    personId?: SortOrder
+    familyId?: SortOrder
+    joinedAt?: SortOrder
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+  export type FamilyMembershipMinOrderByAggregateInput = {
+    personId?: SortOrder
+    familyId?: SortOrder
+    joinedAt?: SortOrder
+  }
+
+  export type FamilyMembershipSumOrderByAggregateInput = {
+    personId?: SortOrder
+    familyId?: SortOrder
+  }
+
+  export type EnumParentRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.ParentRole | EnumParentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumParentRoleFilter<$PrismaModel> | $Enums.ParentRole
+  }
+
+  export type ParentChildChildIdParentIdCompoundUniqueInput = {
+    childId: number
+    parentId: number
+  }
+
+  export type ParentChildCountOrderByAggregateInput = {
+    childId?: SortOrder
+    parentId?: SortOrder
+    role?: SortOrder
+  }
+
+  export type ParentChildAvgOrderByAggregateInput = {
+    childId?: SortOrder
+    parentId?: SortOrder
+  }
+
+  export type ParentChildMaxOrderByAggregateInput = {
+    childId?: SortOrder
+    parentId?: SortOrder
+    role?: SortOrder
+  }
+
+  export type ParentChildMinOrderByAggregateInput = {
+    childId?: SortOrder
+    parentId?: SortOrder
+    role?: SortOrder
+  }
+
+  export type ParentChildSumOrderByAggregateInput = {
+    childId?: SortOrder
+    parentId?: SortOrder
+  }
+
+  export type EnumParentRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ParentRole | EnumParentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumParentRoleWithAggregatesFilter<$PrismaModel> | $Enums.ParentRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumParentRoleFilter<$PrismaModel>
+    _max?: NestedEnumParentRoleFilter<$PrismaModel>
+  }
+
+  export type EnumPartnershipKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartnershipKind | EnumPartnershipKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartnershipKindFilter<$PrismaModel> | $Enums.PartnershipKind
+  }
+
+  export type PartnershipCountOrderByAggregateInput = {
+    id?: SortOrder
+    personAId?: SortOrder
+    personBId?: SortOrder
+    kind?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartnershipAvgOrderByAggregateInput = {
+    id?: SortOrder
+    personAId?: SortOrder
+    personBId?: SortOrder
+  }
+
+  export type PartnershipMaxOrderByAggregateInput = {
+    id?: SortOrder
+    personAId?: SortOrder
+    personBId?: SortOrder
+    kind?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartnershipMinOrderByAggregateInput = {
+    id?: SortOrder
+    personAId?: SortOrder
+    personBId?: SortOrder
+    kind?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartnershipSumOrderByAggregateInput = {
+    id?: SortOrder
+    personAId?: SortOrder
+    personBId?: SortOrder
+  }
+
+  export type EnumPartnershipKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartnershipKind | EnumPartnershipKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartnershipKindWithAggregatesFilter<$PrismaModel> | $Enums.PartnershipKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPartnershipKindFilter<$PrismaModel>
+    _max?: NestedEnumPartnershipKindFilter<$PrismaModel>
   }
 
   export type UserFamilyCreateNestedManyWithoutUserInput = {
@@ -7135,11 +11218,11 @@ export namespace Prisma {
     deleteMany?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
   }
 
-  export type FamilyMemberCreateNestedManyWithoutFamilyInput = {
-    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
-    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  export type FamilyMembershipCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<FamilyMembershipCreateWithoutFamilyInput, FamilyMembershipUncheckedCreateWithoutFamilyInput> | FamilyMembershipCreateWithoutFamilyInput[] | FamilyMembershipUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutFamilyInput | FamilyMembershipCreateOrConnectWithoutFamilyInput[]
+    createMany?: FamilyMembershipCreateManyFamilyInputEnvelope
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
   }
 
   export type UserFamilyCreateNestedManyWithoutFamilyInput = {
@@ -7149,11 +11232,11 @@ export namespace Prisma {
     connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
   }
 
-  export type FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput = {
-    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
-    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  export type FamilyMembershipUncheckedCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<FamilyMembershipCreateWithoutFamilyInput, FamilyMembershipUncheckedCreateWithoutFamilyInput> | FamilyMembershipCreateWithoutFamilyInput[] | FamilyMembershipUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutFamilyInput | FamilyMembershipCreateOrConnectWithoutFamilyInput[]
+    createMany?: FamilyMembershipCreateManyFamilyInputEnvelope
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
   }
 
   export type UserFamilyUncheckedCreateNestedManyWithoutFamilyInput = {
@@ -7163,18 +11246,18 @@ export namespace Prisma {
     connect?: UserFamilyWhereUniqueInput | UserFamilyWhereUniqueInput[]
   }
 
-  export type FamilyMemberUpdateManyWithoutFamilyNestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput | FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput[]
-    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
-    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput | FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutFamilyInput | FamilyMemberUpdateManyWithWhereWithoutFamilyInput[]
-    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  export type FamilyMembershipUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<FamilyMembershipCreateWithoutFamilyInput, FamilyMembershipUncheckedCreateWithoutFamilyInput> | FamilyMembershipCreateWithoutFamilyInput[] | FamilyMembershipUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutFamilyInput | FamilyMembershipCreateOrConnectWithoutFamilyInput[]
+    upsert?: FamilyMembershipUpsertWithWhereUniqueWithoutFamilyInput | FamilyMembershipUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: FamilyMembershipCreateManyFamilyInputEnvelope
+    set?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    disconnect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    delete?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    update?: FamilyMembershipUpdateWithWhereUniqueWithoutFamilyInput | FamilyMembershipUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: FamilyMembershipUpdateManyWithWhereWithoutFamilyInput | FamilyMembershipUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: FamilyMembershipScalarWhereInput | FamilyMembershipScalarWhereInput[]
   }
 
   export type UserFamilyUpdateManyWithoutFamilyNestedInput = {
@@ -7191,18 +11274,18 @@ export namespace Prisma {
     deleteMany?: UserFamilyScalarWhereInput | UserFamilyScalarWhereInput[]
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput> | FamilyMemberCreateWithoutFamilyInput[] | FamilyMemberUncheckedCreateWithoutFamilyInput[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutFamilyInput | FamilyMemberCreateOrConnectWithoutFamilyInput[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput | FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput[]
-    createMany?: FamilyMemberCreateManyFamilyInputEnvelope
-    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput | FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutFamilyInput | FamilyMemberUpdateManyWithWhereWithoutFamilyInput[]
-    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  export type FamilyMembershipUncheckedUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<FamilyMembershipCreateWithoutFamilyInput, FamilyMembershipUncheckedCreateWithoutFamilyInput> | FamilyMembershipCreateWithoutFamilyInput[] | FamilyMembershipUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutFamilyInput | FamilyMembershipCreateOrConnectWithoutFamilyInput[]
+    upsert?: FamilyMembershipUpsertWithWhereUniqueWithoutFamilyInput | FamilyMembershipUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: FamilyMembershipCreateManyFamilyInputEnvelope
+    set?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    disconnect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    delete?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    update?: FamilyMembershipUpdateWithWhereUniqueWithoutFamilyInput | FamilyMembershipUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: FamilyMembershipUpdateManyWithWhereWithoutFamilyInput | FamilyMembershipUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: FamilyMembershipScalarWhereInput | FamilyMembershipScalarWhereInput[]
   }
 
   export type UserFamilyUncheckedUpdateManyWithoutFamilyNestedInput = {
@@ -7247,146 +11330,306 @@ export namespace Prisma {
     update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutUserFamiliesInput, FamilyUpdateWithoutUserFamiliesInput>, FamilyUncheckedUpdateWithoutUserFamiliesInput>
   }
 
-  export type FamilyMemberCreateNestedManyWithoutParent1Input = {
-    create?: XOR<FamilyMemberCreateWithoutParent1Input, FamilyMemberUncheckedCreateWithoutParent1Input> | FamilyMemberCreateWithoutParent1Input[] | FamilyMemberUncheckedCreateWithoutParent1Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent1Input | FamilyMemberCreateOrConnectWithoutParent1Input[]
-    createMany?: FamilyMemberCreateManyParent1InputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  export type FamilyMembershipCreateNestedManyWithoutPersonInput = {
+    create?: XOR<FamilyMembershipCreateWithoutPersonInput, FamilyMembershipUncheckedCreateWithoutPersonInput> | FamilyMembershipCreateWithoutPersonInput[] | FamilyMembershipUncheckedCreateWithoutPersonInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutPersonInput | FamilyMembershipCreateOrConnectWithoutPersonInput[]
+    createMany?: FamilyMembershipCreateManyPersonInputEnvelope
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
   }
 
-  export type FamilyMemberCreateNestedManyWithoutParent2Input = {
-    create?: XOR<FamilyMemberCreateWithoutParent2Input, FamilyMemberUncheckedCreateWithoutParent2Input> | FamilyMemberCreateWithoutParent2Input[] | FamilyMemberUncheckedCreateWithoutParent2Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent2Input | FamilyMemberCreateOrConnectWithoutParent2Input[]
-    createMany?: FamilyMemberCreateManyParent2InputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  export type ParentChildCreateNestedManyWithoutChildInput = {
+    create?: XOR<ParentChildCreateWithoutChildInput, ParentChildUncheckedCreateWithoutChildInput> | ParentChildCreateWithoutChildInput[] | ParentChildUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutChildInput | ParentChildCreateOrConnectWithoutChildInput[]
+    createMany?: ParentChildCreateManyChildInputEnvelope
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
   }
 
-  export type FamilyMemberCreateNestedOneWithoutChildren1Input = {
-    create?: XOR<FamilyMemberCreateWithoutChildren1Input, FamilyMemberUncheckedCreateWithoutChildren1Input>
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutChildren1Input
-    connect?: FamilyMemberWhereUniqueInput
+  export type ParentChildCreateNestedManyWithoutParentInput = {
+    create?: XOR<ParentChildCreateWithoutParentInput, ParentChildUncheckedCreateWithoutParentInput> | ParentChildCreateWithoutParentInput[] | ParentChildUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutParentInput | ParentChildCreateOrConnectWithoutParentInput[]
+    createMany?: ParentChildCreateManyParentInputEnvelope
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
   }
 
-  export type FamilyMemberCreateNestedOneWithoutChildren2Input = {
-    create?: XOR<FamilyMemberCreateWithoutChildren2Input, FamilyMemberUncheckedCreateWithoutChildren2Input>
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutChildren2Input
-    connect?: FamilyMemberWhereUniqueInput
+  export type PartnershipCreateNestedManyWithoutPersonAInput = {
+    create?: XOR<PartnershipCreateWithoutPersonAInput, PartnershipUncheckedCreateWithoutPersonAInput> | PartnershipCreateWithoutPersonAInput[] | PartnershipUncheckedCreateWithoutPersonAInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonAInput | PartnershipCreateOrConnectWithoutPersonAInput[]
+    createMany?: PartnershipCreateManyPersonAInputEnvelope
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
   }
 
-  export type FamilyCreateNestedOneWithoutFamilyMembersInput = {
-    create?: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
-    connectOrCreate?: FamilyCreateOrConnectWithoutFamilyMembersInput
+  export type PartnershipCreateNestedManyWithoutPersonBInput = {
+    create?: XOR<PartnershipCreateWithoutPersonBInput, PartnershipUncheckedCreateWithoutPersonBInput> | PartnershipCreateWithoutPersonBInput[] | PartnershipUncheckedCreateWithoutPersonBInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonBInput | PartnershipCreateOrConnectWithoutPersonBInput[]
+    createMany?: PartnershipCreateManyPersonBInputEnvelope
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+  }
+
+  export type FamilyMembershipUncheckedCreateNestedManyWithoutPersonInput = {
+    create?: XOR<FamilyMembershipCreateWithoutPersonInput, FamilyMembershipUncheckedCreateWithoutPersonInput> | FamilyMembershipCreateWithoutPersonInput[] | FamilyMembershipUncheckedCreateWithoutPersonInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutPersonInput | FamilyMembershipCreateOrConnectWithoutPersonInput[]
+    createMany?: FamilyMembershipCreateManyPersonInputEnvelope
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+  }
+
+  export type ParentChildUncheckedCreateNestedManyWithoutChildInput = {
+    create?: XOR<ParentChildCreateWithoutChildInput, ParentChildUncheckedCreateWithoutChildInput> | ParentChildCreateWithoutChildInput[] | ParentChildUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutChildInput | ParentChildCreateOrConnectWithoutChildInput[]
+    createMany?: ParentChildCreateManyChildInputEnvelope
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+  }
+
+  export type ParentChildUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<ParentChildCreateWithoutParentInput, ParentChildUncheckedCreateWithoutParentInput> | ParentChildCreateWithoutParentInput[] | ParentChildUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutParentInput | ParentChildCreateOrConnectWithoutParentInput[]
+    createMany?: ParentChildCreateManyParentInputEnvelope
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+  }
+
+  export type PartnershipUncheckedCreateNestedManyWithoutPersonAInput = {
+    create?: XOR<PartnershipCreateWithoutPersonAInput, PartnershipUncheckedCreateWithoutPersonAInput> | PartnershipCreateWithoutPersonAInput[] | PartnershipUncheckedCreateWithoutPersonAInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonAInput | PartnershipCreateOrConnectWithoutPersonAInput[]
+    createMany?: PartnershipCreateManyPersonAInputEnvelope
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+  }
+
+  export type PartnershipUncheckedCreateNestedManyWithoutPersonBInput = {
+    create?: XOR<PartnershipCreateWithoutPersonBInput, PartnershipUncheckedCreateWithoutPersonBInput> | PartnershipCreateWithoutPersonBInput[] | PartnershipUncheckedCreateWithoutPersonBInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonBInput | PartnershipCreateOrConnectWithoutPersonBInput[]
+    createMany?: PartnershipCreateManyPersonBInputEnvelope
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+  }
+
+  export type FamilyMembershipUpdateManyWithoutPersonNestedInput = {
+    create?: XOR<FamilyMembershipCreateWithoutPersonInput, FamilyMembershipUncheckedCreateWithoutPersonInput> | FamilyMembershipCreateWithoutPersonInput[] | FamilyMembershipUncheckedCreateWithoutPersonInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutPersonInput | FamilyMembershipCreateOrConnectWithoutPersonInput[]
+    upsert?: FamilyMembershipUpsertWithWhereUniqueWithoutPersonInput | FamilyMembershipUpsertWithWhereUniqueWithoutPersonInput[]
+    createMany?: FamilyMembershipCreateManyPersonInputEnvelope
+    set?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    disconnect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    delete?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    update?: FamilyMembershipUpdateWithWhereUniqueWithoutPersonInput | FamilyMembershipUpdateWithWhereUniqueWithoutPersonInput[]
+    updateMany?: FamilyMembershipUpdateManyWithWhereWithoutPersonInput | FamilyMembershipUpdateManyWithWhereWithoutPersonInput[]
+    deleteMany?: FamilyMembershipScalarWhereInput | FamilyMembershipScalarWhereInput[]
+  }
+
+  export type ParentChildUpdateManyWithoutChildNestedInput = {
+    create?: XOR<ParentChildCreateWithoutChildInput, ParentChildUncheckedCreateWithoutChildInput> | ParentChildCreateWithoutChildInput[] | ParentChildUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutChildInput | ParentChildCreateOrConnectWithoutChildInput[]
+    upsert?: ParentChildUpsertWithWhereUniqueWithoutChildInput | ParentChildUpsertWithWhereUniqueWithoutChildInput[]
+    createMany?: ParentChildCreateManyChildInputEnvelope
+    set?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    disconnect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    delete?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    update?: ParentChildUpdateWithWhereUniqueWithoutChildInput | ParentChildUpdateWithWhereUniqueWithoutChildInput[]
+    updateMany?: ParentChildUpdateManyWithWhereWithoutChildInput | ParentChildUpdateManyWithWhereWithoutChildInput[]
+    deleteMany?: ParentChildScalarWhereInput | ParentChildScalarWhereInput[]
+  }
+
+  export type ParentChildUpdateManyWithoutParentNestedInput = {
+    create?: XOR<ParentChildCreateWithoutParentInput, ParentChildUncheckedCreateWithoutParentInput> | ParentChildCreateWithoutParentInput[] | ParentChildUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutParentInput | ParentChildCreateOrConnectWithoutParentInput[]
+    upsert?: ParentChildUpsertWithWhereUniqueWithoutParentInput | ParentChildUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: ParentChildCreateManyParentInputEnvelope
+    set?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    disconnect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    delete?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    update?: ParentChildUpdateWithWhereUniqueWithoutParentInput | ParentChildUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: ParentChildUpdateManyWithWhereWithoutParentInput | ParentChildUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: ParentChildScalarWhereInput | ParentChildScalarWhereInput[]
+  }
+
+  export type PartnershipUpdateManyWithoutPersonANestedInput = {
+    create?: XOR<PartnershipCreateWithoutPersonAInput, PartnershipUncheckedCreateWithoutPersonAInput> | PartnershipCreateWithoutPersonAInput[] | PartnershipUncheckedCreateWithoutPersonAInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonAInput | PartnershipCreateOrConnectWithoutPersonAInput[]
+    upsert?: PartnershipUpsertWithWhereUniqueWithoutPersonAInput | PartnershipUpsertWithWhereUniqueWithoutPersonAInput[]
+    createMany?: PartnershipCreateManyPersonAInputEnvelope
+    set?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    disconnect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    delete?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    update?: PartnershipUpdateWithWhereUniqueWithoutPersonAInput | PartnershipUpdateWithWhereUniqueWithoutPersonAInput[]
+    updateMany?: PartnershipUpdateManyWithWhereWithoutPersonAInput | PartnershipUpdateManyWithWhereWithoutPersonAInput[]
+    deleteMany?: PartnershipScalarWhereInput | PartnershipScalarWhereInput[]
+  }
+
+  export type PartnershipUpdateManyWithoutPersonBNestedInput = {
+    create?: XOR<PartnershipCreateWithoutPersonBInput, PartnershipUncheckedCreateWithoutPersonBInput> | PartnershipCreateWithoutPersonBInput[] | PartnershipUncheckedCreateWithoutPersonBInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonBInput | PartnershipCreateOrConnectWithoutPersonBInput[]
+    upsert?: PartnershipUpsertWithWhereUniqueWithoutPersonBInput | PartnershipUpsertWithWhereUniqueWithoutPersonBInput[]
+    createMany?: PartnershipCreateManyPersonBInputEnvelope
+    set?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    disconnect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    delete?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    update?: PartnershipUpdateWithWhereUniqueWithoutPersonBInput | PartnershipUpdateWithWhereUniqueWithoutPersonBInput[]
+    updateMany?: PartnershipUpdateManyWithWhereWithoutPersonBInput | PartnershipUpdateManyWithWhereWithoutPersonBInput[]
+    deleteMany?: PartnershipScalarWhereInput | PartnershipScalarWhereInput[]
+  }
+
+  export type FamilyMembershipUncheckedUpdateManyWithoutPersonNestedInput = {
+    create?: XOR<FamilyMembershipCreateWithoutPersonInput, FamilyMembershipUncheckedCreateWithoutPersonInput> | FamilyMembershipCreateWithoutPersonInput[] | FamilyMembershipUncheckedCreateWithoutPersonInput[]
+    connectOrCreate?: FamilyMembershipCreateOrConnectWithoutPersonInput | FamilyMembershipCreateOrConnectWithoutPersonInput[]
+    upsert?: FamilyMembershipUpsertWithWhereUniqueWithoutPersonInput | FamilyMembershipUpsertWithWhereUniqueWithoutPersonInput[]
+    createMany?: FamilyMembershipCreateManyPersonInputEnvelope
+    set?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    disconnect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    delete?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    connect?: FamilyMembershipWhereUniqueInput | FamilyMembershipWhereUniqueInput[]
+    update?: FamilyMembershipUpdateWithWhereUniqueWithoutPersonInput | FamilyMembershipUpdateWithWhereUniqueWithoutPersonInput[]
+    updateMany?: FamilyMembershipUpdateManyWithWhereWithoutPersonInput | FamilyMembershipUpdateManyWithWhereWithoutPersonInput[]
+    deleteMany?: FamilyMembershipScalarWhereInput | FamilyMembershipScalarWhereInput[]
+  }
+
+  export type ParentChildUncheckedUpdateManyWithoutChildNestedInput = {
+    create?: XOR<ParentChildCreateWithoutChildInput, ParentChildUncheckedCreateWithoutChildInput> | ParentChildCreateWithoutChildInput[] | ParentChildUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutChildInput | ParentChildCreateOrConnectWithoutChildInput[]
+    upsert?: ParentChildUpsertWithWhereUniqueWithoutChildInput | ParentChildUpsertWithWhereUniqueWithoutChildInput[]
+    createMany?: ParentChildCreateManyChildInputEnvelope
+    set?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    disconnect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    delete?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    update?: ParentChildUpdateWithWhereUniqueWithoutChildInput | ParentChildUpdateWithWhereUniqueWithoutChildInput[]
+    updateMany?: ParentChildUpdateManyWithWhereWithoutChildInput | ParentChildUpdateManyWithWhereWithoutChildInput[]
+    deleteMany?: ParentChildScalarWhereInput | ParentChildScalarWhereInput[]
+  }
+
+  export type ParentChildUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<ParentChildCreateWithoutParentInput, ParentChildUncheckedCreateWithoutParentInput> | ParentChildCreateWithoutParentInput[] | ParentChildUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ParentChildCreateOrConnectWithoutParentInput | ParentChildCreateOrConnectWithoutParentInput[]
+    upsert?: ParentChildUpsertWithWhereUniqueWithoutParentInput | ParentChildUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: ParentChildCreateManyParentInputEnvelope
+    set?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    disconnect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    delete?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    connect?: ParentChildWhereUniqueInput | ParentChildWhereUniqueInput[]
+    update?: ParentChildUpdateWithWhereUniqueWithoutParentInput | ParentChildUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: ParentChildUpdateManyWithWhereWithoutParentInput | ParentChildUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: ParentChildScalarWhereInput | ParentChildScalarWhereInput[]
+  }
+
+  export type PartnershipUncheckedUpdateManyWithoutPersonANestedInput = {
+    create?: XOR<PartnershipCreateWithoutPersonAInput, PartnershipUncheckedCreateWithoutPersonAInput> | PartnershipCreateWithoutPersonAInput[] | PartnershipUncheckedCreateWithoutPersonAInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonAInput | PartnershipCreateOrConnectWithoutPersonAInput[]
+    upsert?: PartnershipUpsertWithWhereUniqueWithoutPersonAInput | PartnershipUpsertWithWhereUniqueWithoutPersonAInput[]
+    createMany?: PartnershipCreateManyPersonAInputEnvelope
+    set?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    disconnect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    delete?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    update?: PartnershipUpdateWithWhereUniqueWithoutPersonAInput | PartnershipUpdateWithWhereUniqueWithoutPersonAInput[]
+    updateMany?: PartnershipUpdateManyWithWhereWithoutPersonAInput | PartnershipUpdateManyWithWhereWithoutPersonAInput[]
+    deleteMany?: PartnershipScalarWhereInput | PartnershipScalarWhereInput[]
+  }
+
+  export type PartnershipUncheckedUpdateManyWithoutPersonBNestedInput = {
+    create?: XOR<PartnershipCreateWithoutPersonBInput, PartnershipUncheckedCreateWithoutPersonBInput> | PartnershipCreateWithoutPersonBInput[] | PartnershipUncheckedCreateWithoutPersonBInput[]
+    connectOrCreate?: PartnershipCreateOrConnectWithoutPersonBInput | PartnershipCreateOrConnectWithoutPersonBInput[]
+    upsert?: PartnershipUpsertWithWhereUniqueWithoutPersonBInput | PartnershipUpsertWithWhereUniqueWithoutPersonBInput[]
+    createMany?: PartnershipCreateManyPersonBInputEnvelope
+    set?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    disconnect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    delete?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    connect?: PartnershipWhereUniqueInput | PartnershipWhereUniqueInput[]
+    update?: PartnershipUpdateWithWhereUniqueWithoutPersonBInput | PartnershipUpdateWithWhereUniqueWithoutPersonBInput[]
+    updateMany?: PartnershipUpdateManyWithWhereWithoutPersonBInput | PartnershipUpdateManyWithWhereWithoutPersonBInput[]
+    deleteMany?: PartnershipScalarWhereInput | PartnershipScalarWhereInput[]
+  }
+
+  export type PersonCreateNestedOneWithoutMembershipsInput = {
+    create?: XOR<PersonCreateWithoutMembershipsInput, PersonUncheckedCreateWithoutMembershipsInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutMembershipsInput
+    connect?: PersonWhereUniqueInput
+  }
+
+  export type FamilyCreateNestedOneWithoutMembershipsInput = {
+    create?: XOR<FamilyCreateWithoutMembershipsInput, FamilyUncheckedCreateWithoutMembershipsInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutMembershipsInput
     connect?: FamilyWhereUniqueInput
   }
 
-  export type FamilyMemberUncheckedCreateNestedManyWithoutParent1Input = {
-    create?: XOR<FamilyMemberCreateWithoutParent1Input, FamilyMemberUncheckedCreateWithoutParent1Input> | FamilyMemberCreateWithoutParent1Input[] | FamilyMemberUncheckedCreateWithoutParent1Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent1Input | FamilyMemberCreateOrConnectWithoutParent1Input[]
-    createMany?: FamilyMemberCreateManyParent1InputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  export type PersonUpdateOneRequiredWithoutMembershipsNestedInput = {
+    create?: XOR<PersonCreateWithoutMembershipsInput, PersonUncheckedCreateWithoutMembershipsInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutMembershipsInput
+    upsert?: PersonUpsertWithoutMembershipsInput
+    connect?: PersonWhereUniqueInput
+    update?: XOR<XOR<PersonUpdateToOneWithWhereWithoutMembershipsInput, PersonUpdateWithoutMembershipsInput>, PersonUncheckedUpdateWithoutMembershipsInput>
   }
 
-  export type FamilyMemberUncheckedCreateNestedManyWithoutParent2Input = {
-    create?: XOR<FamilyMemberCreateWithoutParent2Input, FamilyMemberUncheckedCreateWithoutParent2Input> | FamilyMemberCreateWithoutParent2Input[] | FamilyMemberUncheckedCreateWithoutParent2Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent2Input | FamilyMemberCreateOrConnectWithoutParent2Input[]
-    createMany?: FamilyMemberCreateManyParent2InputEnvelope
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-  }
-
-  export type NullableBytesFieldUpdateOperationsInput = {
-    set?: Uint8Array | null
-  }
-
-  export type FamilyMemberUpdateManyWithoutParent1NestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutParent1Input, FamilyMemberUncheckedCreateWithoutParent1Input> | FamilyMemberCreateWithoutParent1Input[] | FamilyMemberUncheckedCreateWithoutParent1Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent1Input | FamilyMemberCreateOrConnectWithoutParent1Input[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutParent1Input | FamilyMemberUpsertWithWhereUniqueWithoutParent1Input[]
-    createMany?: FamilyMemberCreateManyParent1InputEnvelope
-    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutParent1Input | FamilyMemberUpdateWithWhereUniqueWithoutParent1Input[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutParent1Input | FamilyMemberUpdateManyWithWhereWithoutParent1Input[]
-    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
-  }
-
-  export type FamilyMemberUpdateManyWithoutParent2NestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutParent2Input, FamilyMemberUncheckedCreateWithoutParent2Input> | FamilyMemberCreateWithoutParent2Input[] | FamilyMemberUncheckedCreateWithoutParent2Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent2Input | FamilyMemberCreateOrConnectWithoutParent2Input[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutParent2Input | FamilyMemberUpsertWithWhereUniqueWithoutParent2Input[]
-    createMany?: FamilyMemberCreateManyParent2InputEnvelope
-    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutParent2Input | FamilyMemberUpdateWithWhereUniqueWithoutParent2Input[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutParent2Input | FamilyMemberUpdateManyWithWhereWithoutParent2Input[]
-    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
-  }
-
-  export type FamilyMemberUpdateOneWithoutChildren1NestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutChildren1Input, FamilyMemberUncheckedCreateWithoutChildren1Input>
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutChildren1Input
-    upsert?: FamilyMemberUpsertWithoutChildren1Input
-    disconnect?: FamilyMemberWhereInput | boolean
-    delete?: FamilyMemberWhereInput | boolean
-    connect?: FamilyMemberWhereUniqueInput
-    update?: XOR<XOR<FamilyMemberUpdateToOneWithWhereWithoutChildren1Input, FamilyMemberUpdateWithoutChildren1Input>, FamilyMemberUncheckedUpdateWithoutChildren1Input>
-  }
-
-  export type FamilyMemberUpdateOneWithoutChildren2NestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutChildren2Input, FamilyMemberUncheckedCreateWithoutChildren2Input>
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutChildren2Input
-    upsert?: FamilyMemberUpsertWithoutChildren2Input
-    disconnect?: FamilyMemberWhereInput | boolean
-    delete?: FamilyMemberWhereInput | boolean
-    connect?: FamilyMemberWhereUniqueInput
-    update?: XOR<XOR<FamilyMemberUpdateToOneWithWhereWithoutChildren2Input, FamilyMemberUpdateWithoutChildren2Input>, FamilyMemberUncheckedUpdateWithoutChildren2Input>
-  }
-
-  export type FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput = {
-    create?: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
-    connectOrCreate?: FamilyCreateOrConnectWithoutFamilyMembersInput
-    upsert?: FamilyUpsertWithoutFamilyMembersInput
+  export type FamilyUpdateOneRequiredWithoutMembershipsNestedInput = {
+    create?: XOR<FamilyCreateWithoutMembershipsInput, FamilyUncheckedCreateWithoutMembershipsInput>
+    connectOrCreate?: FamilyCreateOrConnectWithoutMembershipsInput
+    upsert?: FamilyUpsertWithoutMembershipsInput
     connect?: FamilyWhereUniqueInput
-    update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutFamilyMembersInput, FamilyUpdateWithoutFamilyMembersInput>, FamilyUncheckedUpdateWithoutFamilyMembersInput>
+    update?: XOR<XOR<FamilyUpdateToOneWithWhereWithoutMembershipsInput, FamilyUpdateWithoutMembershipsInput>, FamilyUncheckedUpdateWithoutMembershipsInput>
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type PersonCreateNestedOneWithoutChildEdgesInput = {
+    create?: XOR<PersonCreateWithoutChildEdgesInput, PersonUncheckedCreateWithoutChildEdgesInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutChildEdgesInput
+    connect?: PersonWhereUniqueInput
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutParent1Input, FamilyMemberUncheckedCreateWithoutParent1Input> | FamilyMemberCreateWithoutParent1Input[] | FamilyMemberUncheckedCreateWithoutParent1Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent1Input | FamilyMemberCreateOrConnectWithoutParent1Input[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutParent1Input | FamilyMemberUpsertWithWhereUniqueWithoutParent1Input[]
-    createMany?: FamilyMemberCreateManyParent1InputEnvelope
-    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutParent1Input | FamilyMemberUpdateWithWhereUniqueWithoutParent1Input[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutParent1Input | FamilyMemberUpdateManyWithWhereWithoutParent1Input[]
-    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  export type PersonCreateNestedOneWithoutParentEdgesInput = {
+    create?: XOR<PersonCreateWithoutParentEdgesInput, PersonUncheckedCreateWithoutParentEdgesInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutParentEdgesInput
+    connect?: PersonWhereUniqueInput
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput = {
-    create?: XOR<FamilyMemberCreateWithoutParent2Input, FamilyMemberUncheckedCreateWithoutParent2Input> | FamilyMemberCreateWithoutParent2Input[] | FamilyMemberUncheckedCreateWithoutParent2Input[]
-    connectOrCreate?: FamilyMemberCreateOrConnectWithoutParent2Input | FamilyMemberCreateOrConnectWithoutParent2Input[]
-    upsert?: FamilyMemberUpsertWithWhereUniqueWithoutParent2Input | FamilyMemberUpsertWithWhereUniqueWithoutParent2Input[]
-    createMany?: FamilyMemberCreateManyParent2InputEnvelope
-    set?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    disconnect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    delete?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
-    update?: FamilyMemberUpdateWithWhereUniqueWithoutParent2Input | FamilyMemberUpdateWithWhereUniqueWithoutParent2Input[]
-    updateMany?: FamilyMemberUpdateManyWithWhereWithoutParent2Input | FamilyMemberUpdateManyWithWhereWithoutParent2Input[]
-    deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  export type EnumParentRoleFieldUpdateOperationsInput = {
+    set?: $Enums.ParentRole
+  }
+
+  export type PersonUpdateOneRequiredWithoutChildEdgesNestedInput = {
+    create?: XOR<PersonCreateWithoutChildEdgesInput, PersonUncheckedCreateWithoutChildEdgesInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutChildEdgesInput
+    upsert?: PersonUpsertWithoutChildEdgesInput
+    connect?: PersonWhereUniqueInput
+    update?: XOR<XOR<PersonUpdateToOneWithWhereWithoutChildEdgesInput, PersonUpdateWithoutChildEdgesInput>, PersonUncheckedUpdateWithoutChildEdgesInput>
+  }
+
+  export type PersonUpdateOneRequiredWithoutParentEdgesNestedInput = {
+    create?: XOR<PersonCreateWithoutParentEdgesInput, PersonUncheckedCreateWithoutParentEdgesInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutParentEdgesInput
+    upsert?: PersonUpsertWithoutParentEdgesInput
+    connect?: PersonWhereUniqueInput
+    update?: XOR<XOR<PersonUpdateToOneWithWhereWithoutParentEdgesInput, PersonUpdateWithoutParentEdgesInput>, PersonUncheckedUpdateWithoutParentEdgesInput>
+  }
+
+  export type PersonCreateNestedOneWithoutPartnershipsAInput = {
+    create?: XOR<PersonCreateWithoutPartnershipsAInput, PersonUncheckedCreateWithoutPartnershipsAInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutPartnershipsAInput
+    connect?: PersonWhereUniqueInput
+  }
+
+  export type PersonCreateNestedOneWithoutPartnershipsBInput = {
+    create?: XOR<PersonCreateWithoutPartnershipsBInput, PersonUncheckedCreateWithoutPartnershipsBInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutPartnershipsBInput
+    connect?: PersonWhereUniqueInput
+  }
+
+  export type EnumPartnershipKindFieldUpdateOperationsInput = {
+    set?: $Enums.PartnershipKind
+  }
+
+  export type PersonUpdateOneRequiredWithoutPartnershipsANestedInput = {
+    create?: XOR<PersonCreateWithoutPartnershipsAInput, PersonUncheckedCreateWithoutPartnershipsAInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutPartnershipsAInput
+    upsert?: PersonUpsertWithoutPartnershipsAInput
+    connect?: PersonWhereUniqueInput
+    update?: XOR<XOR<PersonUpdateToOneWithWhereWithoutPartnershipsAInput, PersonUpdateWithoutPartnershipsAInput>, PersonUncheckedUpdateWithoutPartnershipsAInput>
+  }
+
+  export type PersonUpdateOneRequiredWithoutPartnershipsBNestedInput = {
+    create?: XOR<PersonCreateWithoutPartnershipsBInput, PersonUncheckedCreateWithoutPartnershipsBInput>
+    connectOrCreate?: PersonCreateOrConnectWithoutPartnershipsBInput
+    upsert?: PersonUpsertWithoutPartnershipsBInput
+    connect?: PersonWhereUniqueInput
+    update?: XOR<XOR<PersonUpdateToOneWithWhereWithoutPartnershipsBInput, PersonUpdateWithoutPartnershipsBInput>, PersonUncheckedUpdateWithoutPartnershipsBInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -7563,48 +11806,38 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedBytesNullableFilter<$PrismaModel = never> = {
-    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
-    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  export type NestedEnumParentRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.ParentRole | EnumParentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumParentRoleFilter<$PrismaModel> | $Enums.ParentRole
   }
 
-  export type NestedBytesNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
-    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
-    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedBytesNullableFilter<$PrismaModel>
-    _max?: NestedBytesNullableFilter<$PrismaModel>
+  export type NestedEnumParentRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ParentRole | EnumParentRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ParentRole[] | ListEnumParentRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumParentRoleWithAggregatesFilter<$PrismaModel> | $Enums.ParentRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumParentRoleFilter<$PrismaModel>
+    _max?: NestedEnumParentRoleFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+  export type NestedEnumPartnershipKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartnershipKind | EnumPartnershipKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartnershipKindFilter<$PrismaModel> | $Enums.PartnershipKind
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  export type NestedEnumPartnershipKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PartnershipKind | EnumPartnershipKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PartnershipKind[] | ListEnumPartnershipKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPartnershipKindWithAggregatesFilter<$PrismaModel> | $Enums.PartnershipKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPartnershipKindFilter<$PrismaModel>
+    _max?: NestedEnumPartnershipKindFilter<$PrismaModel>
   }
 
   export type UserFamilyCreateWithoutUserInput = {
@@ -7655,44 +11888,23 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserFamily"> | Date | string
   }
 
-  export type FamilyMemberCreateWithoutFamilyInput = {
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children1?: FamilyMemberCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberCreateNestedManyWithoutParent2Input
-    parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
-    parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
+  export type FamilyMembershipCreateWithoutFamilyInput = {
+    joinedAt?: Date | string
+    person: PersonCreateNestedOneWithoutMembershipsInput
   }
 
-  export type FamilyMemberUncheckedCreateWithoutFamilyInput = {
-    id?: number
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
-    parentId2?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
+  export type FamilyMembershipUncheckedCreateWithoutFamilyInput = {
+    personId: number
+    joinedAt?: Date | string
   }
 
-  export type FamilyMemberCreateOrConnectWithoutFamilyInput = {
-    where: FamilyMemberWhereUniqueInput
-    create: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput>
+  export type FamilyMembershipCreateOrConnectWithoutFamilyInput = {
+    where: FamilyMembershipWhereUniqueInput
+    create: XOR<FamilyMembershipCreateWithoutFamilyInput, FamilyMembershipUncheckedCreateWithoutFamilyInput>
   }
 
-  export type FamilyMemberCreateManyFamilyInputEnvelope = {
-    data: FamilyMemberCreateManyFamilyInput | FamilyMemberCreateManyFamilyInput[]
+  export type FamilyMembershipCreateManyFamilyInputEnvelope = {
+    data: FamilyMembershipCreateManyFamilyInput | FamilyMembershipCreateManyFamilyInput[]
     skipDuplicates?: boolean
   }
 
@@ -7718,38 +11930,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type FamilyMemberUpsertWithWhereUniqueWithoutFamilyInput = {
-    where: FamilyMemberWhereUniqueInput
-    update: XOR<FamilyMemberUpdateWithoutFamilyInput, FamilyMemberUncheckedUpdateWithoutFamilyInput>
-    create: XOR<FamilyMemberCreateWithoutFamilyInput, FamilyMemberUncheckedCreateWithoutFamilyInput>
+  export type FamilyMembershipUpsertWithWhereUniqueWithoutFamilyInput = {
+    where: FamilyMembershipWhereUniqueInput
+    update: XOR<FamilyMembershipUpdateWithoutFamilyInput, FamilyMembershipUncheckedUpdateWithoutFamilyInput>
+    create: XOR<FamilyMembershipCreateWithoutFamilyInput, FamilyMembershipUncheckedCreateWithoutFamilyInput>
   }
 
-  export type FamilyMemberUpdateWithWhereUniqueWithoutFamilyInput = {
-    where: FamilyMemberWhereUniqueInput
-    data: XOR<FamilyMemberUpdateWithoutFamilyInput, FamilyMemberUncheckedUpdateWithoutFamilyInput>
+  export type FamilyMembershipUpdateWithWhereUniqueWithoutFamilyInput = {
+    where: FamilyMembershipWhereUniqueInput
+    data: XOR<FamilyMembershipUpdateWithoutFamilyInput, FamilyMembershipUncheckedUpdateWithoutFamilyInput>
   }
 
-  export type FamilyMemberUpdateManyWithWhereWithoutFamilyInput = {
-    where: FamilyMemberScalarWhereInput
-    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyWithoutFamilyInput>
+  export type FamilyMembershipUpdateManyWithWhereWithoutFamilyInput = {
+    where: FamilyMembershipScalarWhereInput
+    data: XOR<FamilyMembershipUpdateManyMutationInput, FamilyMembershipUncheckedUpdateManyWithoutFamilyInput>
   }
 
-  export type FamilyMemberScalarWhereInput = {
-    AND?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
-    OR?: FamilyMemberScalarWhereInput[]
-    NOT?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
-    id?: IntFilter<"FamilyMember"> | number
-    fullName?: StringFilter<"FamilyMember"> | string
-    gender?: StringFilter<"FamilyMember"> | string
-    birthDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
-    deathDate?: DateTimeNullableFilter<"FamilyMember"> | Date | string | null
-    birthPlace?: StringNullableFilter<"FamilyMember"> | string | null
-    picture?: BytesNullableFilter<"FamilyMember"> | Uint8Array | null
-    parentId1?: IntNullableFilter<"FamilyMember"> | number | null
-    parentId2?: IntNullableFilter<"FamilyMember"> | number | null
-    createdAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
-    familyId?: IntFilter<"FamilyMember"> | number
+  export type FamilyMembershipScalarWhereInput = {
+    AND?: FamilyMembershipScalarWhereInput | FamilyMembershipScalarWhereInput[]
+    OR?: FamilyMembershipScalarWhereInput[]
+    NOT?: FamilyMembershipScalarWhereInput | FamilyMembershipScalarWhereInput[]
+    personId?: IntFilter<"FamilyMembership"> | number
+    familyId?: IntFilter<"FamilyMembership"> | number
+    joinedAt?: DateTimeFilter<"FamilyMembership"> | Date | string
   }
 
   export type UserFamilyUpsertWithWhereUniqueWithoutFamilyInput = {
@@ -7798,7 +12001,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyMembers?: FamilyMemberCreateNestedManyWithoutFamilyInput
+    memberships?: FamilyMembershipCreateNestedManyWithoutFamilyInput
   }
 
   export type FamilyUncheckedCreateWithoutUserFamiliesInput = {
@@ -7806,7 +12009,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutFamilyInput
+    memberships?: FamilyMembershipUncheckedCreateNestedManyWithoutFamilyInput
   }
 
   export type FamilyCreateOrConnectWithoutUserFamiliesInput = {
@@ -7861,7 +12064,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyMembers?: FamilyMemberUpdateManyWithoutFamilyNestedInput
+    memberships?: FamilyMembershipUpdateManyWithoutFamilyNestedInput
   }
 
   export type FamilyUncheckedUpdateWithoutUserFamiliesInput = {
@@ -7869,171 +12072,276 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutFamilyNestedInput
+    memberships?: FamilyMembershipUncheckedUpdateManyWithoutFamilyNestedInput
   }
 
-  export type FamilyMemberCreateWithoutParent1Input = {
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children1?: FamilyMemberCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberCreateNestedManyWithoutParent2Input
-    parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    family: FamilyCreateNestedOneWithoutFamilyMembersInput
+  export type FamilyMembershipCreateWithoutPersonInput = {
+    joinedAt?: Date | string
+    family: FamilyCreateNestedOneWithoutMembershipsInput
   }
 
-  export type FamilyMemberUncheckedCreateWithoutParent1Input = {
-    id?: number
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId2?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type FamilyMembershipUncheckedCreateWithoutPersonInput = {
     familyId: number
-    children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
+    joinedAt?: Date | string
   }
 
-  export type FamilyMemberCreateOrConnectWithoutParent1Input = {
-    where: FamilyMemberWhereUniqueInput
-    create: XOR<FamilyMemberCreateWithoutParent1Input, FamilyMemberUncheckedCreateWithoutParent1Input>
+  export type FamilyMembershipCreateOrConnectWithoutPersonInput = {
+    where: FamilyMembershipWhereUniqueInput
+    create: XOR<FamilyMembershipCreateWithoutPersonInput, FamilyMembershipUncheckedCreateWithoutPersonInput>
   }
 
-  export type FamilyMemberCreateManyParent1InputEnvelope = {
-    data: FamilyMemberCreateManyParent1Input | FamilyMemberCreateManyParent1Input[]
+  export type FamilyMembershipCreateManyPersonInputEnvelope = {
+    data: FamilyMembershipCreateManyPersonInput | FamilyMembershipCreateManyPersonInput[]
     skipDuplicates?: boolean
   }
 
-  export type FamilyMemberCreateWithoutParent2Input = {
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children1?: FamilyMemberCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberCreateNestedManyWithoutParent2Input
-    parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
-    family: FamilyCreateNestedOneWithoutFamilyMembersInput
+  export type ParentChildCreateWithoutChildInput = {
+    role: $Enums.ParentRole
+    parent: PersonCreateNestedOneWithoutParentEdgesInput
   }
 
-  export type FamilyMemberUncheckedCreateWithoutParent2Input = {
-    id?: number
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    familyId: number
-    children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
-    children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
+  export type ParentChildUncheckedCreateWithoutChildInput = {
+    parentId: number
+    role: $Enums.ParentRole
   }
 
-  export type FamilyMemberCreateOrConnectWithoutParent2Input = {
-    where: FamilyMemberWhereUniqueInput
-    create: XOR<FamilyMemberCreateWithoutParent2Input, FamilyMemberUncheckedCreateWithoutParent2Input>
+  export type ParentChildCreateOrConnectWithoutChildInput = {
+    where: ParentChildWhereUniqueInput
+    create: XOR<ParentChildCreateWithoutChildInput, ParentChildUncheckedCreateWithoutChildInput>
   }
 
-  export type FamilyMemberCreateManyParent2InputEnvelope = {
-    data: FamilyMemberCreateManyParent2Input | FamilyMemberCreateManyParent2Input[]
+  export type ParentChildCreateManyChildInputEnvelope = {
+    data: ParentChildCreateManyChildInput | ParentChildCreateManyChildInput[]
     skipDuplicates?: boolean
   }
 
-  export type FamilyMemberCreateWithoutChildren1Input = {
+  export type ParentChildCreateWithoutParentInput = {
+    role: $Enums.ParentRole
+    child: PersonCreateNestedOneWithoutChildEdgesInput
+  }
+
+  export type ParentChildUncheckedCreateWithoutParentInput = {
+    childId: number
+    role: $Enums.ParentRole
+  }
+
+  export type ParentChildCreateOrConnectWithoutParentInput = {
+    where: ParentChildWhereUniqueInput
+    create: XOR<ParentChildCreateWithoutParentInput, ParentChildUncheckedCreateWithoutParentInput>
+  }
+
+  export type ParentChildCreateManyParentInputEnvelope = {
+    data: ParentChildCreateManyParentInput | ParentChildCreateManyParentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PartnershipCreateWithoutPersonAInput = {
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    personB: PersonCreateNestedOneWithoutPartnershipsBInput
+  }
+
+  export type PartnershipUncheckedCreateWithoutPersonAInput = {
+    id?: number
+    personBId: number
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartnershipCreateOrConnectWithoutPersonAInput = {
+    where: PartnershipWhereUniqueInput
+    create: XOR<PartnershipCreateWithoutPersonAInput, PartnershipUncheckedCreateWithoutPersonAInput>
+  }
+
+  export type PartnershipCreateManyPersonAInputEnvelope = {
+    data: PartnershipCreateManyPersonAInput | PartnershipCreateManyPersonAInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PartnershipCreateWithoutPersonBInput = {
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    personA: PersonCreateNestedOneWithoutPartnershipsAInput
+  }
+
+  export type PartnershipUncheckedCreateWithoutPersonBInput = {
+    id?: number
+    personAId: number
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartnershipCreateOrConnectWithoutPersonBInput = {
+    where: PartnershipWhereUniqueInput
+    create: XOR<PartnershipCreateWithoutPersonBInput, PartnershipUncheckedCreateWithoutPersonBInput>
+  }
+
+  export type PartnershipCreateManyPersonBInputEnvelope = {
+    data: PartnershipCreateManyPersonBInput | PartnershipCreateManyPersonBInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FamilyMembershipUpsertWithWhereUniqueWithoutPersonInput = {
+    where: FamilyMembershipWhereUniqueInput
+    update: XOR<FamilyMembershipUpdateWithoutPersonInput, FamilyMembershipUncheckedUpdateWithoutPersonInput>
+    create: XOR<FamilyMembershipCreateWithoutPersonInput, FamilyMembershipUncheckedCreateWithoutPersonInput>
+  }
+
+  export type FamilyMembershipUpdateWithWhereUniqueWithoutPersonInput = {
+    where: FamilyMembershipWhereUniqueInput
+    data: XOR<FamilyMembershipUpdateWithoutPersonInput, FamilyMembershipUncheckedUpdateWithoutPersonInput>
+  }
+
+  export type FamilyMembershipUpdateManyWithWhereWithoutPersonInput = {
+    where: FamilyMembershipScalarWhereInput
+    data: XOR<FamilyMembershipUpdateManyMutationInput, FamilyMembershipUncheckedUpdateManyWithoutPersonInput>
+  }
+
+  export type ParentChildUpsertWithWhereUniqueWithoutChildInput = {
+    where: ParentChildWhereUniqueInput
+    update: XOR<ParentChildUpdateWithoutChildInput, ParentChildUncheckedUpdateWithoutChildInput>
+    create: XOR<ParentChildCreateWithoutChildInput, ParentChildUncheckedCreateWithoutChildInput>
+  }
+
+  export type ParentChildUpdateWithWhereUniqueWithoutChildInput = {
+    where: ParentChildWhereUniqueInput
+    data: XOR<ParentChildUpdateWithoutChildInput, ParentChildUncheckedUpdateWithoutChildInput>
+  }
+
+  export type ParentChildUpdateManyWithWhereWithoutChildInput = {
+    where: ParentChildScalarWhereInput
+    data: XOR<ParentChildUpdateManyMutationInput, ParentChildUncheckedUpdateManyWithoutChildInput>
+  }
+
+  export type ParentChildScalarWhereInput = {
+    AND?: ParentChildScalarWhereInput | ParentChildScalarWhereInput[]
+    OR?: ParentChildScalarWhereInput[]
+    NOT?: ParentChildScalarWhereInput | ParentChildScalarWhereInput[]
+    childId?: IntFilter<"ParentChild"> | number
+    parentId?: IntFilter<"ParentChild"> | number
+    role?: EnumParentRoleFilter<"ParentChild"> | $Enums.ParentRole
+  }
+
+  export type ParentChildUpsertWithWhereUniqueWithoutParentInput = {
+    where: ParentChildWhereUniqueInput
+    update: XOR<ParentChildUpdateWithoutParentInput, ParentChildUncheckedUpdateWithoutParentInput>
+    create: XOR<ParentChildCreateWithoutParentInput, ParentChildUncheckedCreateWithoutParentInput>
+  }
+
+  export type ParentChildUpdateWithWhereUniqueWithoutParentInput = {
+    where: ParentChildWhereUniqueInput
+    data: XOR<ParentChildUpdateWithoutParentInput, ParentChildUncheckedUpdateWithoutParentInput>
+  }
+
+  export type ParentChildUpdateManyWithWhereWithoutParentInput = {
+    where: ParentChildScalarWhereInput
+    data: XOR<ParentChildUpdateManyMutationInput, ParentChildUncheckedUpdateManyWithoutParentInput>
+  }
+
+  export type PartnershipUpsertWithWhereUniqueWithoutPersonAInput = {
+    where: PartnershipWhereUniqueInput
+    update: XOR<PartnershipUpdateWithoutPersonAInput, PartnershipUncheckedUpdateWithoutPersonAInput>
+    create: XOR<PartnershipCreateWithoutPersonAInput, PartnershipUncheckedCreateWithoutPersonAInput>
+  }
+
+  export type PartnershipUpdateWithWhereUniqueWithoutPersonAInput = {
+    where: PartnershipWhereUniqueInput
+    data: XOR<PartnershipUpdateWithoutPersonAInput, PartnershipUncheckedUpdateWithoutPersonAInput>
+  }
+
+  export type PartnershipUpdateManyWithWhereWithoutPersonAInput = {
+    where: PartnershipScalarWhereInput
+    data: XOR<PartnershipUpdateManyMutationInput, PartnershipUncheckedUpdateManyWithoutPersonAInput>
+  }
+
+  export type PartnershipScalarWhereInput = {
+    AND?: PartnershipScalarWhereInput | PartnershipScalarWhereInput[]
+    OR?: PartnershipScalarWhereInput[]
+    NOT?: PartnershipScalarWhereInput | PartnershipScalarWhereInput[]
+    id?: IntFilter<"Partnership"> | number
+    personAId?: IntFilter<"Partnership"> | number
+    personBId?: IntFilter<"Partnership"> | number
+    kind?: EnumPartnershipKindFilter<"Partnership"> | $Enums.PartnershipKind
+    startDate?: DateTimeNullableFilter<"Partnership"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"Partnership"> | Date | string | null
+    createdAt?: DateTimeFilter<"Partnership"> | Date | string
+    updatedAt?: DateTimeFilter<"Partnership"> | Date | string
+  }
+
+  export type PartnershipUpsertWithWhereUniqueWithoutPersonBInput = {
+    where: PartnershipWhereUniqueInput
+    update: XOR<PartnershipUpdateWithoutPersonBInput, PartnershipUncheckedUpdateWithoutPersonBInput>
+    create: XOR<PartnershipCreateWithoutPersonBInput, PartnershipUncheckedCreateWithoutPersonBInput>
+  }
+
+  export type PartnershipUpdateWithWhereUniqueWithoutPersonBInput = {
+    where: PartnershipWhereUniqueInput
+    data: XOR<PartnershipUpdateWithoutPersonBInput, PartnershipUncheckedUpdateWithoutPersonBInput>
+  }
+
+  export type PartnershipUpdateManyWithWhereWithoutPersonBInput = {
+    where: PartnershipScalarWhereInput
+    data: XOR<PartnershipUpdateManyMutationInput, PartnershipUncheckedUpdateManyWithoutPersonBInput>
+  }
+
+  export type PersonCreateWithoutMembershipsInput = {
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    picture?: Uint8Array | null
+    bio?: string | null
+    picturePath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    children2?: FamilyMemberCreateNestedManyWithoutParent2Input
-    parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
-    parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    family: FamilyCreateNestedOneWithoutFamilyMembersInput
+    childEdges?: ParentChildCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipCreateNestedManyWithoutPersonBInput
   }
 
-  export type FamilyMemberUncheckedCreateWithoutChildren1Input = {
+  export type PersonUncheckedCreateWithoutMembershipsInput = {
     id?: number
     fullName: string
     gender: string
     birthDate?: Date | string | null
     deathDate?: Date | string | null
     birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
-    parentId2?: number | null
+    bio?: string | null
+    picturePath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyId: number
-    children2?: FamilyMemberUncheckedCreateNestedManyWithoutParent2Input
+    childEdges?: ParentChildUncheckedCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildUncheckedCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipUncheckedCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipUncheckedCreateNestedManyWithoutPersonBInput
   }
 
-  export type FamilyMemberCreateOrConnectWithoutChildren1Input = {
-    where: FamilyMemberWhereUniqueInput
-    create: XOR<FamilyMemberCreateWithoutChildren1Input, FamilyMemberUncheckedCreateWithoutChildren1Input>
+  export type PersonCreateOrConnectWithoutMembershipsInput = {
+    where: PersonWhereUniqueInput
+    create: XOR<PersonCreateWithoutMembershipsInput, PersonUncheckedCreateWithoutMembershipsInput>
   }
 
-  export type FamilyMemberCreateWithoutChildren2Input = {
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children1?: FamilyMemberCreateNestedManyWithoutParent1Input
-    parent1?: FamilyMemberCreateNestedOneWithoutChildren1Input
-    parent2?: FamilyMemberCreateNestedOneWithoutChildren2Input
-    family: FamilyCreateNestedOneWithoutFamilyMembersInput
-  }
-
-  export type FamilyMemberUncheckedCreateWithoutChildren2Input = {
-    id?: number
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
-    parentId2?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    familyId: number
-    children1?: FamilyMemberUncheckedCreateNestedManyWithoutParent1Input
-  }
-
-  export type FamilyMemberCreateOrConnectWithoutChildren2Input = {
-    where: FamilyMemberWhereUniqueInput
-    create: XOR<FamilyMemberCreateWithoutChildren2Input, FamilyMemberUncheckedCreateWithoutChildren2Input>
-  }
-
-  export type FamilyCreateWithoutFamilyMembersInput = {
+  export type FamilyCreateWithoutMembershipsInput = {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userFamilies?: UserFamilyCreateNestedManyWithoutFamilyInput
   }
 
-  export type FamilyUncheckedCreateWithoutFamilyMembersInput = {
+  export type FamilyUncheckedCreateWithoutMembershipsInput = {
     id?: number
     name?: string | null
     createdAt?: Date | string
@@ -8041,151 +12349,407 @@ export namespace Prisma {
     userFamilies?: UserFamilyUncheckedCreateNestedManyWithoutFamilyInput
   }
 
-  export type FamilyCreateOrConnectWithoutFamilyMembersInput = {
+  export type FamilyCreateOrConnectWithoutMembershipsInput = {
     where: FamilyWhereUniqueInput
-    create: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
+    create: XOR<FamilyCreateWithoutMembershipsInput, FamilyUncheckedCreateWithoutMembershipsInput>
   }
 
-  export type FamilyMemberUpsertWithWhereUniqueWithoutParent1Input = {
-    where: FamilyMemberWhereUniqueInput
-    update: XOR<FamilyMemberUpdateWithoutParent1Input, FamilyMemberUncheckedUpdateWithoutParent1Input>
-    create: XOR<FamilyMemberCreateWithoutParent1Input, FamilyMemberUncheckedCreateWithoutParent1Input>
+  export type PersonUpsertWithoutMembershipsInput = {
+    update: XOR<PersonUpdateWithoutMembershipsInput, PersonUncheckedUpdateWithoutMembershipsInput>
+    create: XOR<PersonCreateWithoutMembershipsInput, PersonUncheckedCreateWithoutMembershipsInput>
+    where?: PersonWhereInput
   }
 
-  export type FamilyMemberUpdateWithWhereUniqueWithoutParent1Input = {
-    where: FamilyMemberWhereUniqueInput
-    data: XOR<FamilyMemberUpdateWithoutParent1Input, FamilyMemberUncheckedUpdateWithoutParent1Input>
+  export type PersonUpdateToOneWithWhereWithoutMembershipsInput = {
+    where?: PersonWhereInput
+    data: XOR<PersonUpdateWithoutMembershipsInput, PersonUncheckedUpdateWithoutMembershipsInput>
   }
 
-  export type FamilyMemberUpdateManyWithWhereWithoutParent1Input = {
-    where: FamilyMemberScalarWhereInput
-    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyWithoutParent1Input>
-  }
-
-  export type FamilyMemberUpsertWithWhereUniqueWithoutParent2Input = {
-    where: FamilyMemberWhereUniqueInput
-    update: XOR<FamilyMemberUpdateWithoutParent2Input, FamilyMemberUncheckedUpdateWithoutParent2Input>
-    create: XOR<FamilyMemberCreateWithoutParent2Input, FamilyMemberUncheckedCreateWithoutParent2Input>
-  }
-
-  export type FamilyMemberUpdateWithWhereUniqueWithoutParent2Input = {
-    where: FamilyMemberWhereUniqueInput
-    data: XOR<FamilyMemberUpdateWithoutParent2Input, FamilyMemberUncheckedUpdateWithoutParent2Input>
-  }
-
-  export type FamilyMemberUpdateManyWithWhereWithoutParent2Input = {
-    where: FamilyMemberScalarWhereInput
-    data: XOR<FamilyMemberUpdateManyMutationInput, FamilyMemberUncheckedUpdateManyWithoutParent2Input>
-  }
-
-  export type FamilyMemberUpsertWithoutChildren1Input = {
-    update: XOR<FamilyMemberUpdateWithoutChildren1Input, FamilyMemberUncheckedUpdateWithoutChildren1Input>
-    create: XOR<FamilyMemberCreateWithoutChildren1Input, FamilyMemberUncheckedCreateWithoutChildren1Input>
-    where?: FamilyMemberWhereInput
-  }
-
-  export type FamilyMemberUpdateToOneWithWhereWithoutChildren1Input = {
-    where?: FamilyMemberWhereInput
-    data: XOR<FamilyMemberUpdateWithoutChildren1Input, FamilyMemberUncheckedUpdateWithoutChildren1Input>
-  }
-
-  export type FamilyMemberUpdateWithoutChildren1Input = {
+  export type PersonUpdateWithoutMembershipsInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
-    parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
-    parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
+    childEdges?: ParentChildUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUpdateManyWithoutPersonBNestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateWithoutChildren1Input = {
+  export type PersonUncheckedUpdateWithoutMembershipsInput = {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyId?: IntFieldUpdateOperationsInput | number
-    children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
+    childEdges?: ParentChildUncheckedUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUncheckedUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUncheckedUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUncheckedUpdateManyWithoutPersonBNestedInput
   }
 
-  export type FamilyMemberUpsertWithoutChildren2Input = {
-    update: XOR<FamilyMemberUpdateWithoutChildren2Input, FamilyMemberUncheckedUpdateWithoutChildren2Input>
-    create: XOR<FamilyMemberCreateWithoutChildren2Input, FamilyMemberUncheckedCreateWithoutChildren2Input>
-    where?: FamilyMemberWhereInput
-  }
-
-  export type FamilyMemberUpdateToOneWithWhereWithoutChildren2Input = {
-    where?: FamilyMemberWhereInput
-    data: XOR<FamilyMemberUpdateWithoutChildren2Input, FamilyMemberUncheckedUpdateWithoutChildren2Input>
-  }
-
-  export type FamilyMemberUpdateWithoutChildren2Input = {
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
-    parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
-    parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
-  }
-
-  export type FamilyMemberUncheckedUpdateWithoutChildren2Input = {
-    id?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyId?: IntFieldUpdateOperationsInput | number
-    children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
-  }
-
-  export type FamilyUpsertWithoutFamilyMembersInput = {
-    update: XOR<FamilyUpdateWithoutFamilyMembersInput, FamilyUncheckedUpdateWithoutFamilyMembersInput>
-    create: XOR<FamilyCreateWithoutFamilyMembersInput, FamilyUncheckedCreateWithoutFamilyMembersInput>
+  export type FamilyUpsertWithoutMembershipsInput = {
+    update: XOR<FamilyUpdateWithoutMembershipsInput, FamilyUncheckedUpdateWithoutMembershipsInput>
+    create: XOR<FamilyCreateWithoutMembershipsInput, FamilyUncheckedCreateWithoutMembershipsInput>
     where?: FamilyWhereInput
   }
 
-  export type FamilyUpdateToOneWithWhereWithoutFamilyMembersInput = {
+  export type FamilyUpdateToOneWithWhereWithoutMembershipsInput = {
     where?: FamilyWhereInput
-    data: XOR<FamilyUpdateWithoutFamilyMembersInput, FamilyUncheckedUpdateWithoutFamilyMembersInput>
+    data: XOR<FamilyUpdateWithoutMembershipsInput, FamilyUncheckedUpdateWithoutMembershipsInput>
   }
 
-  export type FamilyUpdateWithoutFamilyMembersInput = {
+  export type FamilyUpdateWithoutMembershipsInput = {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userFamilies?: UserFamilyUpdateManyWithoutFamilyNestedInput
   }
 
-  export type FamilyUncheckedUpdateWithoutFamilyMembersInput = {
+  export type FamilyUncheckedUpdateWithoutMembershipsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userFamilies?: UserFamilyUncheckedUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type PersonCreateWithoutChildEdgesInput = {
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipCreateNestedManyWithoutPersonInput
+    parentEdges?: ParentChildCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipCreateNestedManyWithoutPersonBInput
+  }
+
+  export type PersonUncheckedCreateWithoutChildEdgesInput = {
+    id?: number
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipUncheckedCreateNestedManyWithoutPersonInput
+    parentEdges?: ParentChildUncheckedCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipUncheckedCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipUncheckedCreateNestedManyWithoutPersonBInput
+  }
+
+  export type PersonCreateOrConnectWithoutChildEdgesInput = {
+    where: PersonWhereUniqueInput
+    create: XOR<PersonCreateWithoutChildEdgesInput, PersonUncheckedCreateWithoutChildEdgesInput>
+  }
+
+  export type PersonCreateWithoutParentEdgesInput = {
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildCreateNestedManyWithoutChildInput
+    partnershipsA?: PartnershipCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipCreateNestedManyWithoutPersonBInput
+  }
+
+  export type PersonUncheckedCreateWithoutParentEdgesInput = {
+    id?: number
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipUncheckedCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildUncheckedCreateNestedManyWithoutChildInput
+    partnershipsA?: PartnershipUncheckedCreateNestedManyWithoutPersonAInput
+    partnershipsB?: PartnershipUncheckedCreateNestedManyWithoutPersonBInput
+  }
+
+  export type PersonCreateOrConnectWithoutParentEdgesInput = {
+    where: PersonWhereUniqueInput
+    create: XOR<PersonCreateWithoutParentEdgesInput, PersonUncheckedCreateWithoutParentEdgesInput>
+  }
+
+  export type PersonUpsertWithoutChildEdgesInput = {
+    update: XOR<PersonUpdateWithoutChildEdgesInput, PersonUncheckedUpdateWithoutChildEdgesInput>
+    create: XOR<PersonCreateWithoutChildEdgesInput, PersonUncheckedCreateWithoutChildEdgesInput>
+    where?: PersonWhereInput
+  }
+
+  export type PersonUpdateToOneWithWhereWithoutChildEdgesInput = {
+    where?: PersonWhereInput
+    data: XOR<PersonUpdateWithoutChildEdgesInput, PersonUncheckedUpdateWithoutChildEdgesInput>
+  }
+
+  export type PersonUpdateWithoutChildEdgesInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUpdateManyWithoutPersonNestedInput
+    parentEdges?: ParentChildUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUpdateManyWithoutPersonBNestedInput
+  }
+
+  export type PersonUncheckedUpdateWithoutChildEdgesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUncheckedUpdateManyWithoutPersonNestedInput
+    parentEdges?: ParentChildUncheckedUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUncheckedUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUncheckedUpdateManyWithoutPersonBNestedInput
+  }
+
+  export type PersonUpsertWithoutParentEdgesInput = {
+    update: XOR<PersonUpdateWithoutParentEdgesInput, PersonUncheckedUpdateWithoutParentEdgesInput>
+    create: XOR<PersonCreateWithoutParentEdgesInput, PersonUncheckedCreateWithoutParentEdgesInput>
+    where?: PersonWhereInput
+  }
+
+  export type PersonUpdateToOneWithWhereWithoutParentEdgesInput = {
+    where?: PersonWhereInput
+    data: XOR<PersonUpdateWithoutParentEdgesInput, PersonUncheckedUpdateWithoutParentEdgesInput>
+  }
+
+  export type PersonUpdateWithoutParentEdgesInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUpdateManyWithoutChildNestedInput
+    partnershipsA?: PartnershipUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUpdateManyWithoutPersonBNestedInput
+  }
+
+  export type PersonUncheckedUpdateWithoutParentEdgesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUncheckedUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUncheckedUpdateManyWithoutChildNestedInput
+    partnershipsA?: PartnershipUncheckedUpdateManyWithoutPersonANestedInput
+    partnershipsB?: PartnershipUncheckedUpdateManyWithoutPersonBNestedInput
+  }
+
+  export type PersonCreateWithoutPartnershipsAInput = {
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildCreateNestedManyWithoutParentInput
+    partnershipsB?: PartnershipCreateNestedManyWithoutPersonBInput
+  }
+
+  export type PersonUncheckedCreateWithoutPartnershipsAInput = {
+    id?: number
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipUncheckedCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildUncheckedCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildUncheckedCreateNestedManyWithoutParentInput
+    partnershipsB?: PartnershipUncheckedCreateNestedManyWithoutPersonBInput
+  }
+
+  export type PersonCreateOrConnectWithoutPartnershipsAInput = {
+    where: PersonWhereUniqueInput
+    create: XOR<PersonCreateWithoutPartnershipsAInput, PersonUncheckedCreateWithoutPartnershipsAInput>
+  }
+
+  export type PersonCreateWithoutPartnershipsBInput = {
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipCreateNestedManyWithoutPersonAInput
+  }
+
+  export type PersonUncheckedCreateWithoutPartnershipsBInput = {
+    id?: number
+    fullName: string
+    gender: string
+    birthDate?: Date | string | null
+    deathDate?: Date | string | null
+    birthPlace?: string | null
+    bio?: string | null
+    picturePath?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: FamilyMembershipUncheckedCreateNestedManyWithoutPersonInput
+    childEdges?: ParentChildUncheckedCreateNestedManyWithoutChildInput
+    parentEdges?: ParentChildUncheckedCreateNestedManyWithoutParentInput
+    partnershipsA?: PartnershipUncheckedCreateNestedManyWithoutPersonAInput
+  }
+
+  export type PersonCreateOrConnectWithoutPartnershipsBInput = {
+    where: PersonWhereUniqueInput
+    create: XOR<PersonCreateWithoutPartnershipsBInput, PersonUncheckedCreateWithoutPartnershipsBInput>
+  }
+
+  export type PersonUpsertWithoutPartnershipsAInput = {
+    update: XOR<PersonUpdateWithoutPartnershipsAInput, PersonUncheckedUpdateWithoutPartnershipsAInput>
+    create: XOR<PersonCreateWithoutPartnershipsAInput, PersonUncheckedCreateWithoutPartnershipsAInput>
+    where?: PersonWhereInput
+  }
+
+  export type PersonUpdateToOneWithWhereWithoutPartnershipsAInput = {
+    where?: PersonWhereInput
+    data: XOR<PersonUpdateWithoutPartnershipsAInput, PersonUncheckedUpdateWithoutPartnershipsAInput>
+  }
+
+  export type PersonUpdateWithoutPartnershipsAInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUpdateManyWithoutParentNestedInput
+    partnershipsB?: PartnershipUpdateManyWithoutPersonBNestedInput
+  }
+
+  export type PersonUncheckedUpdateWithoutPartnershipsAInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUncheckedUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUncheckedUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUncheckedUpdateManyWithoutParentNestedInput
+    partnershipsB?: PartnershipUncheckedUpdateManyWithoutPersonBNestedInput
+  }
+
+  export type PersonUpsertWithoutPartnershipsBInput = {
+    update: XOR<PersonUpdateWithoutPartnershipsBInput, PersonUncheckedUpdateWithoutPartnershipsBInput>
+    create: XOR<PersonCreateWithoutPartnershipsBInput, PersonUncheckedCreateWithoutPartnershipsBInput>
+    where?: PersonWhereInput
+  }
+
+  export type PersonUpdateToOneWithWhereWithoutPartnershipsBInput = {
+    where?: PersonWhereInput
+    data: XOR<PersonUpdateWithoutPartnershipsBInput, PersonUncheckedUpdateWithoutPartnershipsBInput>
+  }
+
+  export type PersonUpdateWithoutPartnershipsBInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUpdateManyWithoutPersonANestedInput
+  }
+
+  export type PersonUncheckedUpdateWithoutPartnershipsBInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    gender?: StringFieldUpdateOperationsInput | string
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    picturePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: FamilyMembershipUncheckedUpdateManyWithoutPersonNestedInput
+    childEdges?: ParentChildUncheckedUpdateManyWithoutChildNestedInput
+    parentEdges?: ParentChildUncheckedUpdateManyWithoutParentNestedInput
+    partnershipsA?: PartnershipUncheckedUpdateManyWithoutPersonANestedInput
   }
 
   export type UserFamilyCreateManyUserInput = {
@@ -8212,18 +12776,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberCreateManyFamilyInput = {
-    id?: number
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
-    parentId2?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type FamilyMembershipCreateManyFamilyInput = {
+    personId: number
+    joinedAt?: Date | string
   }
 
   export type UserFamilyCreateManyFamilyInput = {
@@ -8232,49 +12787,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type FamilyMemberUpdateWithoutFamilyInput = {
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
-    parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
-    parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
+  export type FamilyMembershipUpdateWithoutFamilyInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    person?: PersonUpdateOneRequiredWithoutMembershipsNestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateWithoutFamilyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
+  export type FamilyMembershipUncheckedUpdateWithoutFamilyInput = {
+    personId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutFamilyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type FamilyMembershipUncheckedUpdateManyWithoutFamilyInput = {
+    personId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserFamilyUpdateWithoutFamilyInput = {
@@ -8295,122 +12820,142 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberCreateManyParent1Input = {
+  export type FamilyMembershipCreateManyPersonInput = {
+    familyId: number
+    joinedAt?: Date | string
+  }
+
+  export type ParentChildCreateManyChildInput = {
+    parentId: number
+    role: $Enums.ParentRole
+  }
+
+  export type ParentChildCreateManyParentInput = {
+    childId: number
+    role: $Enums.ParentRole
+  }
+
+  export type PartnershipCreateManyPersonAInput = {
     id?: number
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId2?: number | null
+    personBId: number
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyId: number
   }
 
-  export type FamilyMemberCreateManyParent2Input = {
+  export type PartnershipCreateManyPersonBInput = {
     id?: number
-    fullName: string
-    gender: string
-    birthDate?: Date | string | null
-    deathDate?: Date | string | null
-    birthPlace?: string | null
-    picture?: Uint8Array | null
-    parentId1?: number | null
+    personAId: number
+    kind: $Enums.PartnershipKind
+    startDate?: Date | string | null
+    endDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    familyId: number
   }
 
-  export type FamilyMemberUpdateWithoutParent1Input = {
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
-    parent2?: FamilyMemberUpdateOneWithoutChildren2NestedInput
-    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
+  export type FamilyMembershipUpdateWithoutPersonInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyUpdateOneRequiredWithoutMembershipsNestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateWithoutParent1Input = {
-    id?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type FamilyMembershipUncheckedUpdateWithoutPersonInput = {
     familyId?: IntFieldUpdateOperationsInput | number
-    children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutParent1Input = {
-    id?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId2?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type FamilyMembershipUncheckedUpdateManyWithoutPersonInput = {
     familyId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FamilyMemberUpdateWithoutParent2Input = {
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+  export type ParentChildUpdateWithoutChildInput = {
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+    parent?: PersonUpdateOneRequiredWithoutParentEdgesNestedInput
+  }
+
+  export type ParentChildUncheckedUpdateWithoutChildInput = {
+    parentId?: IntFieldUpdateOperationsInput | number
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+  }
+
+  export type ParentChildUncheckedUpdateManyWithoutChildInput = {
+    parentId?: IntFieldUpdateOperationsInput | number
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+  }
+
+  export type ParentChildUpdateWithoutParentInput = {
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+    child?: PersonUpdateOneRequiredWithoutChildEdgesNestedInput
+  }
+
+  export type ParentChildUncheckedUpdateWithoutParentInput = {
+    childId?: IntFieldUpdateOperationsInput | number
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+  }
+
+  export type ParentChildUncheckedUpdateManyWithoutParentInput = {
+    childId?: IntFieldUpdateOperationsInput | number
+    role?: EnumParentRoleFieldUpdateOperationsInput | $Enums.ParentRole
+  }
+
+  export type PartnershipUpdateWithoutPersonAInput = {
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children1?: FamilyMemberUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUpdateManyWithoutParent2NestedInput
-    parent1?: FamilyMemberUpdateOneWithoutChildren1NestedInput
-    family?: FamilyUpdateOneRequiredWithoutFamilyMembersNestedInput
+    personB?: PersonUpdateOneRequiredWithoutPartnershipsBNestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateWithoutParent2Input = {
+  export type PartnershipUncheckedUpdateWithoutPersonAInput = {
     id?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    personBId?: IntFieldUpdateOperationsInput | number
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyId?: IntFieldUpdateOperationsInput | number
-    children1?: FamilyMemberUncheckedUpdateManyWithoutParent1NestedInput
-    children2?: FamilyMemberUncheckedUpdateManyWithoutParent2NestedInput
   }
 
-  export type FamilyMemberUncheckedUpdateManyWithoutParent2Input = {
+  export type PartnershipUncheckedUpdateManyWithoutPersonAInput = {
     id?: IntFieldUpdateOperationsInput | number
-    fullName?: StringFieldUpdateOperationsInput | string
-    gender?: StringFieldUpdateOperationsInput | string
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deathDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    birthPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    picture?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    parentId1?: NullableIntFieldUpdateOperationsInput | number | null
+    personBId?: IntFieldUpdateOperationsInput | number
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    familyId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PartnershipUpdateWithoutPersonBInput = {
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    personA?: PersonUpdateOneRequiredWithoutPartnershipsANestedInput
+  }
+
+  export type PartnershipUncheckedUpdateWithoutPersonBInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    personAId?: IntFieldUpdateOperationsInput | number
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnershipUncheckedUpdateManyWithoutPersonBInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    personAId?: IntFieldUpdateOperationsInput | number
+    kind?: EnumPartnershipKindFieldUpdateOperationsInput | $Enums.PartnershipKind
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
