@@ -13,6 +13,10 @@
  *                 require STARTTLS; anything else/absent → plaintext
  *   SMTP_USER / SMTP_PASS  optional — auth is attached only when BOTH are set
  *                 (a half-set block would attempt a login MailHog rejects)
+ *   SMTP_TLS_REJECT_UNAUTHORIZED  default "true" (verify the server
+ *                 certificate). Set "false" for a self-signed/LAN SMTP server
+ *                 (#20 integration note: secure-by-default; pre-#20 the route
+ *                 hardcoded false, now it's opt-out via env).
  *
  * Failures THROW: callers must surface them as retriable (HTTP 5xx) — an
  * unconfirmed account must never be a dead end (#20 D2).
@@ -28,6 +32,9 @@ export interface SmtpSettings {
   from: string;
   secure: boolean;
   requireTLS: boolean;
+  /** Verify the SMTP server certificate — env `SMTP_TLS_REJECT_UNAUTHORIZED`,
+   *  default true (secure). Only the exact word "false" opts out. */
+  rejectUnauthorized: boolean;
   auth?: { user: string; pass: string };
 }
 
@@ -44,6 +51,7 @@ export function smtpSettings(env: MailEnv = process.env): SmtpSettings {
     from: env.SMTP_FROM || 'no-reply@familyverse.local',
     secure: secureValue === 'true',
     requireTLS: secureValue === 'starttls',
+    rejectUnauthorized: (env.SMTP_TLS_REJECT_UNAUTHORIZED || '').trim().toLowerCase() !== 'false',
     auth:
       env.SMTP_USER && env.SMTP_PASS
         ? { user: env.SMTP_USER, pass: env.SMTP_PASS }
@@ -89,10 +97,10 @@ export async function sendConfirmationEmail(input: ConfirmationMailInput): Promi
     secure: settings.secure,
     requireTLS: settings.requireTLS,
     auth: settings.auth,
-    // Carried over verbatim from the pre-#20 register route so this extraction
-    // is behavior-neutral; certificate posture for the real server is #18's
-    // decision, not #20's.
-    tls: { rejectUnauthorized: false },
+    // #20 integration: certificate verification is ON by default (hardening
+    // ticket — pre-#20 hardcoded false). Self-signed/LAN servers opt out via
+    // SMTP_TLS_REJECT_UNAUTHORIZED=false; compose wiring lands in #18.
+    tls: { rejectUnauthorized: settings.rejectUnauthorized },
   });
 
   await transporter.sendMail(confirmationMailOptions(input));

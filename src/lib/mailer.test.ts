@@ -13,13 +13,14 @@ vi.mock('nodemailer', () => ({
 }));
 
 describe('smtpSettings (env parsing)', () => {
-  it('defaults to the compose dev stack: mailhog:1025, familyverse no-reply, plaintext, no auth', () => {
+  it('defaults to the compose dev stack: mailhog:1025, familyverse no-reply, plaintext, no auth, TLS verified', () => {
     expect(smtpSettings({})).toEqual({
       host: 'mailhog',
       port: 1025,
       from: 'no-reply@familyverse.local',
       secure: false,
       requireTLS: false,
+      rejectUnauthorized: true,
       auth: undefined,
     });
   });
@@ -49,6 +50,15 @@ describe('smtpSettings (env parsing)', () => {
       requireTLS: false,
     });
     expect(smtpSettings({ SMTP_SECURE: 'tls' })).toMatchObject({ secure: false, requireTLS: false });
+  });
+
+  it('SMTP_TLS_REJECT_UNAUTHORIZED: verification on by default, exact "false" opts out (self-signed LAN servers)', () => {
+    expect(smtpSettings({}).rejectUnauthorized).toBe(true);
+    expect(smtpSettings({ SMTP_TLS_REJECT_UNAUTHORIZED: 'true' }).rejectUnauthorized).toBe(true);
+    expect(smtpSettings({ SMTP_TLS_REJECT_UNAUTHORIZED: '' }).rejectUnauthorized).toBe(true);
+    expect(smtpSettings({ SMTP_TLS_REJECT_UNAUTHORIZED: 'no' }).rejectUnauthorized).toBe(true);
+    expect(smtpSettings({ SMTP_TLS_REJECT_UNAUTHORIZED: 'false' }).rejectUnauthorized).toBe(false);
+    expect(smtpSettings({ SMTP_TLS_REJECT_UNAUTHORIZED: 'FALSE' }).rejectUnauthorized).toBe(false);
   });
 
   it('attaches auth only when BOTH SMTP_USER and SMTP_PASS are set', () => {
