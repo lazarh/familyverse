@@ -4,8 +4,8 @@
  * The tree screen (#16, structure from #13, visual truth prototype/index.html):
  *
  *  - page head: family name + people/generations sub-line; actions =
- *    **Add member** (the one primary button on this screen), the PNG export,
- *    and the wired zoom bar;
+ *    **Add member** (the one primary button on this screen), the export
+ *    menu (PNG image / PDF document, #9), and the wired zoom bar;
  *  - canvas: dot-grid warm canvas hosting TreeCanvas + the prototype legend;
  *  - states: loading / error+retry / empty family (EmptyState owns the
  *    primary button while the head's is hidden — still one primary per screen);
@@ -16,7 +16,7 @@
  */
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import DownloadButton from '@/app/components/DownloadButton';
+import ExportButton from '@/app/components/ExportButton';
 import MemberDrawer from '@/app/components/drawer/MemberDrawer';
 import { useActiveFamily } from '@/app/components/nav/FamilySwitcher';
 import { Button, EmptyState } from '@/app/components/ui';
@@ -119,7 +119,7 @@ function TreeScreen() {
         );
       }
       return (
-        <div className={canvasShell}>
+        <div className={`${canvasShell} tree-export-target`}>
           <TreeCanvas
             ref={canvasRef}
             feed={feed}
@@ -189,10 +189,10 @@ function TreeScreen() {
               Add member
             </Button>
           )}
-          {/* Secondary PNG export (restyled at integration review: now a
-              shared Button so it aligns in this row — the export rework
-              itself remains ticket #9). */}
-          <DownloadButton />
+          {/* Export menu (#9): the trigger is styled byte-for-byte like a
+              primary Button so it stays aligned with Add member (the rule
+              from #16's review); formats + capture live in lib/export. */}
+          <ExportButton familyName={family?.name ?? 'Family'} />
           <ZoomBar
             zoom={zoom}
             onZoomOut={() => canvasRef.current?.zoomOut()}
