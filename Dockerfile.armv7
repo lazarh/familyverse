@@ -85,8 +85,14 @@ COPY --from=builder /app/package-lock.json* ./
 # the slim base has no Python/make/g++. Install build deps for this step only
 # and purge them in the same layer (bcrypt's compiled binding stays in
 # node_modules), keeping the runner slim.
+# libssl3/openssl: all three custom armv7 Prisma engines link against
+# libssl.so.3/libcrypto.so.3, which bookworm-slim does NOT ship — without it
+# every engine dies at exec with "error while loading shared libraries:
+# libssl.so.3" (first observed on the #18 board cutover: migrate deploy
+# failed with an empty "Schema engine error"). Kept installed (marked
+# manual, so the purge below cannot autoremove them).
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 make g++ \
+    python3 make g++ libssl3 openssl \
     && npm ci --omit=dev \
     && apt-get purge -y --auto-remove python3 make g++ \
     && rm -rf /var/lib/apt/lists/*
