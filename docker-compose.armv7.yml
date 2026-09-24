@@ -1,35 +1,104 @@
-version: '3.8'
-
-# Portainer-ready compose file for armv7 (Cubieboard4 and other 32-bit ARM devices).
-# Image is built and pushed by the "Build and push ARM v7 image" GitHub Actions workflow.
+# PROD stack for the Cubieboard4 boards (#18, wired against #11's image
+# contract): app + co-located Postgres on ONE board (cubie2), alongside the
+# existing fleet. Usable as-is with `docker compose` on the board, or pasted
+# into a Portainer stack.
 #
-# Usage in Portainer:
-#   1. Go to Stacks → Add Stack → select "Repository" or paste this file.
-#   2. Set the environment variables below (or use a Portainer env file).
-#   3. IMPORTANT: mount a host volume for /app/prisma so that your SQLite database
-#      survives container restarts (see the volumes section).
+# Image built and pushed by .github/workflows/build-and-push-armv7.yml
+# (armv7-latest / armv7-<sha> tags — #12 gave those a single source of truth).
+#
+# Required env — compose refuses to start without these (there is no file:
+# SQLite fallback anywhere, in this file or in the image):
+#   DATABASE_URL       Postgres DSN to this stack's `postgres` service, e.g.
+#                      postgresql://familyverse:CHANGE_ME@postgres:5432/familyverse?schema=public
+#                      — must match POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB
+#   NEXTAUTH_SECRET    openssl rand -base64 32
+#
+# Everything else defaults to this household's reality (split-DNS URL, the
+# board's MailHog, the Trump demo seed) and is overridable per board.
+#
+# Recorded ports / volumes / env (closes #3's "ports/volumes not yet
+# specified" open item):
+#   app:      host 3003 -> container 3000. Keeping 3003 means the
+#             family.lazarh.work proxy needs zero changes.
+#   postgres: in-network ONLY, deliberately not published — the boards already
+#             run a Postgres on host 5432. Reach this one with
+#             `docker compose exec postgres psql -U familyverse -d familyverse`.
+#   volumes:  postgres_data — named volume on the board's SD card (#3
+#             implication; default WAL write load is fine for a family app).
+#             /data/familyverse/pictures (bind) -> /app/data/pictures — the
+#             household's photos as plain files on the board. The host dir
+#             must exist BEFORE first `up`, owned by 1001:1001 (the image's
+#             nextjs uid/gid), or the seed cannot write pictures.
+#             SD-wear escape hatch for both: point them at USB/SSD later —
+#             paths/volumes are the only coupling.
 
 services:
   app:
     image: ghcr.io/lazarh/familyverse:armv7-latest
     platform: linux/arm/v7
     ports:
-      - "3001:3000"
+      - "3003:3000"
     environment:
       NODE_ENV: production
 
-      SMTP_HOST: ${SMTP_HOST}
-      SMTP_PORT: ${SMTP_PORT}
-      SMTP_FROM: ${SMTP_FROM}
+      # Mandatory (#11 §5): Postgres DSN for the co-located `postgres`
+      # service. The image ships no file: default either — an unset/invalid
+      # DSN stops the container before the app starts (entrypoint, `set -e`).
+      DATABASE_URL: "${DATABASE_URL:?set DATABASE_URL to the postgres DSN - no file: SQLite fallback}"
 
-      # SQLite database path inside the container.
-      # If you mount a host volume below, update this path to match.
-      DATABASE_URL: ${DATABASE_URL:-file:/app/prisma/prod.db}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://family.lazarh.work}
+      NEXTAUTH_SECRET: "${NEXTAUTH_SECRET:?set NEXTAUTH_SECRET - generate with openssl rand -base64 32}"
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://family.lazarh.work}
 
-      NEXTAUTH_URL: ${NEXTAUTH_URL}
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      # SMTP (#20 contract): defaults = the board's MailHog over plaintext,
+      # exactly what the old app used. Point SMTP_* at a real server whenever
+      # you want actual delivery — no rebuild needed.
+      SMTP_HOST: ${SMTP_HOST:-cubie2.house.local}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_FROM: ${SMTP_FROM:-no-reply@family.lazarh.work}
+      SMTP_SECURE: ${SMTP_SECURE:-}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_TLS_REJECT_UNAUTHORIZED: ${SMTP_TLS_REJECT_UNAUTHORIZED:-true}
+
+      # Seed script (runs at every container start, idempotent — #21).
+      # Override the demo credentials if you don't want them on the board.
+      SEED_DEMO_EMAIL: ${SEED_DEMO_EMAIL:-demo@familyverse.local}
+      SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-demo123}
+      SEED_FAMILY: ${SEED_FAMILY:-trump}
+
+      # Container-fixed picture dir (#15); the bind mount below lands on it.
+      PICTURES_DIR: /app/data/pictures
     volumes:
-      # Persist the SQLite database across container restarts.
-      # On the host, create this directory first: mkdir -p /opt/familyverse/prisma
-      - /opt/familyverse/prisma:/app/prisma
+      - /data/familyverse/pictures:/app/data/pictures
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
+    labels:
+      # Deliberate deploys only (`docker compose pull && up -d`): the retired
+      # container was watchtower-managed; opt this stack out so image tags
+      # change on our terms, not watchtower's.
+      - com.centurylinklabs.watchtower.enable=false
+
+  postgres:
+    # The exact image the boards already run (#3, human-reported facts).
+    image: postgres:16-alpine
+    platform: linux/arm/v7
+    environment:
+      # If you override these, keep DATABASE_URL above in sync — compose
+      # cannot cross-check the DSN for you.
+      POSTGRES_USER: ${POSTGRES_USER:-familyverse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-familyverse}
+      POSTGRES_DB: ${POSTGRES_DB:-familyverse}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-familyverse} -d ${POSTGRES_DB:-familyverse}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
