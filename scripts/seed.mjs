@@ -1,7 +1,9 @@
-// Idempotent dev seed (#16): a confirmed demo user, a family, and the
-// Kessler-shaped tree from the approved prototype — three generations,
-// three MARRIED partnerships, markdown bios, and three real warm JPEG
-// swatches written into PICTURES_DIR so pictureUrl works out of the box.
+// Idempotent dev seed (#16 flow, #21 dataset): a confirmed demo user, one
+// family, and the demo tree from scripts/seed-data/. SEED_FAMILY picks the
+// dataset — `trump` (default; the retired board demo the human is used to
+// seeing, per #19/#21) or `kessler` (the original prototype tree). Photos
+// (real board photos or warm swatch JPEGs, per dataset photoDir) are written
+// into PICTURES_DIR under fresh UUIDs so pictureUrl works out of the box.
 //
 // Plain ESM against @prisma/client's generated output — no ts-node/tsx needed.
 // Run via: npm run db:seed   (requires DATABASE_URL and a migrated database)
@@ -10,23 +12,27 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import * as trump from './seed-data/trump.mjs';
+import * as kessler from './seed-data/kessler.mjs';
 
 const prisma = new PrismaClient();
 
 const demoEmail = process.env.SEED_DEMO_EMAIL || 'demo@familyverse.local';
 const demoPassword = process.env.SEED_DEMO_PASSWORD || 'demo123';
 
-// Warm 128×128 JPEG swatches (sand/clay/sage gradients) — genuinely encoded
-// JPEGs (FF D8 FF magic bytes) that render as pleasant placeholder photos.
-// Shipped as files next to this script; loaded per call.
-const swatch = (name) => readFile(new URL(`./swatches/${name}.jpg`, import.meta.url));
+const DATASETS = { trump, kessler };
+const datasetKey = (process.env.SEED_FAMILY || 'trump').trim().toLowerCase();
+const dataset = DATASETS[datasetKey];
+if (!dataset) {
+  throw new Error(`SEED_FAMILY="${datasetKey}" — expected one of: ${Object.keys(DATASETS).join(', ')}`);
+}
 
 function picturesDir() {
   const configured = process.env.PICTURES_DIR?.trim();
   return configured ? configured : path.join(process.cwd(), 'data', 'pictures');
 }
 
-/** Store a swatch JPEG under a UUID name; returns the picturePath value. */
+/** Store a dataset JPEG under a UUID name; returns the picturePath value. */
 async function storePicture(jpeg) {
   const filename = `${randomUUID()}.jpg`;
   await mkdir(picturesDir(), { recursive: true });
@@ -35,6 +41,9 @@ async function storePicture(jpeg) {
 }
 
 const day = (iso) => (iso ? new Date(iso) : null);
+
+/** Read `<photoDir><photo>` relative to this script (dataset ships both). */
+const readPhoto = (photo) => readFile(new URL(photo, new URL(dataset.photoDir, import.meta.url)));
 
 async function main() {
   // 1. Confirmed demo user.
@@ -56,7 +65,7 @@ async function main() {
   });
   let family = membership?.family ?? null;
   if (!family) {
-    family = await prisma.family.create({ data: { name: 'The Kessler Family' } });
+    family = await prisma.family.create({ data: { name: dataset.name } });
     await prisma.userFamily.create({ data: { userId: user.id, familyId: family.id } });
   }
 
@@ -68,9 +77,9 @@ async function main() {
     console.log(`[seed] ${family.name} already has ${existingPeople} people — nothing to do.`);
     return;
   }
-  if (family.name !== 'The Kessler Family') {
-    // An empty leftover family (old seed naming) — adopt the prototype name.
-    family = await prisma.family.update({ where: { id: family.id }, data: { name: 'The Kessler Family' } });
+  if (family.name !== dataset.name) {
+    // An empty leftover family — adopt the dataset's name.
+    family = await prisma.family.update({ where: { id: family.id }, data: { name: dataset.name } });
   }
 
   const makePerson = (fullName, gender, birthDate, deathDate, birthPlace, bio, picturePath) =>
@@ -87,56 +96,27 @@ async function main() {
       },
     });
 
-  // Generation 1
-  const walterPicture = await storePicture(await swatch('sand'));
-  const ruthPicture = await storePicture(await swatch('clay'));
-  const walter = await makePerson(
-    'Walter Kessler',
-    'Male',
-    '1941-05-02',
-    '2016-11-30',
-    'Kraków, Poland',
-    'Kept the **family ledgers** — every birth, marriage and rumour, in pencil, in one exercise book.',
-    walterPicture,
-  );
-  const ruth = await makePerson(
-    'Ruth Kessler',
-    'Female',
-    '1940-01-15',
-    '2021-06-04',
-    'Malmö, Sweden',
-    null,
-    ruthPicture,
-  );
+  // People first; slugs resolve the edges below.
+  const bySlug = new Map();
+  let pictures = 0;
+  for (const p of dataset.people) {
+    const picturePath = p.photo ? await storePicture(await readPhoto(p.photo)) : null;
+    if (picturePath) pictures += 1;
+    bySlug.set(p.slug, await makePerson(p.fullName, p.gender, p.birthDate, p.deathDate, p.birthPlace, p.bio, picturePath));
+  }
+  const idOf = (slug) => {
+    const person = bySlug.get(slug);
+    if (!person) throw new Error(`[seed] dataset "${datasetKey}" references unknown slug "${slug}"`);
+    return person.id;
+  };
 
-  // Generation 2
-  const daniel = await makePerson('Daniel Kessler', 'Male', '1965-02-12', null, 'Bristol, England', null, null);
-  const anita = await makePerson('Anita Kessler', 'Female', '1968-07-03', null, 'Accra, Ghana', null, null);
-
-  // Generation 3
-  const mayaPicture = await storePicture(await swatch('sage'));
-  const maya = await makePerson(
-    'Maya Kessler',
-    'Female',
-    '1994-03-14',
-    null,
-    'Bristol, England',
-    'Third-generation Bristolian, **heads the history department**, and insists the family sourdough starter is older than the house.\n\n- Kept every letter Grandma Ruth sent from Malmö, 1961–1978.\n- The one who remembers everyone\'s birthday — use her as the date check.',
-    mayaPicture,
-  );
-  const sam = await makePerson('Sam Ortega', 'Male', '1992-11-02', null, 'Porto, Portugal', null, null);
-  const theo = await makePerson('Theo Kessler', 'Male', '1997-09-27', null, 'Bristol, England', null, null);
-
-  // Parent edges (five-role enum in play: these are BIOLOGICAL).
+  // Parent edges (five-role enum in play: seed edges are BIOLOGICAL).
   await prisma.parentChild.createMany({
-    data: [
-      { childId: daniel.id, parentId: walter.id, role: 'BIOLOGICAL' },
-      { childId: daniel.id, parentId: ruth.id, role: 'BIOLOGICAL' },
-      { childId: maya.id, parentId: daniel.id, role: 'BIOLOGICAL' },
-      { childId: maya.id, parentId: anita.id, role: 'BIOLOGICAL' },
-      { childId: theo.id, parentId: daniel.id, role: 'BIOLOGICAL' },
-      { childId: theo.id, parentId: anita.id, role: 'BIOLOGICAL' },
-    ],
+    data: dataset.parents.map(([child, parent]) => ({
+      childId: idOf(child),
+      parentId: idOf(parent),
+      role: 'BIOLOGICAL',
+    })),
   });
 
   // Partnerships, canonical personAId < personBId.
@@ -146,15 +126,13 @@ async function main() {
     kind,
   });
   await prisma.partnership.createMany({
-    data: [
-      pair(walter.id, ruth.id, 'MARRIED'),
-      pair(daniel.id, anita.id, 'MARRIED'),
-      pair(maya.id, sam.id, 'MARRIED'),
-    ],
+    data: dataset.partnerships.map(([a, b]) => pair(idOf(a), idOf(b), 'MARRIED')),
   });
 
   console.log(
-    `[seed] ${family.name}: 7 people, 3 generations, 3 partnerships, bios + pictures in ${picturesDir()} (demo user ${demoEmail}).`,
+    `[seed] ${family.name} (SEED_FAMILY=${datasetKey}): ${dataset.people.length} people, ` +
+      `${dataset.parents.length} parent edges, ${dataset.partnerships.length} partnerships, ` +
+      `${pictures} pictures in ${picturesDir()} (demo user ${demoEmail}).`,
   );
 }
 

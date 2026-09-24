@@ -4,7 +4,8 @@
 # register -> MailHog -> confirm, invite restriction, cross-family isolation.
 # Plus #20 auth hardening: min-8 password, confirmation resend (re-register
 # and POST /api/register/resend), expired/invalid token handling.
-# Prereqs: dev stack running and seeded (docker compose up).
+# Prereqs: dev stack running and seeded (docker compose up) — the seeded
+# content asserts below pin the DEFAULT dataset (SEED_FAMILY=trump, #21).
 # Usage:   ./scripts/e2e.sh   (override target with E2E_BASE=http://host:port)
 set -u
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -58,37 +59,39 @@ expect "family details 200" "$(curl -s -o /dev/null -w '%{http_code}' -b $J1 $BA
 
 echo "--- 2. feed shape & seeded content"
 curl -s -b $J1 $BASE/api/families/$FAM_ID/people -o feed.json
-python3 - <<'EOF' && ok "feed: flat shape, 7/6/3, Kessler names, 3 pictures, bio, no raw picturePath, Walter deceased" || bad "feed shape/content asserts"
+python3 - <<'EOF' && ok "feed: flat shape, 28/33/6, Trump names, 11 pictures, bio, no raw picturePath, Friedrich deceased, board slip dropped" || bad "feed shape/content asserts"
 import json
 f = json.load(open('feed.json'))
 assert set(f) == {'people', 'parentChild', 'partnerships'}, f.keys()
-assert (len(f['people']), len(f['parentChild']), len(f['partnerships'])) == (7, 6, 3)
+assert (len(f['people']), len(f['parentChild']), len(f['partnerships'])) == (28, 33, 6)
 names = {p['fullName'] for p in f['people']}
-assert {'Walter Kessler','Ruth Kessler','Daniel Kessler','Anita Kessler','Maya Kessler','Sam Ortega','Theo Kessler'} <= names
-assert sum(1 for p in f['people'] if p['pictureUrl']) == 3
+assert {'Friedrich Trumpf','Elisabeth Christ','Donald Trump','Melania Trump','Ivanka Trump','Barron Trump'} <= names
+assert sum(1 for p in f['people'] if p['pictureUrl']) == 11
 assert all('picturePath' not in p for p in f['people'])
-maya = next(p for p in f['people'] if p['fullName'] == 'Maya Kessler')
-assert maya['bio'] and '**heads the history department**' in maya['bio']
-walter = next(p for p in f['people'] if p['fullName'] == 'Walter Kessler')
-assert walter['deathDate'] is not None
+friedrich = next(p for p in f['people'] if p['fullName'] == 'Friedrich Trumpf')
+assert friedrich['bio'] and '**barber and restaurateur**' in friedrich['bio']
+assert friedrich['deathDate'] is not None
+# #21: the board recorded Elisabeth (Friedrich's wife) as his child — dropped.
+elisabeth = next(p for p in f['people'] if p['fullName'] == 'Elisabeth Christ')
+assert not any(e['childId'] == elisabeth['id'] for e in f['parentChild'])
 assert any(e['role'] == 'BIOLOGICAL' for e in f['parentChild'])
 assert all(k['kind'] == 'MARRIED' for k in f['partnerships'])
 EOF
 
-WALTER=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['id'] for p in f['people'] if p['fullName']=='Walter Kessler'))")
-DANIEL=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['id'] for p in f['people'] if p['fullName']=='Daniel Kessler'))")
-MAYA=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['id'] for p in f['people'] if p['fullName']=='Maya Kessler'))")
-WALTER_PIC=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['pictureUrl'] for p in f['people'] if p['fullName']=='Walter Kessler'))")
+DONALD=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['id'] for p in f['people'] if p['fullName']=='Donald Trump'))")
+DONALD_JR=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['id'] for p in f['people'] if p['fullName']=='Donald Trump Jr.'))")
+IVANKA=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['id'] for p in f['people'] if p['fullName']=='Ivanka Trump'))")
+DONALD_PIC=$(python3 -c "import json;f=json.load(open('feed.json'));print(next(p['pictureUrl'] for p in f['people'] if p['fullName']=='Donald Trump'))")
 
 expect "picture proxy serves jpeg to a session" \
-  "$(curl -s -o /dev/null -w '%{http_code} %{content_type}' -b $J1 "$BASE$WALTER_PIC")" "200 image/jpeg"
+  "$(curl -s -o /dev/null -w '%{http_code} %{content_type}' -b $J1 "$BASE$DONALD_PIC")" "200 image/jpeg"
 
 echo "--- 3. create person with roles + partnership"
 CRE=$(curl -s -b $J1 -X POST "$BASE/api/families/$FAM_ID/people" \
   -F "fullName=E2E Orphan" -F "gender=Non-binary" -F "birthDate=2000-01-02" \
   -F "deathDate=" -F "birthPlace=Testville" -F "bio=**e2e**" \
-  -F "parents=[{\"parentId\":$WALTER,\"role\":\"FOSTER\"},{\"parentId\":$MAYA,\"role\":\"LEGAL_GUARDIAN\"}]" \
-  -F "partnerships=[{\"personId\":$MAYA,\"kind\":\"COHABITATION\"}]" \
+  -F "parents=[{\"parentId\":$DONALD,\"role\":\"FOSTER\"},{\"parentId\":$IVANKA,\"role\":\"LEGAL_GUARDIAN\"}]" \
+  -F "partnerships=[{\"personId\":$IVANKA,\"kind\":\"COHABITATION\"}]" \
   -o create.json -w '%{http_code}')
 expect "POST person 201" "$CRE" "201"
 python3 - <<'EOF' && ok "create response: person + 2 role edges + 1 canonical partnership" || bad "create response asserts"
@@ -122,7 +125,7 @@ expect "oversize -> PICTURE_TOO_LARGE" "$(python3 -c "import json;print(json.loa
 echo "--- 5. PATCH desired-full-set semantics"
 curl -s -b $J1 -X PATCH "$BASE/api/people/$A_ID" \
   -F "fullName=E2E Orphan Renamed" -F "gender=Not said" \
-  -F "parents=[{\"parentId\":$DANIEL,\"role\":\"BIOLOGICAL\"}]" \
+  -F "parents=[{\"parentId\":$DONALD_JR,\"role\":\"BIOLOGICAL\"}]" \
   -F "partnerships=[]" -o patch.json -w '%{http_code}' > patch.code
 expect "PATCH 200" "$(cat patch.code)" "200"
 python3 - <<'EOF' && ok "PATCH: rename, canonical gender, parents replaced (2->1), partnership set cleared" || bad "PATCH asserts"
@@ -149,7 +152,7 @@ echo "--- 7. membership delete keeps the person (#5 deliberate change)"
 expect "DELETE membership 200" \
   "$(curl -s -b $J1 -X DELETE "$BASE/api/families/$FAM_ID/people/$A_ID" -o /dev/null -w '%{http_code}')" "200"
 curl -s -b $J1 $BASE/api/families/$FAM_ID/people -o feed2.json
-expect "feed back to 7 people" "$(python3 -c "import json;print(len(json.load(open('feed2.json'))['people']))")" "7"
+expect "feed back to 28 people" "$(python3 -c "import json;print(len(json.load(open('feed2.json'))['people']))")" "28"
 expect "orphaned person row persists (psql)" \
   "$(docker compose -f "$REPO/docker-compose.yml" exec -T postgres psql -U familyverse -d familyverse -tAc "SELECT count(*) FROM \"Person\" WHERE id=$A_ID" | tr -d '[:space:]')" "1"
 expect "orphan is invisible to API (no shared family) -> 403" \
@@ -164,7 +167,7 @@ expect "DELETE person 200" \
 expect "person gone -> 404" \
   "$(curl -s -o /dev/null -w '%{http_code}' -b $J1 $BASE/api/people/$B_ID)" "404"
 curl -s -b $J1 $BASE/api/families/$FAM_ID/people -o feed3.json
-expect "feed still 7" "$(python3 -c "import json;print(len(json.load(open('feed3.json'))['people']))")" "7"
+expect "feed still 28" "$(python3 -c "import json;print(len(json.load(open('feed3.json'))['people']))")" "28"
 
 echo "--- 9. register -> MailHog -> confirm -> login -> create family"
 expect "register e2e-one 201" \
@@ -230,11 +233,11 @@ expect "empty-family feed is well-formed" \
 
 echo "--- 10. cross-family isolation + invite restriction"
 expect "e2e-one cannot read demo person -> 403" \
-  "$(curl -s -o /dev/null -w '%{http_code}' -b $J2 $BASE/api/people/$WALTER)" "403"
+  "$(curl -s -o /dev/null -w '%{http_code}' -b $J2 $BASE/api/people/$DONALD)" "403"
 expect "e2e-one cannot read demo feed -> 403" \
   "$(curl -s -o /dev/null -w '%{http_code}' -b $J2 $BASE/api/families/$FAM_ID/people)" "403"
 expect "e2e-one cannot edit demo person -> 403" \
-  "$(curl -s -o /dev/null -w '%{http_code}' -b $J2 -X PATCH $BASE/api/people/$WALTER -F 'bio=x')" "403"
+  "$(curl -s -o /dev/null -w '%{http_code}' -b $J2 -X PATCH $BASE/api/people/$DONALD -F 'bio=x')" "403"
 expect "register e2e-two 201" \
   "$(curl -s -X POST $BASE/api/register -H 'Content-Type: application/json' \
       -d '{"email":"e2e-two@familyverse.local","password":"secret123","website_url":""}' -o /dev/null -w '%{http_code}')" "201"

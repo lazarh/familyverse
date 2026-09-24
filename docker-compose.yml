@@ -26,6 +26,8 @@ services:
       # Seed script (scripts/seed.mjs) — demo user created on container start
       SEED_DEMO_EMAIL: ${SEED_DEMO_EMAIL:-demo@familyverse.local}
       SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-demo123}
+      # Demo dataset: trump (default, #21) or kessler (the #16 prototype tree).
+      SEED_FAMILY: ${SEED_FAMILY:-trump}
 
       # Picture storage (#15): files under this dir are served same-origin by
       # GET /api/pictures/<file>. Named volume keeps writes on the non-root
