@@ -122,6 +122,23 @@ COPY --from=builder --chown=nextjs:nodejs /app/docker-entrypoint.sh ./docker-ent
 # can be written (a named volume inherits this ownership on first mount).
 RUN mkdir -p /app/data/pictures && chown -R nextjs:nodejs /app/data/pictures
 
+# SWC bindings on armv7 (#18 board cutover): Next ships no native @next/swc
+# for 32-bit arm, so `next start` resolves bindings by DOWNLOADING the wasm
+# variant into next/wasm (with a native-fallback attempt into
+# next/next-swc-fallback), staging tars in $XDG_CACHE_HOME/next-swc.
+# On the board both paths died: the next/ dir is root-owned (EACCES on mkdir)
+# and nextjs' homedir is /nonexistent (cache mkdir fails), which hung the boot
+# after "✓ Starting..." with no Ready. Fix: bake the bindings as root here —
+# the same wasm-resolution code path the builder stage's `next build` already
+# proved works on armv7 — then hand both dirs to nextjs and point the cache at
+# world-writable /tmp so a future Next upgrade can still re-download.
+# Placed just before USER so every layer above stays byte-identical and board
+# pulls only fetch this one layer.
+ENV XDG_CACHE_HOME=/tmp
+RUN timeout 300 node -e "require('next/dist/build/swc').loadBindings().then(()=>console.log('swc bindings baked ok'))" \
+    && mkdir -p /app/node_modules/next/next-swc-fallback /app/node_modules/next/wasm \
+    && chown -R nextjs:nodejs /app/node_modules/next/next-swc-fallback /app/node_modules/next/wasm
+
 USER nextjs
 
 EXPOSE 3000
