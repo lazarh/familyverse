@@ -54,12 +54,31 @@ const CanvasInner = forwardRef<TreeCanvasHandle, TreeCanvasProps>(function Canva
   ref,
 ) {
   const rf = useReactFlow();
-  // True once the store has real dimensions — before that, fitView/setCenter
-  // would compute against a zero-size viewport. (`viewportInitialized` exists
-  // on the runtime store but not on the published `ReactFlowState` type.)
-  const ready = useStore(
-    (state) => (state as { viewportInitialized?: boolean }).viewportInitialized === true,
-  );
+  // True once the viewport (d3 zoom) is live with real dimensions AND every
+  // node has been measured — fitView against unmeasured nodes is a no-op,
+  // and `handled` must not mark the initial fit done before it can succeed.
+  // NB: `viewportInitialized` lives on the viewport *helper*, not on the
+  // zustand store, so the old gate never opened: neither the initial fit nor
+  // `?focus=` centring ever ran. The small Kessler demo renders fine at 100%,
+  // which masked it; #21's 28-person tree exposed it. (Store internals are
+  // cast down: the published `ReactFlowState` type omits them.)
+  type StoreExtras = {
+    d3Zoom?: unknown;
+    d3Selection?: unknown;
+    width?: number;
+    height?: number;
+    nodeInternals?: Map<string, { hidden?: boolean; width?: number; height?: number }>;
+  };
+  const ready = useStore((state) => {
+    const s = state as typeof state & StoreExtras;
+    if (!s.d3Zoom || !s.d3Selection || !s.width || !s.height) return false;
+    if (!s.nodeInternals || s.nodeInternals.size === 0) return false;
+    for (const node of s.nodeInternals.values()) {
+      if (node.hidden) continue;
+      if (!node.width || !node.height) return false;
+    }
+    return true;
+  });
 
   const { nodes, edges } = useMemo(
     () => buildGraph(feed, focusId ?? null),
