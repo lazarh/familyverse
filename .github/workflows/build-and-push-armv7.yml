@@ -39,3 +39,23 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/familyverse:armv7-latest
             ghcr.io/${{ github.repository_owner }}/familyverse:armv7-${{ github.sha }}
+
+      # Regression guard from the #18 board cutover: bookworm-slim ships no
+      # OpenSSL 3 and all three custom armv7 Prisma engines link libssl.so.3 —
+      # the image built "green" while every engine died at exec with
+      # "error while loading shared libraries: libssl.so.3" (first seen only
+      # when migrate deploy ran against a live board). Runs the pushed image
+      # under the QEMU set up above and fails the run if any engine has
+      # unresolved shared libraries. See #18 / commit 5d80a0a.
+      - name: Smoke — armv7 engines resolve their shared libraries
+        run: |
+          docker pull "ghcr.io/${{ github.repository_owner }}/familyverse:armv7-latest"
+          docker run --rm --platform linux/arm/v7 --entrypoint sh \
+            "ghcr.io/${{ github.repository_owner }}/familyverse:armv7-latest" -ec '
+              for e in query-engine migration-engine introspection-engine; do
+                echo "== $e"; ldd "/engines/$e";
+              done | tee /tmp/ldd.out
+              if grep -q "not found" /tmp/ldd.out; then
+                echo "missing shared libraries in armv7 engines" >&2; exit 1;
+              fi
+              echo "all armv7 engines resolve their libraries"'
