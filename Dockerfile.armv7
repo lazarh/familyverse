@@ -106,7 +106,7 @@ RUN chown -R nextjs:nodejs /app/prisma
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
 # Seed script and entrypoint (#11 decision): migrations + idempotent seed run
 # at container START (not at image build), so they target the runtime

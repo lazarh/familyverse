@@ -70,7 +70,7 @@ RUN chown -R nextjs:nodejs /app/prisma
 # Copy the built application from the builder stage
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/next.config.mjs ./next.config.mjs
 # The Prisma client and schema/migrations are now sourced from the runner's earlier steps.
 
 # Seed script and entrypoint: migrations + idempotent seed run at container
