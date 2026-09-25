@@ -41,7 +41,7 @@ const TAB_ACTIVE =
 const TAB_IDLE = "text-[var(--muted)] hover:text-[var(--ink)]";
 
 /**
- * The Familyverse mark + wordmark (auth.html `.brand`). Exported for the
+ * The Family Verse mark + wordmark (auth.html `.brand`). Exported for the
  * other nav-less screens (create-family, confirm) so the brand line stays
  * byte-identical across them.
  */
@@ -67,7 +67,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
         <circle cx="18.4" cy="18.6" r="2.6" />
         <path d="M12 7.4v4.2M12 11.6 6.4 16.4M12 11.6l5.6 4.8" />
       </svg>
-      Familyverse
+      Family Verse
     </Link>
   );
 }

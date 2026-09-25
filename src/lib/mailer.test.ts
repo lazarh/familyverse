@@ -77,7 +77,7 @@ describe('confirmationMailOptions (the mail body, shared by send + resend)', () 
     const options = confirmationMailOptions({ to: 'pending@familyverse.local', token: 'tok-123', env: {} });
     expect(options.from).toBe('no-reply@familyverse.local');
     expect(options.to).toBe('pending@familyverse.local');
-    expect(options.subject).toBe('Confirm your Familyverse account');
+    expect(options.subject).toBe('Confirm your Family Verse account');
     expect(options.html).toContain('http://localhost:3000/confirm?token=tok-123');
   });
 
@@ -108,7 +108,7 @@ describe('sendConfirmationEmail (transport wiring)', () => {
       expect.objectContaining({ host: 'smtp.example', port: 2525, auth: { user: 'u', pass: 'p' } }),
     );
     expect(sendMail).toHaveBeenCalledWith(
-      expect.objectContaining({ to: 'a@familyverse.local', subject: 'Confirm your Familyverse account' }),
+      expect.objectContaining({ to: 'a@familyverse.local', subject: 'Confirm your Family Verse account' }),
     );
   });
 

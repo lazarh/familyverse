@@ -25,7 +25,7 @@ describe("AuthCard chrome (prototype/auth.html)", () => {
         <form />
       </AuthCard>,
     );
-    expect(html).toContain("Familyverse");
+    expect(html).toContain("Family Verse");
     expect(html).toContain("Welcome home");
     expect(html).toContain("One household, one tree");
     expect(html).toContain("Self-hosted — your data stays home");
@@ -184,7 +184,7 @@ describe("BrandMark", () => {
   it("renders the clay family mark with the wordmark, linking home", () => {
     const html = renderToStaticMarkup(<BrandMark />);
     expect(html).toContain('href="/"');
-    expect(html).toContain("Familyverse");
+    expect(html).toContain("Family Verse");
     expect(html).toContain("text-[var(--clay)]");
     expect(html).toContain('cx="12"'); // the three-circle mark
     expect(html).toContain('aria-hidden="true"');

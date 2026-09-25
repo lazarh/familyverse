@@ -78,7 +78,7 @@ export function confirmationMailOptions({ to, token, env = process.env }: Confir
   return {
     from: settings.from,
     to,
-    subject: 'Confirm your Familyverse account',
+    subject: 'Confirm your Family Verse account',
     html: `<p>Thanks for registering. Please confirm your email by clicking the link below:</p>
            <p><a href="${confirmLink}">Confirm your email</a></p>
            <p>If you did not sign up, ignore this message.</p>`,

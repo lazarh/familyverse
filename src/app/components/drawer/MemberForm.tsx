@@ -704,7 +704,7 @@ export function MemberForm({
               variant="danger"
               onClick={removeFromFamily}
               disabled={saving}
-              title="Remove this person from this family — they stay in Familyverse"
+              title="Remove this person from this family — they stay in Family Verse"
             >
               Remove from family
             </Button>
@@ -757,7 +757,7 @@ export function MemberForm({
       >
         <p className="text-[15px] text-[var(--ink-soft)]">
           <span className="font-650 text-[var(--ink)]">{fullName}</span> will be removed from
-          Familyverse entirely — their relationships, memberships and photo go with them. This
+          Family Verse entirely — their relationships, memberships and photo go with them. This
           cannot be undone.
         </p>
         <p className="mt-3 text-[13.5px] text-[var(--muted)]">

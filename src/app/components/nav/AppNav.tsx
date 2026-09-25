@@ -33,7 +33,7 @@ export default function AppNav() {
             <circle cx="18.4" cy="18.6" r="2.6" />
             <path d="M12 7.4v4.2M12 11.6 6.4 16.4M12 11.6l5.6 4.8" />
           </svg>
-          Familyverse
+          Family Verse
         </Link>
         <span aria-hidden="true" className="h-[22px] w-px flex-none bg-[var(--line-strong)]" />
         <FamilySwitcher />

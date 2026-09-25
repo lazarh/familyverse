@@ -153,7 +153,7 @@ export default function ShareFamilyDialog({
         <Field
           label="Email address"
           tag="req"
-          hint="They need an existing Familyverse account with this email — no invite email is sent."
+          hint="They need an existing Family Verse account with this email — no invite email is sent."
         >
           <div className="flex items-center gap-2">
             <div className="min-w-0 flex-1">

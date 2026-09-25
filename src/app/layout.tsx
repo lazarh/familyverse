@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Family Tree App",
-  description: "The Family Tree App is a web application designed to help users create, manage, and visualize family trees. It allows users to add family members, define relationships, and export visual representations of the tree.",
+  title: "Family Verse",
+  description:
+    "Family Verse — create, manage, and visualize your family tree: add members, define relationships, and export the tree as PNG or PDF.",
 };
 
 export default function RootLayout({

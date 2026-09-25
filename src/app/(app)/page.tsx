@@ -165,7 +165,7 @@ function TreeScreen() {
       <div className="mb-5 flex flex-wrap items-end justify-between gap-5">
         <div className="min-w-0">
           <h1 className="truncate text-[26px]">
-            {family?.name ?? (familiesError !== null ? 'Familyverse' : '…')}
+            {family?.name ?? (familiesError !== null ? 'Family Verse' : '…')}
           </h1>
           <p className="mt-1 text-[13.5px] text-[var(--muted)]">{sub}</p>
         </div>
